@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@maptiler/sdk": "^3.8.0",
+    "mapbox-gl": "^3.16.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
