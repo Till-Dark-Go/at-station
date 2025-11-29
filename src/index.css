@@ -29,74 +29,18 @@
     display: none;
 }
 
-/* NAVBAR component styles */
-
-.nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 43px 0 0 35px;
+.mapboxgl-marker
+{
+    overflow: visible;
 }
 
-.nav_items {
-    margin-top: 50px;
+.mapboxgl-marker img
+{
+    transition: transform 1s ease;
+    transform-origin: bottom;
 }
 
-.nav_items ul li {
-    list-style: none;
-    margin-bottom: 50px;
-}
-
-.nav_items ul li img {
-    cursor: pointer;
-    width: 28px;
-}
-
-/* USERPROFILE component styles */
-
-.profile_icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 43px 40px 0 0;
-}
-
-.profile_icon img {
-    width: 34px;
-}
-
-/* STATION INFO LAYOUT, CURRENT STATION LABEL, NEXT STATION LABEL components styles */
-
-.stations_labeled_navigation {
-    position: absolute;
-    width: 100%;
-    align-items: center;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: white;
-    pointer-events: none;  /* This is so that the mouse passes through the transparent full scale div and we can still move the map */
-}
-
-.current_st_component {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.current_st_name_label {
-    text-transform: uppercase;
-    font-weight: 300;
-    color: #B7BDBF;
-    margin-bottom: 10px;
-    font-size: 20px;
-    pointer-events: auto;  /* Turning on the highlight function only on the text elements, not the whole component */
-}
-
-.current_station {
-    font-size: 32px;
-    text-transform: uppercase;
-    font-weight: 400;
-    pointer-events: auto;
+.mapboxgl-marker img:hover
+{
+    transform: scale(1.3);
 }
