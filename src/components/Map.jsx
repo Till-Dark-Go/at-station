@@ -38,6 +38,7 @@ export default function Map() {
             // CUSTOM MARKER SVG
             marker.innerHTML = "<img>";
             marker.children[0].src = marker_logo;
+
             
             // HOVERING 
             marker.onmouseenter = () => { 
@@ -65,7 +66,7 @@ export default function Map() {
                     mapRef.current.zoomTo(9, {
                         duration: 2000
                     });
-                    // mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
+                    mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
 
                     // Moving
                     mapRef.current.once('moveend', () => {
