@@ -44,3 +44,36 @@
 {
     transform: scale(1.3);
 }
+
+/* AUTH PAGE component styles */
+
+.authPage 
+{
+    display: flex;
+    justify-content: left;
+    margin: 10px
+}
+
+.signIn, .logIn, .otherServices
+{
+    display: block;
+    width: 200px;
+}
+
+input 
+{
+    height: 20px;
+    margin-bottom: 5px;
+}
+
+button
+{
+    width: 90px;
+    height: 30px;
+}
+
+.otherServices button
+{
+    width: 150px;
+    margin-bottom: 5px;
+}
