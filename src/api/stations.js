@@ -35,12 +35,6 @@ export async function getStationsByCountry(country) {
  * Fetch stations ordered by name
  */
 export async function getStationsSorted() {
-  const q = query(collection(db, "stations"), orderBy("name"));
-
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => doc.data());
-}
-export async function getStationsSorted() {
   try {
     const q = query(collection(db, "stations"), orderBy("name"));
 

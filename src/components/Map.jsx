@@ -1,3 +1,4 @@
+// src/components/Map.jsx
 import React, { useRef, useEffect, useState } from 'react';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
@@ -53,15 +54,21 @@ export default function Map() {
 
     // Add station markers dynamically
     stations.forEach(station => {
+      // Use flat fields
+      const lat = station.latitude;
+      const lng = station.longitude;
+
       const marker = new maptilersdk.Marker()
-        .setLngLat([station.longitude, station.latitude])
+        .setLngLat([lng, lat])
         .addTo(map.current);
 
-      marker.addClassName(station.stationId);
+      // Use the Firestore document ID for unique identification
+      // note: station.id comes from getStations() { id: doc.id, ... }
+      marker.addClassName(station.id || station.stationId || station.name);
 
       // Replace default marker with station_logo
       const markerEl = marker.getElement();
-      markerEl.innerHTML = `<img src="${station_logo}" width="28" height="28" />`;
+      markerEl.innerHTML = `<img src="${station_logo}" width="28" height="28" alt="${station.name}" />`;
 
       // Click behavior: move map and user marker
       markerEl.onclick = () => {
@@ -69,20 +76,21 @@ export default function Map() {
 
         // Fly map to selected station
         map.current.flyTo({
-          center: [station.longitude, station.latitude],
+          center: [lng, lat],
           zoom: zoom,
           speed: 0.04,
           curve: 1.5,
         });
 
         // Move user marker to station
-        userMarker.setLngLat([station.longitude, station.latitude]);
+        userMarker.setLngLat([lng, lat]);
 
         // Scale selected station icon using CSS class
         document.querySelectorAll(".maplibregl-marker img").forEach(img => {
           img.classList.remove("selected"); // Remove "selected" from all markers
         });
-        markerEl.querySelector("img").classList.add("selected"); // Add "selected" to clicked marker
+        const img = markerEl.querySelector("img");
+        if (img) img.classList.add("selected"); // Add "selected" to clicked marker
       };
     });
 
@@ -90,7 +98,7 @@ export default function Map() {
 
   return (
     <div className="map-wrap">
-      <div ref={mapContainer} className="map"></div>
+      <div ref={mapContainer} className="map" style={{ width: "100%", height: "100vh" }}></div>
     </div>
   );
 }
