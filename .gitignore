@@ -25,3 +25,6 @@ dist-ssr
 
 # Enviromental variables
 .env
+
+# Firebase Admin service account
+scripts/service-account-key.json
