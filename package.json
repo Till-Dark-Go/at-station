@@ -12,8 +12,11 @@
   "dependencies": {
     "@maptiler/sdk": "^3.8.0",
     "firebase": "^12.5.0",
+    "firebase-admin": "^13.6.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "trainline-stations": "^2.0.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

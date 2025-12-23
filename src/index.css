@@ -94,7 +94,8 @@
     flex-direction: column;
     justify-content: space-between;
     color: white;
-    pointer-events: none;  /* This is so that the mouse passes through the transparent full scale div and we can still move the map */
+    pointer-events: none;
+   /* This is so that the mouse passes through the transparent full scale div and we can still move the map */
 }
 
 .current_st_component {
