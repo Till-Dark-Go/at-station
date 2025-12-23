@@ -1,0 +1,34 @@
+{
+  "stations": [
+    {
+      "name": "Zurich HB",
+      "latitude": 47.3769,
+      "longitude": 8.5417,
+      "country": "Switzerland"
+    },
+    {
+      "name": "Geneva",
+      "latitude": 46.2104,
+      "longitude": 6.1420,
+      "country": "Switzerland"
+    },
+    {
+      "name": "Bern",
+      "latitude": 46.9489,
+      "longitude": 7.4395,
+      "country": "Switzerland"
+    },
+    {
+      "name": "Frankfurt am Main",
+      "latitude": 50.110924,
+      "longitude": 8.682127,
+      "country": "Germany"
+    },
+    {
+      "name": "Graz",
+      "latitude": 47.076668,
+      "longitude": 15.421371,
+      "country": "Austria"
+    }
+  ]
+}
