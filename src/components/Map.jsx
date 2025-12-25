@@ -16,9 +16,7 @@ export default function Map() {
 
     // Everything set up in useEffect only once when the map is first loaded
     useEffect(() => {
-        // RESET !!!!!!!!!!!!!!!!
-        mapboxgl.accessToken = 'pk.eyJ1IjoidWx2ZW5yZXYiLCJhIjoiY21paXNkdmhjMHNsZjNkczhndTB2cm1qdCJ9.ifCHVq0mhLsOdWQiMiGr2g';
-        // __________________________________
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
