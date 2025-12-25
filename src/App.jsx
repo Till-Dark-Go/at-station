@@ -5,8 +5,8 @@ export default function App() {
   let result = false;
   return (
     <div className = "App">
-      {/* <Map /> */}
-      <AuthPage />
+      <Map />
+      {/* <AuthPage /> */}
     </div>
   )
 }
