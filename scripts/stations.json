@@ -1,22 +1,754 @@
 {
   "stations": [
     {
-      "name": "Zurich HB",
-      "latitude": 47.3769,
-      "longitude": 8.5417,
-      "country": "Switzerland"
+      "name": "Gothenburg",
+      "latitude": 57.70887,
+      "longitude": 11.97456,
+      "country": "Sweden"
+    },
+    {
+      "name": "Ostrava",
+      "latitude": 49.820923,
+      "longitude": 18.262524,
+      "country": "Czechia"
+    },
+    {
+      "name": "Brno",
+      "latitude": 49.195061,
+      "longitude": 16.606836,
+      "country": "Czech Republic"
+    },
+    {
+      "name": "Cagliari",
+      "latitude": 39.223843,
+      "longitude": 9.121661,
+      "country": "Italy"
+    },
+    {
+      "name": "Palma",
+      "latitude": 39.56945,
+      "longitude": 2.64995,
+      "country": "Spain"
+    },
+    {
+      "name": "Istanbul",
+      "latitude": 41.00824,
+      "longitude": 28.978359,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Bursa",
+      "latitude": 40.188526,
+      "longitude": 29.060965,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Eskişehir",
+      "latitude": 39.766705,
+      "longitude": 30.525631,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Konya",
+      "latitude": 37.874641,
+      "longitude": 32.493156,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Antalya",
+      "latitude": 36.896893,
+      "longitude": 30.713324,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Alanya",
+      "latitude": 36.544441,
+      "longitude": 31.995407,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Mersin",
+      "latitude": 36.812103,
+      "longitude": 34.641479,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Ankara",
+      "latitude": 39.933365,
+      "longitude": 32.859741,
+      "country": "Türkiye"
+    },
+    {
+      "name": "Nicosia",
+      "latitude": 35.185566,
+      "longitude": 33.382275,
+      "country": "Cyprus"
+    },
+    {
+      "name": "Heraklion",
+      "latitude": 35.338734,
+      "longitude": 25.144213,
+      "country": "Greece"
+    },
+    {
+      "name": "Chania",
+      "latitude": 35.513828,
+      "longitude": 24.018038,
+      "country": "Greece"
+    },
+    {
+      "name": "Zaporizhzhia",
+      "latitude": 47.846458,
+      "longitude": 35.149269,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Mariupol",
+      "latitude": 47.097134,
+      "longitude": 37.543365,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Kropyvnytskyi",
+      "latitude": 48.507935,
+      "longitude": 32.262318,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Rivne",
+      "latitude": 50.6199,
+      "longitude": 26.251617,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Zhytomyr",
+      "latitude": 50.25465,
+      "longitude": 28.658667,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Košice",
+      "latitude": 48.716385,
+      "longitude": 21.261074,
+      "country": "Slovakia"
+    },
+    {
+      "name": "Uzhhorod",
+      "latitude": 48.6208,
+      "longitude": 22.28788,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Chernivtsi",
+      "latitude": 48.29208,
+      "longitude": 25.935837,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Ivano-Frankivsk",
+      "latitude": 48.922634,
+      "longitude": 24.711117,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Brașov",
+      "latitude": 45.657974,
+      "longitude": 25.601198,
+      "country": "Romania"
+    },
+    {
+      "name": "Innsbruck",
+      "latitude": 47.262691,
+      "longitude": 11.3947,
+      "country": "Austria"
+    },
+    {
+      "name": "Salzburg",
+      "latitude": 47.80949,
+      "longitude": 13.05501,
+      "country": "Austria"
+    },
+    {
+      "name": "Graz",
+      "latitude": 47.070713,
+      "longitude": 15.439504,
+      "country": "Austria"
+    },
+    {
+      "name": "Murcia",
+      "latitude": 37.992241,
+      "longitude": -1.130654,
+      "country": "Spain"
+    },
+    {
+      "name": "Albacete",
+      "latitude": 38.997662,
+      "longitude": -1.86007,
+      "country": "Spain"
+    },
+    {
+      "name": "Kherson",
+      "latitude": 46.635418,
+      "longitude": 32.616867,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Białystok",
+      "latitude": 53.143291,
+      "longitude": 23.164089,
+      "country": "Poland"
+    },
+    {
+      "name": "Łódź",
+      "latitude": 51.759247,
+      "longitude": 19.455982,
+      "country": "Poland"
+    },
+    {
+      "name": "Lublin",
+      "latitude": 51.24691,
+      "longitude": 22.57362,
+      "country": "Poland"
+    },
+    {
+      "name": "Poznań",
+      "latitude": 52.406376,
+      "longitude": 16.925167,
+      "country": "Poland"
+    },
+    {
+      "name": "Bremen",
+      "latitude": 53.079296,
+      "longitude": 8.801694,
+      "country": "Germany"
+    },
+    {
+      "name": "Nancy",
+      "latitude": 48.690781,
+      "longitude": 6.18247,
+      "country": "France"
+    },
+    {
+      "name": "Strasbourg",
+      "latitude": 48.573406,
+      "longitude": 7.752111,
+      "country": "France"
+    },
+    {
+      "name": "Stuttgart",
+      "latitude": 48.775845,
+      "longitude": 9.182932,
+      "country": "Germany"
+    },
+    {
+      "name": "Limerick",
+      "latitude": 52.668018,
+      "longitude": -8.630498,
+      "country": "Ireland"
+    },
+    {
+      "name": "Cork",
+      "latitude": 51.896893,
+      "longitude": -8.486316,
+      "country": "Ireland"
+    },
+    {
+      "name": "Galway",
+      "latitude": 53.270668,
+      "longitude": -9.05679,
+      "country": "Ireland"
+    },
+    {
+      "name": "Inverness",
+      "latitude": 57.477772,
+      "longitude": -4.224721,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "York",
+      "latitude": 53.959965,
+      "longitude": -1.087298,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Newcastle upon Tyne",
+      "latitude": 54.978252,
+      "longitude": -1.61778,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Glasgow",
+      "latitude": 55.864239,
+      "longitude": -4.251806,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Edinburgh",
+      "latitude": 55.953251,
+      "longitude": -3.188267,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Belfast",
+      "latitude": 54.597286,
+      "longitude": -5.93012,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Douglas",
+      "latitude": 54.152336,
+      "longitude": -4.486123,
+      "country": "Isle of Man"
+    },
+    {
+      "name": "Dublin",
+      "latitude": 53.349804,
+      "longitude": -6.26031,
+      "country": "Ireland"
+    },
+    {
+      "name": "Cambridge",
+      "latitude": 52.205338,
+      "longitude": 0.121817,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Birmingham",
+      "latitude": 52.486244,
+      "longitude": -1.890401,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Cardiff",
+      "latitude": 51.481583,
+      "longitude": -3.17909,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Oxford",
+      "latitude": 51.752022,
+      "longitude": -1.257726,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Liverpool",
+      "latitude": 53.408371,
+      "longitude": -2.991573,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Manchester",
+      "latitude": 53.480759,
+      "longitude": -2.242631,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "London",
+      "latitude": 51.507351,
+      "longitude": -0.127758,
+      "country": "United Kingdom"
+    },
+    {
+      "name": "Amsterdam",
+      "latitude": 52.370216,
+      "longitude": 4.895168,
+      "country": "Netherlands"
+    },
+    {
+      "name": "Leipzig",
+      "latitude": 51.339695,
+      "longitude": 12.373075,
+      "country": "Germany"
+    },
+    {
+      "name": "Toulouse",
+      "latitude": 43.604652,
+      "longitude": 1.444209,
+      "country": "France"
+    },
+    {
+      "name": "Clermont-Ferrand",
+      "latitude": 45.77721,
+      "longitude": 3.08252,
+      "country": "France"
+    },
+    {
+      "name": "Bari",
+      "latitude": 41.117142,
+      "longitude": 16.871872,
+      "country": "Italy"
+    },
+    {
+      "name": "Florence",
+      "latitude": 43.769562,
+      "longitude": 11.255814,
+      "country": "Italy"
+    },
+    {
+      "name": "Genoa",
+      "latitude": 44.405651,
+      "longitude": 8.946256,
+      "country": "Italy"
+    },
+    {
+      "name": "Badajoz",
+      "latitude": 38.879448,
+      "longitude": -6.970654,
+      "country": "Spain"
+    },
+    {
+      "name": "Salamanca",
+      "latitude": 40.970104,
+      "longitude": -5.66354,
+      "country": "Spain"
+    },
+    {
+      "name": "Bilbao",
+      "latitude": 43.263012,
+      "longitude": -2.934985,
+      "country": "Spain"
+    },
+    {
+      "name": "San Sebastián",
+      "latitude": 43.3209,
+      "longitude": -1.98451,
+      "country": "Spain"
+    },
+    {
+      "name": "Zaragoza",
+      "latitude": 41.648823,
+      "longitude": -0.889085,
+      "country": "Spain"
+    },
+    {
+      "name": "Córdoba",
+      "latitude": 37.888176,
+      "longitude": -4.779383,
+      "country": "Spain"
+    },
+    {
+      "name": "Granada",
+      "latitude": 37.177338,
+      "longitude": -3.598557,
+      "country": "Spain"
+    },
+    {
+      "name": "Málaga",
+      "latitude": 36.721275,
+      "longitude": -4.421399,
+      "country": "Spain"
+    },
+    {
+      "name": "Seville",
+      "latitude": 37.389091,
+      "longitude": -5.984459,
+      "country": "Spain"
+    },
+    {
+      "name": "Alicante",
+      "latitude": 38.345997,
+      "longitude": -0.490686,
+      "country": "Spain"
+    },
+    {
+      "name": "Valencia",
+      "latitude": 39.469906,
+      "longitude": -0.376288,
+      "country": "Spain"
+    },
+    {
+      "name": "Gibraltar",
+      "latitude": 36.140751,
+      "longitude": -5.353585,
+      "country": "Gibraltar"
+    },
+    {
+      "name": "Lagos",
+      "latitude": 37.102787,
+      "longitude": -8.673027,
+      "country": "Portugal"
+    },
+    {
+      "name": "Porto",
+      "latitude": 41.157944,
+      "longitude": -8.629105,
+      "country": "Portugal"
+    },
+    {
+      "name": "Lisbon",
+      "latitude": 38.722252,
+      "longitude": -9.139337,
+      "country": "Portugal"
+    },
+    {
+      "name": "Andorra la Vella",
+      "latitude": 42.50753,
+      "longitude": 1.52182,
+      "country": "Andorra"
+    },
+    {
+      "name": "Barcelona",
+      "latitude": 41.385063,
+      "longitude": 2.173404,
+      "country": "Spain"
+    },
+    {
+      "name": "Madrid",
+      "latitude": 40.416775,
+      "longitude": -3.70379,
+      "country": "Spain"
+    },
+    {
+      "name": "Valletta",
+      "latitude": 35.898907,
+      "longitude": 14.514553,
+      "country": "Malta"
+    },
+    {
+      "name": "Syracuse",
+      "latitude": 37.06617,
+      "longitude": 15.28426,
+      "country": "Italy"
+    },
+    {
+      "name": "Catania",
+      "latitude": 37.507877,
+      "longitude": 15.08303,
+      "country": "Italy"
+    },
+    {
+      "name": "Zadar",
+      "latitude": 44.11937,
+      "longitude": 15.231365,
+      "country": "Croatia"
+    },
+    {
+      "name": "Sarajevo",
+      "latitude": 43.856258,
+      "longitude": 18.413076,
+      "country": "Bosnia and Herzegovina"
+    },
+    {
+      "name": "Dubrovnik",
+      "latitude": 42.650661,
+      "longitude": 18.094423,
+      "country": "Croatia"
+    },
+    {
+      "name": "Podgorica",
+      "latitude": 42.438061,
+      "longitude": 19.265551,
+      "country": "Montenegro"
+    },
+    {
+      "name": "Belgrade",
+      "latitude": 44.786568,
+      "longitude": 20.448921,
+      "country": "Serbia"
+    },
+    {
+      "name": "Timișoara",
+      "latitude": 45.748871,
+      "longitude": 21.208679,
+      "country": "Romania"
     },
     {
       "name": "Geneva",
-      "latitude": 46.2104,
-      "longitude": 6.1420,
+      "latitude": 46.204391,
+      "longitude": 6.143158,
       "country": "Switzerland"
     },
     {
-      "name": "Bern",
-      "latitude": 46.9489,
-      "longitude": 7.4395,
-      "country": "Switzerland"
+      "name": "Bourges",
+      "latitude": 47.081013,
+      "longitude": 2.398782,
+      "country": "France"
+    },
+    {
+      "name": "Nantes",
+      "latitude": 47.218372,
+      "longitude": -1.553621,
+      "country": "France"
+    },
+    {
+      "name": "Bordeaux",
+      "latitude": 44.837788,
+      "longitude": -0.57918,
+      "country": "France"
+    },
+    {
+      "name": "Klaipeda",
+      "latitude": 55.702305,
+      "longitude": 21.143198,
+      "country": "Lithuania"
+    },
+    {
+      "name": "Poltava",
+      "latitude": 49.588268,
+      "longitude": 34.551418,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Kryvyi Rih",
+      "latitude": 47.910484,
+      "longitude": 33.391785,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Ioannina",
+      "latitude": 39.67453,
+      "longitude": 20.84021,
+      "country": "Greece"
+    },
+    {
+      "name": "Patras",
+      "latitude": 38.246208,
+      "longitude": 21.735069,
+      "country": "Greece"
+    },
+    {
+      "name": "Larissa",
+      "latitude": 39.638779,
+      "longitude": 22.415979,
+      "country": "Greece"
+    },
+    {
+      "name": "Thessaloniki",
+      "latitude": 40.640064,
+      "longitude": 22.94442,
+      "country": "Greece"
+    },
+    {
+      "name": "Athens",
+      "latitude": 37.98381,
+      "longitude": 23.727539,
+      "country": "Greece"
+    },
+    {
+      "name": "Tiranë",
+      "latitude": 41.327545,
+      "longitude": 19.818699,
+      "country": "Albania"
+    },
+    {
+      "name": "Pristina",
+      "latitude": 42.66544,
+      "longitude": 21.165319,
+      "country": "Kosovo"
+    },
+    {
+      "name": "Skopje",
+      "latitude": 41.997345,
+      "longitude": 21.427996,
+      "country": "North Macedonia"
+    },
+    {
+      "name": "Plovdiv",
+      "latitude": 42.135406,
+      "longitude": 24.745291,
+      "country": "Bulgaria"
+    },
+    {
+      "name": "Varna",
+      "latitude": 43.21405,
+      "longitude": 27.914734,
+      "country": "Bulgaria"
+    },
+    {
+      "name": "Sofia",
+      "latitude": 42.697708,
+      "longitude": 23.321867,
+      "country": "Bulgaria"
+    },
+    {
+      "name": "Cluj-Napoca",
+      "latitude": 46.77092,
+      "longitude": 23.58992,
+      "country": "Romania"
+    },
+    {
+      "name": "Bucharest",
+      "latitude": 44.426765,
+      "longitude": 26.102537,
+      "country": "Romania"
+    },
+    {
+      "name": "Vinnytsia",
+      "latitude": 49.233082,
+      "longitude": 28.468218,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Dnipro",
+      "latitude": 48.464718,
+      "longitude": 35.046185,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Luhansk",
+      "latitude": 48.574039,
+      "longitude": 39.307816,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Donetsk",
+      "latitude": 48.015884,
+      "longitude": 37.802849,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Kharkiv",
+      "latitude": 49.9935,
+      "longitude": 36.230385,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Naples",
+      "latitude": 40.851799,
+      "longitude": 14.26812,
+      "country": "Italy"
+    },
+    {
+      "name": "Rome",
+      "latitude": 41.902782,
+      "longitude": 12.496365,
+      "country": "Italy"
+    },
+    {
+      "name": "San Marino",
+      "latitude": 43.94236,
+      "longitude": 12.457777,
+      "country": "San Marino"
+    },
+    {
+      "name": "Milan",
+      "latitude": 45.464203,
+      "longitude": 9.189982,
+      "country": "Italy"
+    },
+    {
+      "name": "Venice",
+      "latitude": 45.440845,
+      "longitude": 12.315515,
+      "country": "Italy"
+    },
+    {
+      "name": "Marseille",
+      "latitude": 43.296482,
+      "longitude": 5.36978,
+      "country": "France"
+    },
+    {
+      "name": "Brussels",
+      "latitude": 50.850346,
+      "longitude": 4.351721,
+      "country": "Belgium"
+    },
+    {
+      "name": "Luxembourg",
+      "latitude": 49.610697,
+      "longitude": 6.128693,
+      "country": "Luxembourg"
     },
     {
       "name": "Frankfurt am Main",
@@ -25,10 +757,184 @@
       "country": "Germany"
     },
     {
-      "name": "Graz",
-      "latitude": 47.076668,
-      "longitude": 15.421371,
+      "name": "Kyiv",
+      "latitude": 50.447731,
+      "longitude": 30.542721,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Odesa",
+      "latitude": 46.476608,
+      "longitude": 30.70731,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Minsk",
+      "latitude": 53.904541,
+      "longitude": 27.561523,
+      "country": "Belarus"
+    },
+    {
+      "name": "Wrocław",
+      "latitude": 51.107883,
+      "longitude": 17.038538,
+      "country": "Poland"
+    },
+    {
+      "name": "Chișinău",
+      "latitude": 47.00367,
+      "longitude": 28.907089,
+      "country": "Moldova"
+    },
+    {
+      "name": "Lviv",
+      "latitude": 49.839684,
+      "longitude": 24.029716,
+      "country": "Ukraine"
+    },
+    {
+      "name": "Gdańsk",
+      "latitude": 54.35603,
+      "longitude": 18.64612,
+      "country": "Poland"
+    },
+    {
+      "name": "Prague",
+      "latitude": 50.075539,
+      "longitude": 14.4378,
+      "country": "Czech Republic"
+    },
+    {
+      "name": "Kraków",
+      "latitude": 50.064651,
+      "longitude": 19.944981,
+      "country": "Poland"
+    },
+    {
+      "name": "Warsaw",
+      "latitude": 52.229675,
+      "longitude": 21.01223,
+      "country": "Poland"
+    },
+    {
+      "name": "Vilnius",
+      "latitude": 54.687157,
+      "longitude": 25.279652,
+      "country": "Lithuania"
+    },
+    {
+      "name": "Riga",
+      "latitude": 56.94965,
+      "longitude": 24.105186,
+      "country": "Latvia"
+    },
+    {
+      "name": "Tallinn",
+      "latitude": 59.436962,
+      "longitude": 24.753574,
+      "country": "Estonia"
+    },
+    {
+      "name": "Helsinki",
+      "latitude": 60.169857,
+      "longitude": 24.938379,
+      "country": "Finland"
+    },
+    {
+      "name": "Oslo",
+      "latitude": 59.913868,
+      "longitude": 10.752245,
+      "country": "Norway"
+    },
+    {
+      "name": "Stockholm",
+      "latitude": 59.329323,
+      "longitude": 18.068581,
+      "country": "Sweden"
+    },
+    {
+      "name": "Copenhagen",
+      "latitude": 55.676098,
+      "longitude": 12.568337,
+      "country": "Denmark"
+    },
+    {
+      "name": "Hamburg",
+      "latitude": 53.551086,
+      "longitude": 9.993682,
+      "country": "Germany"
+    },
+    {
+      "name": "Berlin",
+      "latitude": 52.520008,
+      "longitude": 13.404954,
+      "country": "Germany"
+    },
+    {
+      "name": "Munich",
+      "latitude": 48.135124,
+      "longitude": 11.581981,
+      "country": "Germany"
+    },
+    {
+      "name": "Zagreb",
+      "latitude": 45.81501,
+      "longitude": 15.981919,
+      "country": "Croatia"
+    },
+    {
+      "name": "Ljubljana",
+      "latitude": 46.056946,
+      "longitude": 14.505752,
+      "country": "Slovenia"
+    },
+    {
+      "name": "Budapest",
+      "latitude": 47.497913,
+      "longitude": 19.040236,
+      "country": "Hungary"
+    },
+    {
+      "name": "Bratislava",
+      "latitude": 48.148598,
+      "longitude": 17.107748,
+      "country": "Slovakia"
+    },
+    {
+      "name": "Vienna",
+      "latitude": 48.208176,
+      "longitude": 16.373819,
       "country": "Austria"
+    },
+    {
+      "name": "Lyon",
+      "latitude": 45.764042,
+      "longitude": 4.835659,
+      "country": "France"
+    },
+    {
+      "name": "Monaco",
+      "latitude": 43.738419,
+      "longitude": 7.424616,
+      "country": "Monaco"
+    },
+    {
+      "name": "Bern",
+      "latitude": 46.947975,
+      "longitude": 7.447447,
+      "country": "Switzerland"
+    },
+    {
+      "name": "Zürich",
+      "latitude": 47.376888,
+      "longitude": 8.541694,
+      "country": "Switzerland"
+    },
+    {
+      "name": "Paris",
+      "latitude": 48.856613,
+      "longitude": 2.352222,
+      "country": "France"
     }
   ]
 }
