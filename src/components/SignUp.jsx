@@ -1,3 +1,4 @@
+/*
 import { Link } from 'react-router-dom'
 import authGoBackButton from '../assets/authGoBackButton.svg';
 
@@ -130,7 +131,7 @@ export default function SignUp() {
                     <div>I agree to Terms & Conditions</div>
                 </label>
             </div>
-            {/* This MAY NOT be a BUTTON in the future when I add useNavigation */}
+            {}
             <button className='createAccount'
                 onClick={handleSignUp}
                 disabled={isLoading}>
@@ -156,4 +157,208 @@ export default function SignUp() {
             <Link to = '/auth' className='goBack'><img src={authGoBackButton} alt = 'Go back to main authentication page' /></Link>
         </div>
     )
+}
+*/
+
+import { Link, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+
+import authGoBackButton from '../assets/authGoBackButton.svg';
+import { 
+  doCreateUserWithEmailAndPassword,
+  doSignInWithGoogle,
+  doSignInWithGithub
+} from '../firebase/auth';
+
+export default function SignUp() {
+  const navigate = useNavigate();
+
+  const signUpEmail = useRef(null);
+  const signUpPass = useRef(null);
+  const signUpUsername = useRef(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Shared success handler (same philosophy as LogIn)
+  const handleSuccess = () => {
+    navigate('/');
+  };
+
+  // EMAIL / PASSWORD SIGN UP
+  const handleSignUp = async () => {
+    const email = signUpEmail.current.value;
+    const password = signUpPass.current.value;
+
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError('');
+
+      await doCreateUserWithEmailAndPassword(email, password);
+      handleSuccess();
+    } catch (err) {
+      if (err.code === 'auth/email-already-in-use') {
+        setError('This email is already registered');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Password should be at least 6 characters');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Invalid email address');
+      } else {
+        setError('Failed to create account: ' + err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // GOOGLE SIGN UP
+  const handleGoogleSignUp = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      await doSignInWithGoogle();
+      handleSuccess();
+    } catch (err) {
+      setError('Failed to sign up with Google: ' + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // GITHUB SIGN UP
+  const handleGithubSignUp = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      await doSignInWithGithub();
+      handleSuccess();
+    } catch (err) {
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        setError(
+          'An account already exists with the same email. Try logging in instead.'
+        );
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign-in popup was closed. Please try again.');
+      } else {
+        setError('Failed to sign up with GitHub: ' + err.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="signUpElements">
+      <div className="title">Register for your first ride</div>
+
+      <div className="logInRedirectionText">
+        Had a ride before?
+        <Link
+          to="/auth/log-in"
+          className="logInRedirectionTextButton"
+        >
+          Log in
+        </Link>
+      </div>
+
+      {}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSignUp();
+        }}
+      >
+        <div className="signUpInputs">
+          <div className="entryArea">
+            <input
+              type="text"
+              placeholder=" "
+              ref={signUpUsername}
+              disabled={isLoading}
+              required
+            />
+            <div className="labelLine">Username</div>
+          </div>
+
+          <div className="entryArea">
+            <input
+              type="email"
+              placeholder=" "
+              ref={signUpEmail}
+              disabled={isLoading}
+              required
+            />
+            <div className="labelLine">Email</div>
+          </div>
+
+          <div className="entryArea">
+            <input
+              type="password"
+              placeholder=" "
+              ref={signUpPass}
+              disabled={isLoading}
+              required
+            />
+            <div className="labelLine">Password</div>
+          </div>
+        </div>
+
+        <label className="termsHolder">
+          <input type="checkbox" required />
+          <span className="checkMark"></span>
+          <div>I agree to Terms & Conditions</div>
+        </label>
+
+        {error && <div className="errorMessage">{error}</div>}
+
+        <button
+          type="submit"
+          className="createAccount"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Creating an account...' : 'Create an account'}
+        </button>
+      </form>
+
+      <div className="signUpVia">
+        <div className="line"></div>
+        <div className="text">or sign up via</div>
+        <div className="line right"></div>
+      </div>
+
+      <div className="signUpOptions">
+        <button
+          type="button"
+          className="googleSignUp"
+          onClick={handleGoogleSignUp}
+          disabled={isLoading}
+        >
+          Google
+        </button>
+
+        <button
+          type="button"
+          className="githubSignUp"
+          onClick={handleGithubSignUp}
+          disabled={isLoading}
+        >
+          GitHub
+        </button>
+      </div>
+
+      <Link to="/auth" className="goBack">
+        <img
+          src={authGoBackButton}
+          alt="Go back to main authentication page"
+        />
+      </Link>
+    </div>
+  );
 }

@@ -1,15 +1,24 @@
 import Map from './components/Map'
 import AuthPage from './components/AuthPage'
+import ProtectedRoute from './firebase/ProtectedRoute';
 import GreetingScreen from './components/GreetingScreen'
 import SignUp from './components/SignUp'
 import LogIn from './components/LogIn'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-// createBrowserRouter defines a MAP of URLs to components -> which URL relates to which component
 const router = createBrowserRouter([
-  {path: '/', element: <Map />},
   {
+    path: '/', 
+    element: (
+      // private route so ProtectedRoute: if logged in render map, if not redirect to /auth
+      <ProtectedRoute>
+        <Map />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    // public route, anyone can access so ProtectedRoute is not needed 
     path: '/auth', 
     element: <AuthPage />,
     children: [  // Using NESTED routing

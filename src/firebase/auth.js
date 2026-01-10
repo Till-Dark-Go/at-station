@@ -1,11 +1,5 @@
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  GithubAuthProvider,  // Add this
-  signOut 
-} from 'firebase/auth';
+// Purpose: talks to Firebase and triggers state change
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../api/firebase';
 
 // Sign up with email/password
@@ -25,7 +19,7 @@ export const doSignInWithGoogle = async () => {
   return result;
 };
 
-// ✨ GitHub sign in
+// GitHub sign in
 export const doSignInWithGithub = async () => {
   const provider = new GithubAuthProvider();
   const result = await signInWithPopup(auth, provider);
