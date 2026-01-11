@@ -1,5 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import authGoBackButton from '../assets/authGoBackButton.svg';
+import google from '../assets/google.svg'
+import github from '../assets/github.svg'
+import opened_eye from '../assets/opened_eye.svg'
+import closed_eye from '../assets/closed_eye.svg'
+
 import { useRef, useState } from 'react';
 
 import {
@@ -10,16 +15,16 @@ import {
 
 
 export default function LogIn() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const logInEmail = useRef(null);
-  const logInPass = useRef(null);
+    const logInEmail = useRef(null);
+    const logInPass = useRef(null);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-  // Shared helper for successful auth
-  const handleSuccess = () => {
+    // Shared helper for successful auth
+    const handleSuccess = () => {
         // Firebase auth state changes and AuthContext will update automatically via onAuthStateChanged
         // ProtectedRoute will allow access
         navigate('/'); // Redirect to Map.jsx
@@ -31,7 +36,7 @@ export default function LogIn() {
         const password = logInPass.current.value;
 
         if (!email || !password) {
-        setError('Please fill in all fields');
+        setError('Please fill in all fields.');
         return;
         }
 
@@ -42,10 +47,8 @@ export default function LogIn() {
         await doSignInWithEmailAndPassword(email, password);
         handleSuccess();
         } catch (err) {
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-                setError('Invalid email or password');
-        } else if (err.code === 'auth/invalid-email') {
-                setError('Invalid email address');
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                setError('Invalid email or password.');
         } else {
                 setError('Failed to log in: ' + err.message);
         }
@@ -91,114 +94,129 @@ export default function LogIn() {
                 setIsLoading(false);
             }
     };
+    
+    // Toggle the password's eye button to show/hide it
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className="logInElements">
-        <div className="title">Log in to an existing account</div>
+            <div className="title">Log in to an existing account</div>
 
-        <div className="signUpRedirectionText">
-            Don&apos;t have an account?
-            <Link
-            to="/auth/sign-up"
-            className="signUpRedirectionTextButton"
+            <div className="signUpRedirectionText">
+                Don&apos;t have an account?
+                <Link
+                to="/auth/sign-up"
+                className="signUpRedirectionTextButton"
+                >
+                Sign up
+                </Link>
+            </div>
+
+            {}
+            <form
+                onSubmit={(e) => {
+                e.preventDefault();
+                handleLogIn();
+                }}
+                id="login-form"
             >
-            Sign up
+                <div className="logInInputs">
+                <div className="entryArea">
+                    <input
+                    id="login-email"
+                    type="email"
+                    placeholder=" "
+                    ref={logInEmail}
+                    disabled={isLoading}
+                    autoComplete="email"
+                    required
+                    />
+                    <label htmlFor="login-email" className="labelLine">Email</label>
+                </div>
+
+                <div className="entryArea">
+                    <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder=" "
+                    ref={logInPass}
+                    disabled={isLoading}
+                    autoComplete="current-password"
+                    required
+                    />
+                    <label htmlFor="login-password" className="labelLine">Password</label>
+                    <div className='showHidePassIcon'>
+                        <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
+                            onClick={() => setShowPassword(!showPassword)} 
+                            role="button" />
+                    </div>
+                </div>
+                </div>
+
+                {error && <div className="errorMessage">{error}</div>}
+
+                <button
+                type="submit"
+                className="logIntoAccount"
+                disabled={isLoading}
+                aria-busy={isLoading}
+                >
+                {isLoading ? 'Logging in...' : 'Log in'}
+                </button>
+            </form>
+
+            <div className="logInVia">
+                <div className="line" aria-hidden="true" />
+                <div className="text">or log in via</div>
+                <div className="line right" aria-hidden="true" />
+            </div>
+
+            <div className="logInOptions">
+                <button
+                type="button"
+                className="googleLogIn"
+                onClick={async () => {
+                    setIsLoading(true);
+                    setError('');
+                    try {
+                    await doSignInWithGoogle();
+                    handleSuccess();
+                    } catch (err) {
+                    setError(err.message);
+                    } finally {
+                    setIsLoading(false);
+                    }
+                }}
+                disabled={isLoading}
+                >
+                    <img src={google} alt="Google icon" aria-hidden="true" />Google
+                </button>
+
+                <button
+                type="button"
+                className="githubLogIn"
+                onClick={async () => {
+                    setIsLoading(true);
+                    setError('');
+                    try {
+                    await doSignInWithGithub();
+                    handleSuccess();
+                    } catch (err) {
+                    setError(err.message);
+                    } finally {
+                    setIsLoading(false);
+                    }
+                }}
+                disabled={isLoading}
+                >
+                    <img src={github} alt="Github icon" aria-hidden="true" />GitHub
+                </button>
+            </div>
+
+            <Link to="/auth/sign-up" className="goBack">
+                <img src={authGoBackButton} alt="Go back to sign up" 
+                    role="button" />
             </Link>
-        </div>
-
-        {}
-        <form
-            onSubmit={(e) => {
-            e.preventDefault();
-            handleLogIn();
-            }}
-        >
-            <div className="logInInputs">
-            <div className="entryArea">
-                <input
-                type="email"
-                placeholder=" "
-                ref={logInEmail}
-                disabled={isLoading}
-                required
-                />
-                <div className="labelLine">Email</div>
-            </div>
-
-            <div className="entryArea">
-                <input
-                type="password"
-                placeholder=" "
-                ref={logInPass}
-                disabled={isLoading}
-                required
-                />
-                <div className="labelLine">Password</div>
-            </div>
-            </div>
-
-            {error && <div className="errorMessage">{error}</div>}
-
-            <button
-            type="submit"
-            className="logIntoAccount"
-            disabled={isLoading}
-            >
-            {isLoading ? 'Logging in...' : 'Log in'}
-            </button>
-        </form>
-
-        <div className="logInVia">
-            <div className="line" />
-            <div className="text">or log in via</div>
-            <div className="line right" />
-        </div>
-
-        <div className="logInOptions">
-            <button
-            type="button"
-            className="googleLogIn"
-            onClick={async () => {
-                setIsLoading(true);
-                setError('');
-                try {
-                await doSignInWithGoogle();
-                handleSuccess();
-                } catch (err) {
-                setError(err.message);
-                } finally {
-                setIsLoading(false);
-                }
-            }}
-            disabled={isLoading}
-            >
-            Google
-            </button>
-
-            <button
-            type="button"
-            className="githubLogIn"
-            onClick={async () => {
-                setIsLoading(true);
-                setError('');
-                try {
-                await doSignInWithGithub();
-                handleSuccess();
-                } catch (err) {
-                setError(err.message);
-                } finally {
-                setIsLoading(false);
-                }
-            }}
-            disabled={isLoading}
-            >
-            GitHub
-            </button>
-        </div>
-
-        <Link to="/auth/sign-up" className="goBack">
-            <img src={authGoBackButton} alt="Go back to sign up" />
-        </Link>
         </div>
     );
 }
