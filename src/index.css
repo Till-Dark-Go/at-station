@@ -282,8 +282,9 @@ input:not(:placeholder-shown) + .labelLine {
 
 .showHidePassIcon img {
     flex-shrink: 0;
+    width: 20px;
     max-width: 100%;
-    margin-top: -5px;
+    margin-top: -3px;
     margin-right: 20px;
     z-index: 4444;
     cursor: pointer;
