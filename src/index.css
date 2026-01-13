@@ -74,7 +74,7 @@ button {
 .authMainPage {
     width: 100%;
     height: 100vh;
-    background-image: url('./assets/AuthPageBlackBG.svg');
+    background: url('./assets/AuthPageBlackBG.svg') center center / cover no-repeat; 
     color: white;
     position: relative;
 }
@@ -82,7 +82,7 @@ button {
 .lightRaysPNG {
     width: 100%;
     height: 100vh;
-    background-image: url('./assets/LightRays.png');
+    background: url('./assets/LightRays.png') center center / cover no-repeat;
     position: absolute;
     top: 0;
     left: 0;
