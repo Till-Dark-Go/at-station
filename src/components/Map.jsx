@@ -144,9 +144,18 @@ export default function Map() {
     }, [])  // Empty dep array [] - useEffect run once when the map is first instantiated
     
     return (
+        <>
         <div id = "map-wrap">
             <div ref={mapContainerRef} id = "map-container"></div>
         </div>
+
+        {/* All UI components displayed "on top" of the map - the TODO LIST AS WELL */}
+        <div className='UI-elements'>
+                <button
+                    className='todo-list-button'
+                >Open TODO</button>
+        </div>
+        </>
     )
 }
 

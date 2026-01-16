@@ -41,6 +41,32 @@
     transform: scale(1.3);
 }
 
+/* UI Elements alongside Map div styles */
+
+.UI-elements {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+
+.UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
+    pointer-events: auto;
+}
+
+.todo-list-button {
+    width: 150px;
+    height: 70px;
+    margin-bottom: 100px;
+}
+
+
 /* AUTH PAGE component styles */
 
 .authPage {
