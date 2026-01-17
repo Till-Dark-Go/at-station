@@ -24,56 +24,428 @@
     height: 100%;
 }
 
-.mapboxgl-control-container
-{
+.mapboxgl-control-container {
     display: none;
 }
 
-.mapboxgl-marker
-{
+.mapboxgl-marker {
     overflow: visible;
 }
 
-.mapboxgl-marker img
-{
+.mapboxgl-marker img {
     transition: transform 1s ease;
     transform-origin: bottom;
 }
 
-.mapboxgl-marker img:hover
-{
+.mapboxgl-marker img:hover {
     transform: scale(1.3);
 }
 
+/* UI Elements alongside Map div styles */
+
+.UI-elements {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+}
+
+.UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
+    pointer-events: auto;
+}
+
+.todo-list-button {
+    width: 150px;
+    height: 70px;
+    margin-bottom: 100px;
+}
+
+
 /* AUTH PAGE component styles */
 
-.authPage 
-{
+.authPage {
     display: flex;
     justify-content: left;
     margin: 10px
 }
 
-.signIn, .logIn, .otherServices
-{
+.signIn, .logIn, .otherServices {
     display: block;
     width: 200px;
 }
 
-input 
-{
+input {
     height: 20px;
     margin-bottom: 5px;
 }
 
-button
-{
+button {
     width: 90px;
     height: 30px;
 }
 
-.otherServices button
-{
+.otherServices button {
     width: 150px;
     margin-bottom: 5px;
+}
+
+/* GREETING SCREEN component styles */
+
+.authMainPage {
+    width: 100%;
+    height: 100vh;
+    background: url('./assets/AuthPageBlackBG.svg') center center / cover no-repeat; 
+    color: white;
+    position: relative;
+}
+
+.lightRaysPNG {
+    width: 100%;
+    height: 100vh;
+    background: url('./assets/LightRays.png') center center / cover no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.topBar {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    z-index: 1111;
+}
+
+.greetingText, .signUpElements, .logInElements {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.catchPhrase {
+    position: relative;
+    background: transparent;
+    padding: 8px 0;
+    width: 350px;
+    color: #D0D0D0;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 300;
+}
+
+.catchPhrase::before {  /* ::before creates a pseudo element*/
+    content: '';  /* Required for pseudo-element to render */
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    padding: 1px;
+    background: linear-gradient(20deg, #3B3B3B, #BDBDBD);
+
+    /* This compositing mode subtracts the first mask from the second */
+    /* Result: only the 2px padding area (the "border") remains visible */
+    mask: 
+        linear-gradient(#fff 0 0) content-box,  /* Mask out the content area */ 
+        linear-gradient(#fff 0 0);  /* Keep the entire element */
+    mask-composite: exclude;
+
+    pointer-events: none; /* Allows clicks to pass through to text */
+}
+
+.mainTitle, .signUpElements .title, .logInElements .title {
+    font-size: 40px;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 400;
+    letter-spacing: 3px;
+}
+
+.gradientText {
+    background: -webkit-linear-gradient(20deg, #454545, #FFFFFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.subTitle {
+    color: #D0D0D0;
+    width: 600px;
+    line-height: 26px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 200;
+    margin-bottom: 50px;
+}
+
+.authButton, .createAccount, .googleSignUp, .githubSignUp, .logIntoAccount, .googleLogIn, .githubLogIn {
+    width: 310px;
+    height: 70px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 70px;
+    text-transform: uppercase;
+    font-size: 20px;
+    background: #0000007e;
+    border: 1px solid #FFC973;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.4s ease;
+    font-weight: 400;
+}
+
+.authButton:hover {
+    box-shadow: 
+        /* 0 0 15px #ffc973a8,  outer glow */
+        inset 0 0 15px #ffc973a8;   /* inner glow */
+}
+
+/* SIGN UP and LOG IN component styles (some are inherited from the GREETING SCREEN)*/
+
+.signUpElements, .logInElements {
+    height: 100vh;
+    /* background-image: url('./assets/authStationTextBG.svg'); */
+    background-color: #0A0A0A;
+}
+
+.signUpElements .title, .logInElements .title {
+    font-size: 35px;
+}
+
+.signup-form, .login-form {
+    width: 500px;
+}
+
+.logInRedirectionText, .signUpRedirectionText {
+    width: 500px;
+    color: #D0D0D0;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.logInRedirectionTextButton, .signUpRedirectionTextButton {
+    margin-left: 5px;
+    color: #FFC973;
+}
+
+.signUpInputs, .logInInputs {
+    width: 501px;
+    margin-bottom: 10px;
+}
+
+.entryArea {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding-top: 14px;
+}
+
+.entryArea input {
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 14px;
+    padding: 20px 0;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 1px solid #949494;
+    transition: 0.1s ease;
+    background: transparent;
+    z-index: 1111;
+    color: #949494;
+    cursor: pointer;
+}
+
+.labelLine {
+    position: absolute;
+    font-size: 16px;
+    color: #848484;
+    background-color: #0A0A0A;
+    margin-left: 20px;
+    transition: 0.2s ease;
+    line-height: 42px;
+}
+
+.entryArea input:focus, input:not(:placeholder-shown) {
+    color: white;
+    border-color: white;
+    font-size: 14px;
+}
+
+.entryArea input:focus + .labelLine,
+input:not(:placeholder-shown) + .labelLine {
+    color: white;
+    height: 25px;
+    line-height: 30px;
+    padding: 0 12px;
+    transform: translate(-20px, -16px) scale(0.84);
+    z-index: 2222;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.showHidePassIcon {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.showHidePassIcon img {
+    flex-shrink: 0;
+    width: 20px;
+    max-width: 100%;
+    margin-top: -3px;
+    margin-right: 20px;
+    z-index: 4444;
+    cursor: pointer;
+}
+
+.termsHolder {
+    display: flex;
+    height: 20px;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 35px;
+    cursor: pointer;
+}
+
+.termsHolder input {
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+    height: 16px;
+    width: 16px;
+}
+
+.checkMark {
+    position: relative;
+    height: 16px;
+    width: 16px;
+    background-color: #02020257;
+    border: 1px solid #949494;
+    border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.termsHolder input:hover .checkMark {
+    background-color: #3f3f3fa8;
+}
+
+.termsHolder input:checked + .checkMark {
+    background-color: #53535360;
+}
+
+.checkMark:after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.termsHolder input:checked + .checkMark:after {
+    display: block;
+}
+
+.termsHolder div {
+    margin-left: 8px;
+    color: #D0D0D0;
+}
+
+.createAccount, .googleSignUp, .githubSignUp, .logIntoAccount, .googleLogIn, .githubLogIn {
+    width: 100%;
+    height: 65px;
+    line-height: 65px;
+    background-color: #00000085;
+    border: 1px solid #949494;
+}
+
+.logIntoAccount {
+    margin-top: 20px;
+}
+
+.googleSignUp, .githubSignUp, .googleLogIn, .githubLogIn {
+    width: 300px;
+    color: #D0D0D0;
+    font-weight: 300;
+}
+
+.createAccount:hover, .googleSignUp:hover, .githubSignUp:hover, .logIntoAccount:hover, .googleLogIn:hover, .githubLogIn:hover {
+    border: 1px solid #FFC973;
+    box-shadow: 
+        /* 0 0 15px #ffc973a8, */
+        inset 0 0 15px #ffc973a8;
+}
+
+.signUpVia, .signUpOptions, .logInVia, .logInOptions {
+    color: #D0D0D0;
+    width: 500px; 
+    margin-top: 25px;
+    margin-bottom: 35px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.signUpOptions, .logInOptions {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    width: 500px;
+}
+
+.signUpOptions button, .logInOptions button {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signUpOptions button img, .logInOptions button img {
+    margin-right: 6px;
+}
+
+.line {
+    background: linear-gradient(20deg, #454545, #FFFFFF);
+    width: 32%;
+    height: 2px;
+    border-radius: 3px;
+}
+
+.right {
+    background: linear-gradient(20deg, #a1a1a1, #FFFFFF);
+}
+
+.goBack img {
+    display: block;
+    width: 23px;
+    margin-top: 10px;
+}
+
+.errorMessage {
+    margin-bottom: 20px;
+    margin-top: -8px;
+    color: rgb(255, 93, 93);
 }
