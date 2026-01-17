@@ -61,10 +61,12 @@
     margin-top: 40px;
     text-align: center;
     width: 200px;
+    pointer-events: none;
 }
 
 .top-curr-station-name .lable {
     font-size: 14px;
+    pointer-events: auto;
 }
 
 .top-curr-station-name .station-name {
@@ -72,6 +74,7 @@
     text-transform: uppercase;
     margin-block: 17px;
     letter-spacing: 2px;
+    pointer-events: auto;
 }
 
 .top-curr-station-name .line {
@@ -86,6 +89,7 @@
     align-items: center;
     width: 500px;
     height: 150px;
+    pointer-events: none;
 }
 
 .travel-time-bar {
@@ -98,6 +102,7 @@
     font-size: 14px;
     isolation: isolate;
     letter-spacing: 1px;
+    pointer-events: auto;
 }
 
 .travel-time-bar::before {
@@ -124,6 +129,7 @@
     inset: 2px; /* Match the padding/border width */
     border-radius: 48px; /* Slightly smaller than ::before */
     background: #00000070;
+    backdrop-filter: blur(2px);
     z-index: -1;
     pointer-events: none;
 }
@@ -146,6 +152,8 @@
     color: #DADADA;
     font-size: 25px;
     letter-spacing: 1px;
+    backdrop-filter: blur(2px);
+    pointer-events: auto;
 }
 
 .todo-list-button, .profile-button {
@@ -157,6 +165,8 @@
     color: #DADADA;
     transition: 0.4s ease;
     cursor: pointer;
+    backdrop-filter: blur(2px);
+    pointer-events: auto;
 }
 
 .todo-list-button:hover, .profile-button:hover {
