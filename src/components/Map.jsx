@@ -18,6 +18,10 @@ export default function Map() {
     // This will be taken from Firebase when we have personal info about each user - including their last/current stop
     const userStartingPoint = { lng: 8.541694, lat: 47.376888};   // Zurich
     const userStationName = 'Zurich';
+
+    const [nextStationName, setNextStationName] = useState('at station');
+    const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...')
+
     // Everything set up in useEffect only once when the map is first loaded
     useEffect(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -59,97 +63,103 @@ export default function Map() {
             } else {
                 img.src = marker_logo;
             
-            // HOVERING 
-            marker.onmouseenter = () => { 
-                // Do something here that will pass the NAME of the station to the button below 
-                // If clicked - then proceed to the confirmation window and then to movement
-                img.onmouseenter = () => {
-                    img.src = hovered_marker_logo;
+                // HOVERING 
+                marker.onmouseenter = () => {
+                    img.onmouseenter = () => {
+                        img.src = hovered_marker_logo;
+                        setNextStationName(markerIDClass);
+                        let station = arrayOfStations.find(item => item.id == markerIDClass);
+                        let nextLng = station['longitude'];
+                        let nextLat = station['latitude'];
+                        let travelTimeInMinutes = calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat)
+                        setTravelTimeLabel("Travel time: " + travelTimeInMinutes);
+                    }
                 }
-            }
 
-            img.onmouseleave = () => {
-                img.src = marker_logo;
-            }
+                img.onmouseleave = () => {
+                    img.src = marker_logo;
+                    setNextStationName('at station');
+                    setTravelTimeLabel('Awaiting travelling...');
+                }
 
-            // MOVING TO THE STATION
-            marker.onclick = () => {
-                // Get the marker's class
-                console.log(markerIDClass);
+                // MOVING TO THE STATION
+                marker.onclick = () => {
+                    // Get the marker's class
+                    console.log(markerIDClass);
 
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // Here should be a check if (markerIDClass != userCurrentIDStationPosition) { do everything that's below }
-                // This is needed so that we don't go through the whole animation and calculation if we clicked on the same station where we're standing
-                // Just show in the console that you're already standing on this station so click on something else
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // Here should be a check if (markerIDClass != userCurrentIDStationPosition) { do everything that's below }
+                    // This is needed so that we don't go through the whole animation and calculation if we clicked on the same station where we're standing
+                    // Just show in the console that you're already standing on this station so click on something else
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                // Get the long and lat based on this class
-                let nextLng, nextLat;
-                arrayOfStations.forEach((station) => {
-                    if (station['id'] == markerIDClass) {
-                        console.log(station);
-                        nextLng = station['longitude'];
-                        nextLat = station['latitude'];
-                    }
-                });
-
-                // Using the vector formula and USER'S long lat calculate the distance
-                let userLng = userStartingPoint.lng;
-                let userLat = userStartingPoint.lat;
-                console.log(userLng, userLat, nextLng, nextLat);
-                let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
-
-                // Print to the console
-                console.log(distance);
-
-                // Convert into some number of minutes
-                let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
-                console.log(travelTime + ' minutes');
-
-                // Based on the minutes set the speed for flyTo() below when clicked on the marker
-
-
-                // FLying back to the USER POINT and starting from there
-                mapRef.current.flyTo({
-                    center: [userLng, userLat], 
-                    zoom: 7,
-                    speed: 0.2,
-                    curve: 1,
-                    easing(t) {
-                        return t;
-                    }
-                });
-
-                mapRef.current.once('moveend', () => {  // .once('moveend') is used to track when the PREV animation ENDED - then we start a new one, otherwise it will be jumpy
-                    // Setting zoom and changing the style to the colorful one
-                    mapRef.current.setMaxZoom(15);
-                    mapRef.current.zoomTo(15, {
-                        duration: 10000
+                    // Get the long and lat based on this class
+                    let nextLng, nextLat;
+                    arrayOfStations.forEach((station) => {
+                        if (station['id'] == markerIDClass) {
+                            console.log(station);
+                            nextLng = station['longitude'];
+                            nextLat = station['latitude'];
+                        }
                     });
-                    mapRef.current.once('zoomend', () => {
-                        mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
 
-                        mapRef.current.once('moveend', () => {
-                            mapRef.current.easeTo({
-                                center: [nextLng, nextLat],
-                                zoom: 15,
-                                duration: 60000*travelTime  // 1 minute = 60 000 ms and we set duration in ms
-                            });
+                    // Using the vector formula and USER'S long lat calculate the distance
+                    let userLng = userStartingPoint.lng;
+                    let userLat = userStartingPoint.lat;
+                    console.log(userLng, userLat, nextLng, nextLat);
+                    let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
 
-                            // Changing the zoom back to normal
+                    // Print to the console
+                    console.log(distance);
+
+                    // Convert into some number of minutes
+                    let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
+                    console.log(travelTime + ' minutes');
+
+                    // Based on the minutes set the speed for flyTo() below when clicked on the marker
+
+
+                    // FLying back to the USER POINT and starting from there
+                    mapRef.current.flyTo({
+                        center: [userLng, userLat], 
+                        zoom: 7,
+                        speed: 0.2,
+                        curve: 1,
+                        easing(t) {
+                            return t;
+                        }
+                    });
+
+                    mapRef.current.once('moveend', () => {  // .once('moveend') is used to track when the PREV animation ENDED - then we start a new one, otherwise it will be jumpy
+                        // Setting zoom and changing the style to the colorful one
+                        mapRef.current.setMaxZoom(15);
+                        mapRef.current.zoomTo(15, {
+                            duration: 10000
+                        });
+                        mapRef.current.once('zoomend', () => {
+                            mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
+
                             mapRef.current.once('moveend', () => {
-                                mapRef.current.zoomTo(7, {
-                                    duration: 10000
+                                mapRef.current.easeTo({
+                                    center: [nextLng, nextLat],
+                                    zoom: 15,
+                                    duration: 60000*travelTime  // 1 minute = 60 000 ms and we set duration in ms
                                 });
-                                mapRef.current.once('moveend', () => {     
-                                    mapRef.current.setMaxZoom(7);
-                                    mapRef.current.setStyle("mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe");
+
+                                // Changing the zoom back to normal
+                                mapRef.current.once('moveend', () => {
+                                    mapRef.current.zoomTo(7, {
+                                        duration: 10000
+                                    });
+                                    mapRef.current.once('moveend', () => {     
+                                        mapRef.current.setMaxZoom(7);
+                                        mapRef.current.setStyle("mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe");
+                                    });
                                 });
                             });
                         });
                     });
-                });
-            };
+                };
             }
         });
         
@@ -172,19 +182,39 @@ export default function Map() {
                 <div className='line'></div>
             </div>
             <div className='bottom-UI'>
-                <button
+                <div className='travel-time-bar'>{travelTimeLabel}</div>
+                <div className='buttons'>
+                    <button
                     className='todo-list-button'
-                ><img src={todo_list_logo} alt="Todo list page logo" /></button>
-                <button className='at-station-button'>
-                    at station
-                </button>
-                <button
-                    className='profile-button'
-                ><img src={user_pf_logo} alt="User profile page logo" /></button>
+                    ><img src={todo_list_logo} alt="Todo list page logo" /></button>
+                    <button className='at-station-button'>
+                        {nextStationName}
+                    </button>
+                    <button
+                        className='profile-button'
+                    ><img src={user_pf_logo} alt="User profile page logo" /></button>
+                </div>
             </div>
         </div>
         </>
     )
+}
+
+function calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat) {
+    // Using the vector formula and USER'S long lat calculate the distance
+    let userLng = userStartingPoint.lng;
+    let userLat = userStartingPoint.lat;
+    console.log(userLng, userLat, nextLng, nextLat);
+    let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
+
+    // Print to the console
+    console.log(distance);
+
+    // Convert into some number of minutes
+    let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
+    console.log(travelTime + ' minutes');
+
+    return travelTime;
 }
 
 // This calculates the distance between two points considering MEDIANS - since this is a real world map, we can't just use the Euclidean distance formula

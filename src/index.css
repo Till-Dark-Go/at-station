@@ -80,11 +80,60 @@
 
 .bottom-UI {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 60px;
     align-items: center;
     width: 500px;
+    height: 150px;
+}
+
+.travel-time-bar {
+    width: 270px;
+    position: relative;
+    background: transparent;
+    padding: 8px 0;
+    color: #DADADA;
+    text-align: center;
+    font-size: 14px;
+    isolation: isolate;
+    letter-spacing: 1px;
+}
+
+.travel-time-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    padding: 2px;
+    background:
+        linear-gradient(20deg, #3B3B3B, #BDBDBD);
+    z-index: 0;
+
+    mask: 
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+
+    pointer-events: none;
+}
+
+.travel-time-bar::after {
+    content: '';
+    position: absolute;
+    inset: 2px; /* Match the padding/border width */
+    border-radius: 48px; /* Slightly smaller than ::before */
+    background: #00000070;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bottom-UI .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .at-station-button {
