@@ -7,7 +7,7 @@
     margin: 0;
     padding: 0;
     font-family: Inter;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* MAP component styles */
@@ -28,17 +28,13 @@
     display: none;
 }
 
-.mapboxgl-marker {
-    overflow: visible;
-}
-
 .mapboxgl-marker img {
-    transition: transform 1s ease;
-    transform-origin: bottom;
+    transition: transform 1s ease, opacity 0.3s ease;
+    scale: 0.35;
 }
 
 .mapboxgl-marker img:hover {
-    transform: scale(1.3);
+    transform: scale(1.5);
 }
 
 /* UI Elements alongside Map div styles */
@@ -52,18 +48,71 @@
     pointer-events: none;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
+    color: #DADADA;
 }
 
 .UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
     pointer-events: auto;
 }
 
-.todo-list-button {
-    width: 150px;
+.top-curr-station-name {
+    margin-top: 40px;
+    text-align: center;
+    width: 200px;
+}
+
+.top-curr-station-name .lable {
+    font-size: 14px;
+}
+
+.top-curr-station-name .station-name {
+    font-size: 35px;
+    text-transform: uppercase;
+    margin-block: 17px;
+    letter-spacing: 2px;
+}
+
+.top-curr-station-name .line {
+    width: 100%;
+}
+
+.bottom-UI {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    align-items: center;
+    width: 500px;
+}
+
+.at-station-button {
+    width: 270px;
+    height: 86px;
+    background-color: #00000070;
+    border: 2px solid #949494; 
+    border-radius: 10px;
+    text-transform: uppercase;
+    color: #DADADA;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+
+.todo-list-button, .profile-button {
+    width: 70px;
     height: 70px;
-    margin-bottom: 100px;
+    background-color: #00000070;
+    border: 2px solid #949494; 
+    border-radius: 10px;
+    color: #DADADA;
+    transition: 0.4s ease;
+    cursor: pointer;
+}
+
+.todo-list-button:hover, .profile-button:hover {
+    background-color: #0000009d;
+    box-shadow: 0 0 15px #949494;
 }
 
 
@@ -208,8 +257,8 @@ button {
 
 .authButton:hover {
     box-shadow: 
-        /* 0 0 15px #ffc973a8,  outer glow */
-        inset 0 0 15px #ffc973a8;   /* inner glow */
+        0 0 15px #ffc973a8,
+        inset 0 0 15px #ffc973a8;
 }
 
 /* SIGN UP and LOG IN component styles (some are inherited from the GREETING SCREEN)*/
@@ -395,7 +444,7 @@ input:not(:placeholder-shown) + .labelLine {
 .createAccount:hover, .googleSignUp:hover, .githubSignUp:hover, .logIntoAccount:hover, .googleLogIn:hover, .githubLogIn:hover {
     border: 1px solid #FFC973;
     box-shadow: 
-        /* 0 0 15px #ffc973a8, */
+        0 0 15px #ffc973a8,
         inset 0 0 15px #ffc973a8;
 }
 

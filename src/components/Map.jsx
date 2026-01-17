@@ -4,6 +4,10 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { getStations } from '../api/stations.js'
 
 import marker_logo from '../assets/marker.svg'
+import hovered_marker_logo from '../assets/hovered_marker.png'
+import user_marker_logo from '../assets/user_marker.png'
+import todo_list_logo from '../assets/todo_list.svg'
+import user_pf_logo from '../assets/user_profile.svg'
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
 
@@ -12,8 +16,8 @@ export default function Map() {
     const mapContainerRef = useRef();
  
     // This will be taken from Firebase when we have personal info about each user - including their last/current stop
-    const userStartingPoint = { lng: 8.191225, lat: 46.015261};
-
+    const userStartingPoint = { lng: 8.541694, lat: 47.376888};   // Zurich
+    const userStationName = 'Zurich';
     // Everything set up in useEffect only once when the map is first loaded
     useEffect(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -27,17 +31,16 @@ export default function Map() {
             maxZoom: 7
         });
 
-        // Plots the markers
-        // You can add div into .Marker() to have a wrapper around the marker - come back to the docs
-        let marker = new mapboxgl.Marker().setLngLat([userStartingPoint.lng, userStartingPoint.lat]).addTo(mapRef.current);
-        marker.addClassName('userMarker');  // Adds the LAST class in the string for this marker
-
         // Automatically plotting all the station markers on the map from the data we got from Firebase
         // Also adding their ids as their class names just in case
         arrayOfStations.forEach((station) => {  // This DOES NOT return the HTML div - this is why I do the query selector for markers separately below
             let stationMarker = new mapboxgl.Marker().setLngLat([station['longitude'], station['latitude']]).addTo(mapRef.current);
             let stationID = station['id'];
             stationMarker.addClassName(stationID);
+            
+            if (station['longitude'] == userStartingPoint.lng && station['latitude'] == userStartingPoint.lat) {
+                stationMarker.addClassName('userMarker');
+            }
         });
 
         let markers = document.querySelectorAll(".mapboxgl-marker");
@@ -45,17 +48,28 @@ export default function Map() {
         // This one DOES RETURN THE HTML DIV - which is why I can set up the img and do onclick, it knows what HTML element to click on
         markers.forEach((marker) => {
             let markerIDClass = marker.className.split(' ')[marker.className.split(' ').length - 1];
-        
+
             // Setting custom marker svg
             marker.innerHTML = "<img>";
-            marker.children[0].src = marker_logo;
+            let img = marker.children[0];
+
+            if (markerIDClass == "userMarker") {
+                console.log(marker);
+                img.src = user_marker_logo;
+            } else {
+                img.src = marker_logo;
             
             // HOVERING 
             marker.onmouseenter = () => { 
                 // Do something here that will pass the NAME of the station to the button below 
                 // If clicked - then proceed to the confirmation window and then to movement
-                // But when simply hovered over, we pass the info to the button and that's it
-                // The expansion and glowing is done in css
+                img.onmouseenter = () => {
+                    img.src = hovered_marker_logo;
+                }
+            }
+
+            img.onmouseleave = () => {
+                img.src = marker_logo;
             }
 
             // MOVING TO THE STATION
@@ -136,6 +150,7 @@ export default function Map() {
                     });
                 });
             };
+            }
         });
         
         return () => {
@@ -151,9 +166,22 @@ export default function Map() {
 
         {/* All UI components displayed "on top" of the map - the TODO LIST AS WELL */}
         <div className='UI-elements'>
+            <div className='top-curr-station-name'>
+                <div className='lable'>Current station is</div>
+                <div className='station-name'>{userStationName}</div>
+                <div className='line'></div>
+            </div>
+            <div className='bottom-UI'>
                 <button
                     className='todo-list-button'
-                >Open TODO</button>
+                ><img src={todo_list_logo} alt="Todo list page logo" /></button>
+                <button className='at-station-button'>
+                    at station
+                </button>
+                <button
+                    className='profile-button'
+                ><img src={user_pf_logo} alt="User profile page logo" /></button>
+            </div>
         </div>
         </>
     )
