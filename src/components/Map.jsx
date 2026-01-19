@@ -5,9 +5,13 @@ import { getStations } from '../api/stations.js'
 
 import marker_logo from '../assets/marker.svg'
 import hovered_marker_logo from '../assets/hovered_marker.png'
-import user_marker_logo from '../assets/user_marker.png'
+// import user_marker_logo from '../assets/user_marker.png'  // Transparent user marker with white outline
+// import user_marker_logo from '../assets/golden_user_marker.svg'  // Gold user marker in case we don't like a black one
+import user_marker_logo from '../assets/black_user_marker.svg'
 import todo_list_logo from '../assets/todo_list.svg'
 import user_pf_logo from '../assets/user_profile.svg'
+
+
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
 
@@ -137,7 +141,7 @@ export default function Map() {
                             duration: 10000
                         });
                         mapRef.current.once('zoomend', () => {
-                            mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
+                            // mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
 
                             mapRef.current.once('moveend', () => {
                                 mapRef.current.easeTo({
@@ -153,7 +157,7 @@ export default function Map() {
                                     });
                                     mapRef.current.once('moveend', () => {     
                                         mapRef.current.setMaxZoom(7);
-                                        mapRef.current.setStyle("mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe");
+                                        // mapRef.current.setStyle("mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe");
                                     });
                                 });
                             });
