@@ -88,7 +88,7 @@ export default function Map() {
 
                 marker_img.onmouseleave = () => {  // Leave marker -> reset button's name and travel time on the bottom UI
                     marker_img.src = marker_logo;
-                    if (!popupOpenRef) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
+                    if (!popupOpenRef.current) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
                         setNextStation({name: 'at station', country: ''});
                         setTravelTimeLabel('Awaiting travelling...');
                     }
