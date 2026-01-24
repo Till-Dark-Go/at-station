@@ -3,14 +3,14 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { getStations } from '../api/stations.js'
 
-import marker_logo from '../assets/marker.svg'
-import hovered_marker_logo from '../assets/hovered_marker.png'
-// import user_marker_logo from '../assets/user_marker.png'  // Transparent user marker with white outline
-// import user_marker_logo from '../assets/golden_user_marker.svg'  // Gold user marker in case we don't like a black one
-import user_marker_logo from '../assets/black_user_marker.svg'
-import todo_list_logo from '../assets/todo_list.svg'
-import user_pf_logo from '../assets/user_profile.svg'
+import marker_logo from '../assets/images/marker.svg'
+import hovered_marker_logo from '../assets/images/hovered_marker.png'
+import user_marker_logo from '../assets/images/black_user_marker.svg'
+import todo_list_logo from '../assets/images/todo_list.svg'
+import user_pf_logo from '../assets/images/user_profile.svg'
+import close_popup_button from '../assets/images/authGoBackButton.svg'
 
+import { calcStationParameters } from '../assets/utils/mapFunctions.js'
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
@@ -19,150 +19,85 @@ export default function Map() {
     const mapRef = useRef();
     const mapContainerRef = useRef();
  
-    // This will be taken from Firebase when we have personal info about each user - including their last/current stop
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! This will be taken from Firebase when we have personal info about each user - including their last/current stop
     const userStartingPoint = { lng: 8.541694, lat: 47.376888};   // Zurich
     const userStationName = 'Zurich';
 
-    const [nextStationName, setNextStationName] = useState('at station');
-    const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...')
+    const [nextStation, setNextStation] = useState({name: 'at station', country: ''});
+    const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...');
+    const [confirmTravelPopup, setConfirmTravelPopup] = useState(false);
+    const popupOpenRef = useRef(false);
+    const [timeAndCoords, setTimeAndCoords] = useState({hours: null, minutes: null, nextLng: null, nextLat: null});  // These need to be kept between renders => use useState for this
+    const UI_elements_div = useRef(null);  // For the UI elements container to make it pointer-events: auto when the pop up is opened (so that we can't move the map)
 
-    // Everything set up in useEffect only once when the map is first loaded
+    // Everything set up in useEffect only ONCE when the map is first loaded
     useEffect(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: "mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe",
-            center: [userStartingPoint.lng, userStartingPoint.lat],
+            center: [userStartingPoint.lng, userStartingPoint.lat],        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CHANGE THIS TO INFO FROM DB
             zoom: 7,
             minZoom: 5,
             maxZoom: 7
         });
 
         // Automatically plotting all the station markers on the map from the data we got from Firebase
-        // Also adding their ids as their class names just in case
-        arrayOfStations.forEach((station) => {  // This DOES NOT return the HTML div - this is why I do the query selector for markers separately below
-            let stationMarker = new mapboxgl.Marker().setLngLat([station['longitude'], station['latitude']]).addTo(mapRef.current);
+        arrayOfStations.forEach((station) => {  // DOES NOT return the HTML div, arrayOfStations is an ARRAY with objects (db entries) inside
+            let stationMarker = new mapboxgl.Marker()
+                                        .setLngLat([station['longitude'], station['latitude']])
+                                        .addTo(mapRef.current);
             let stationID = station['id'];
             stationMarker.addClassName(stationID);
-            
+
             if (station['longitude'] == userStartingPoint.lng && station['latitude'] == userStartingPoint.lat) {
                 stationMarker.addClassName('userMarker');
             }
         });
 
-        let markers = document.querySelectorAll(".mapboxgl-marker");
-        // Setting custom svg for markers, handle the click of the station (NOT DONE YET) and how to move there
-        // This one DOES RETURN THE HTML DIV - which is why I can set up the img and do onclick, it knows what HTML element to click on
+        let markers = document.querySelectorAll(".mapboxgl-marker");  // Getting all the marker divs
+
         markers.forEach((marker) => {
             let markerIDClass = marker.className.split(' ')[marker.className.split(' ').length - 1];
 
             // Setting custom marker svg
             marker.innerHTML = "<img>";
-            let img = marker.children[0];
+            let marker_img = marker.children[0];
 
             if (markerIDClass == "userMarker") {
-                console.log(marker);
-                img.src = user_marker_logo;
+                marker_img.src = user_marker_logo;
+
             } else {
-                img.src = marker_logo;
-            
-                // HOVERING 
-                marker.onmouseenter = () => {
-                    img.onmouseenter = () => {
-                        img.src = hovered_marker_logo;
-                        setNextStationName(markerIDClass);
-                        let station = arrayOfStations.find(item => item.id == markerIDClass);
-                        let nextLng = station['longitude'];
-                        let nextLat = station['latitude'];
-                        let travelTimeInMinutes = calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat)
-                        setTravelTimeLabel("Travel time: " + travelTimeInMinutes);
+                marker_img.src = marker_logo;
+                let hoverResults;
+
+                marker_img.onmouseenter = () => {  // Enter marker -> get coordinates and travel time to it
+                    marker_img.src = hovered_marker_logo;
+
+                    let station = arrayOfStations.find(item => item.id == markerIDClass);
+                    setNextStation({name: markerIDClass, country: station.country});
+
+                    hoverResults = calcStationParameters(station, userStartingPoint);
+                    if (hoverResults.hoursVar > 0) {
+                        setTravelTimeLabel(`Travel time: ${hoverResults.hoursVar} hr ${hoverResults.minutesVar} min`);
+                    } else {
+                        setTravelTimeLabel(`Travel time: ${hoverResults.minutesVar} min`);
                     }
                 }
 
-                img.onmouseleave = () => {
-                    img.src = marker_logo;
-                    setNextStationName('at station');
-                    setTravelTimeLabel('Awaiting travelling...');
+                marker_img.onmouseleave = () => {  // Leave marker -> reset button's name and travel time on the bottom UI
+                    marker_img.src = marker_logo;
+                    if (!popupOpenRef) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
+                        setNextStation({name: 'at station', country: ''});
+                        setTravelTimeLabel('Awaiting travelling...');
+                    }
                 }
 
-                // MOVING TO THE STATION
-                marker.onclick = () => {
-                    // Get the marker's class
-                    console.log(markerIDClass);
+                marker_img.onclick = () => {  // Click on marker -> open confirmation pop up window
 
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // Here should be a check if (markerIDClass != userCurrentIDStationPosition) { do everything that's below }
-                    // This is needed so that we don't go through the whole animation and calculation if we clicked on the same station where we're standing
-                    // Just show in the console that you're already standing on this station so click on something else
-                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                    // Get the long and lat based on this class
-                    let nextLng, nextLat;
-                    arrayOfStations.forEach((station) => {
-                        if (station['id'] == markerIDClass) {
-                            console.log(station);
-                            nextLng = station['longitude'];
-                            nextLat = station['latitude'];
-                        }
-                    });
-
-                    // Using the vector formula and USER'S long lat calculate the distance
-                    let userLng = userStartingPoint.lng;
-                    let userLat = userStartingPoint.lat;
-                    console.log(userLng, userLat, nextLng, nextLat);
-                    let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
-
-                    // Print to the console
-                    console.log(distance);
-
-                    // Convert into some number of minutes
-                    let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
-                    console.log(travelTime + ' minutes');
-
-                    // Based on the minutes set the speed for flyTo() below when clicked on the marker
-
-
-                    // FLying back to the USER POINT and starting from there
-                    mapRef.current.flyTo({
-                        center: [userLng, userLat], 
-                        zoom: 7,
-                        speed: 0.2,
-                        curve: 1,
-                        easing(t) {
-                            return t;
-                        }
-                    });
-
-                    mapRef.current.once('moveend', () => {  // .once('moveend') is used to track when the PREV animation ENDED - then we start a new one, otherwise it will be jumpy
-                        // Setting zoom and changing the style to the colorful one
-                        mapRef.current.setMaxZoom(15);
-                        mapRef.current.zoomTo(15, {
-                            duration: 10000
-                        });
-                        mapRef.current.once('zoomend', () => {
-                            // mapRef.current.setStyle("mapbox://styles/ulvenrev/cmik0ioyv003001sbcqbl2wi9");
-
-                            mapRef.current.once('moveend', () => {
-                                mapRef.current.easeTo({
-                                    center: [nextLng, nextLat],
-                                    zoom: 15,
-                                    duration: 60000*travelTime  // 1 minute = 60 000 ms and we set duration in ms
-                                });
-
-                                // Changing the zoom back to normal
-                                mapRef.current.once('moveend', () => {
-                                    mapRef.current.zoomTo(7, {
-                                        duration: 10000
-                                    });
-                                    mapRef.current.once('moveend', () => {     
-                                        mapRef.current.setMaxZoom(7);
-                                        // mapRef.current.setStyle("mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe");
-                                    });
-                                });
-                            });
-                        });
-                    });
+                    openPopup(hoverResults.hoursVar, hoverResults.minutesVar, hoverResults.nextLngVar, hoverResults.nextLatVar);
+                    
                 };
             }
         });
@@ -171,6 +106,67 @@ export default function Map() {
             mapRef.current.remove();
         }
     }, [])  // Empty dep array [] - useEffect run once when the map is first instantiated
+
+    function openPopup(hoursVar, minutesVar, nextLngVar, nextLatVar) {  // Marker onClick function
+        setTimeAndCoords({hours: hoursVar, minutes: minutesVar, nextLng: nextLngVar, nextLat: nextLatVar});  // Setting new values -> causes a re-render
+        setConfirmTravelPopup(prev => !prev);  // This re-render is triggered ONLY after the previous line
+        popupOpenRef.current = true;
+        UI_elements_div.current.style.pointerEvents = 'auto';
+    }
+
+    function closePopup(popupOpenRef) {
+        setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null});
+        setConfirmTravelPopup(prev => !prev);
+        popupOpenRef.current = false;
+        UI_elements_div.current.style.pointerEvents = 'none';
+    }
+
+    function animateMapMovement(nextLng, nextLat, travelTime) {
+        setConfirmTravelPopup(prev => !prev);
+        popupOpenRef.current = false;
+        UI_elements_div.current.style.pointerEvents = 'auto';
+
+        // FLying back to the USER POINT and starting from there
+        mapRef.current.flyTo({
+            center: [userStartingPoint.lng, userStartingPoint.lat],  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Change to info from the database
+            zoom: 7,
+            speed: 0.2,
+            curve: 1,
+            easing(t) {
+                return t;
+            }
+        });
+
+        mapRef.current.once('moveend', () => {  // .once('moveend') is used to track when the PREV animation ENDED - then we start a new one, otherwise it will be jumpy
+            // Zooming in 
+            mapRef.current.setMaxZoom(15);
+            mapRef.current.zoomTo(15, {
+                duration: 10000
+            });
+
+            mapRef.current.once('zoomend', () => {  // Animation continues
+                mapRef.current.once('moveend', () => {
+                    mapRef.current.easeTo({
+                        center: [nextLng, nextLat],
+                        zoom: 15,
+                        duration: 60000*travelTime  // 1 minute = 60 000 ms and we set duration in ms
+                    });
+
+                    // Changing zoom back to normal
+                    mapRef.current.once('moveend', () => {
+                        mapRef.current.zoomTo(7, {
+                            duration: 10000
+                        });
+                        mapRef.current.once('moveend', () => {     
+                            mapRef.current.setMaxZoom(7);
+                            setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null});
+                            UI_elements_div.current.style.pointerEvents = 'none';
+                        });
+                    });
+                });
+            });
+        });
+    }
     
     return (
         <>
@@ -179,12 +175,32 @@ export default function Map() {
         </div>
 
         {/* All UI components displayed "on top" of the map - the TODO LIST AS WELL */}
-        <div className='UI-elements'>
+        <div className='UI-elements' ref={UI_elements_div}>
             <div className='top-curr-station-name'>
                 <div className='lable'>Current station is</div>
                 <div className='station-name'>{userStationName}</div>
                 <div className='line'></div>
             </div>
+            {confirmTravelPopup && 
+            <div className='confrim-travel-popup'>
+                <button className='popup-close-button' onClick={() => closePopup(popupOpenRef)}><img src={close_popup_button} alt="Close popup button" /></button>
+                <div className='travel-info'>
+                    <div className='info'>
+                        <div className='next-station-lable'>Your next station is</div>
+                        <div className='next-station-name'>{nextStation.name}</div>
+                        {timeAndCoords.hours > 0 && <div className='travel-time'>The road will take <strong>{timeAndCoords.hours} hr {timeAndCoords.minutes} min</strong></div>}
+                        {timeAndCoords.hours == 0 && <div className='travel-time'>The road will take <strong>{timeAndCoords.minutes} min</strong></div>}
+                        <div className='station-description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                        <div className='country'>Country: {nextStation.country}</div>
+                    </div>
+                    <div className='button'>
+                        <button className='confirm-travel-button' 
+                            onClick={() => 
+                                animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeAndCoords.hours*60+timeAndCoords.minutes)}
+                        >CONFIRM</button>
+                    </div>
+                </div>
+            </div>}
             <div className='bottom-UI'>
                 <div className='travel-time-bar'>{travelTimeLabel}</div>
                 <div className='buttons'>
@@ -192,7 +208,7 @@ export default function Map() {
                     className='todo-list-button'
                     ><img src={todo_list_logo} alt="Todo list page logo" /></button>
                     <button className='at-station-button'>
-                        {nextStationName}
+                        {nextStation.name}
                     </button>
                     <button
                         className='profile-button'
@@ -202,41 +218,4 @@ export default function Map() {
         </div>
         </>
     )
-}
-
-function calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat) {
-    // Using the vector formula and USER'S long lat calculate the distance
-    let userLng = userStartingPoint.lng;
-    let userLat = userStartingPoint.lat;
-    console.log(userLng, userLat, nextLng, nextLat);
-    let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
-
-    // Print to the console
-    console.log(distance);
-
-    // Convert into some number of minutes
-    let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
-    console.log(travelTime + ' minutes');
-
-    return travelTime;
-}
-
-// This calculates the distance between two points considering MEDIANS - since this is a real world map, we can't just use the Euclidean distance formula
-function haversine(lng1, lat1, lng2, lat2){
-    // Converting to radians
-    lng1 = lng1 * Math.PI / 180;
-    lng2 = lng2 * Math.PI / 180;
-    lat1 = lat1 * Math.PI / 180;
-    lat2 = lat2 * Math.PI / 180;
-
-    // Haversine formula itself - we won't care about how it works too much, it's just math
-    const dlon = lng2 - lng1; 
-    const dlat = lat2 - lat1;
-    const a = Math.sin(dlat/2)**2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon/2)**2;
-    const c = 2 * Math.asin(Math.sqrt(a));
-
-    // Earth's radius in km
-    const r = 6371;
-
-    return c * r;  // Distance between two points in km
 }

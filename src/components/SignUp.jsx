@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 
-import authGoBackButton from "../assets/authGoBackButton.svg";
-import google from "../assets/google.svg"
-import github from "../assets/github.svg"
-import opened_eye from "../assets/opened_eye.svg"
-import closed_eye from "../assets/closed_eye.svg"
+import authGoBackButton from "../assets/images/authGoBackButton.svg";
+import google from "../assets/images/google.svg"
+import github from "../assets/images/github.svg"
+import opened_eye from "../assets/images/opened_eye.svg"
+import closed_eye from "../assets/images/closed_eye.svg"
 
 import { 
   doCreateUserWithEmailAndPassword,

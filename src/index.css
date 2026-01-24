@@ -55,6 +55,7 @@
 
 .UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
     pointer-events: auto;
+    z-index: 100;
 }
 
 .top-curr-station-name {
@@ -81,10 +82,93 @@
     margin-bottom: 17px;
     letter-spacing: 2px;
     pointer-events: auto;
+    color: #fff;
 }
 
 .top-curr-station-name .line {
     width: 40%;
+}
+
+.confrim-travel-popup {
+    width: 49%;
+    height: 50%;
+    background-color: #00000070;
+    border: 2px solid #949494; 
+    border-radius: 10px;
+    backdrop-filter: blur(2px);
+    font-weight: 300;
+}
+
+.popup-close-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 8888;
+    margin-top: 25px;
+    margin-left: 15px;
+}
+
+.popup-close-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.travel-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.travel-info .info {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin-block: 25px;
+    color: #D0D0D0;
+}
+
+.next-station-lable {
+    font-size: 14px;
+}
+
+.next-station-name {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 35px;
+    font-weight: 500;
+    margin-block: 10px;
+    color: #fff;
+}
+
+.travel-time strong {
+    color: #fff;
+}
+
+.station-description {
+    width: 80%;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    line-height: 27px;
+    text-align: center;
+}
+
+.confirm-travel-button {
+    transition: 0.4s ease;
+    cursor: pointer;
 }
 
 .bottom-UI {
@@ -149,7 +233,7 @@
     width: 100%;
 }
 
-.at-station-button {
+.at-station-button, .confirm-travel-button {
     width: 255px;
     height: 80px;
     background-color: #00000070;
@@ -161,6 +245,12 @@
     letter-spacing: 1px;
     backdrop-filter: blur(2px);
     pointer-events: auto;
+}
+
+.confirm-travel-button {
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
 }
 
 .todo-list-button, .profile-button {
@@ -176,9 +266,14 @@
     pointer-events: auto;
 }
 
-.todo-list-button:hover, .profile-button:hover {
+.todo-list-button:hover, .profile-button:hover, .confirm-travel-button:hover {
     background-color: #0000009d;
     box-shadow: 0 0 15px #949494;
+}
+
+.confirm-travel-button {
+    margin-bottom: 40px;
+    background-color: transparent;
 }
 
 
@@ -215,7 +310,7 @@ button {
 .authMainPage {
     width: 100%;
     height: 100vh;
-    background: url('./assets/AuthPageBlackBG.svg') center center / cover no-repeat; 
+    background: url('./assets/images/AuthPageBlackBG.svg') center center / cover no-repeat; 
     color: white;
     position: relative;
 }
@@ -223,7 +318,7 @@ button {
 .lightRaysPNG {
     width: 100%;
     height: 100vh;
-    background: url('./assets/LightRays.png') center center / cover no-repeat;
+    background: url('./assets/images/LightRays.png') center center / cover no-repeat;
     position: absolute;
     top: 0;
     left: 0;
