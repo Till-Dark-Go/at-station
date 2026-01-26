@@ -1,17 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
+import './signup_and_login.css'
 
-import authGoBackButton from "../assets/images/authGoBackButton.svg";
-import google from "../assets/images/google.svg"
-import github from "../assets/images/github.svg"
-import opened_eye from "../assets/images/opened_eye.svg"
-import closed_eye from "../assets/images/closed_eye.svg"
+import authGoBackButton from "../../assets/images/authGoBackButton.svg";
+import google from "../../assets/images/google.svg"
+import github from "../../assets/images/github.svg"
+import opened_eye from "../../assets/images/opened_eye.svg"
+import closed_eye from "../../assets/images/closed_eye.svg"
 
 import { 
   doCreateUserWithEmailAndPassword,
   doSignInWithGoogle,
   doSignInWithGithub
-} from "../firebase/auth";
+} from "../../firebase/auth";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -99,14 +100,14 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="signUpElements">
+    <div className="main-block">
       <div className="title">Register for your first ride</div>
 
-      <div className="logInRedirectionText">
+      <div className="redirection-text">
         Had a ride before?
         <Link
           to="/auth/log-in"
-          className="logInRedirectionTextButton"
+          className="redirection-text-button"
         >
           Log in
         </Link>
@@ -120,34 +121,34 @@ export default function SignUp() {
         }}
         id="signup-form"
       >
-        <div className="signUpInputs">
-          <div className="entryArea">
-            <input
-              id="signup-username"
-              type="text"
-              placeholder=" "
-              ref={signUpUsername}
-              disabled={isLoading}
-              autoComplete="username"
-              required
-            />
-            <label htmlFor="signup-username" className="labelLine">Username</label >
+        <div className="inputs-holder">
+            <div className="entry-area">
+              <input
+                id="signup-username"
+                type="text"
+                placeholder=" "
+                ref={signUpUsername}
+                disabled={isLoading}
+                autoComplete="username"
+                required
+              />
+              <label htmlFor="signup-username" className="label-line">Username</label >
+            </div>
+
+            <div className="entry-area">
+              <input
+                id="signup-email"
+                type="email"
+                placeholder=" "
+                ref={signUpEmail}
+                disabled={isLoading}
+                autoComplete="email"
+                required
+              />
+              <label htmlFor="signup-email" className="label-line">Email</label >
           </div>
 
-          <div className="entryArea">
-            <input
-              id="signup-email"
-              type="email"
-              placeholder=" "
-              ref={signUpEmail}
-              disabled={isLoading}
-              autoComplete="email"
-              required
-            />
-            <label htmlFor="signup-email" className="labelLine">Email</label >
-          </div>
-
-          <div className="entryArea">
+          <div className="entry-area">
             <input
               id="signup-password"
               type={showPassword ? "text" : "password"}
@@ -157,8 +158,8 @@ export default function SignUp() {
               autoComplete="new-password"
               required
             />
-            <label htmlFor="signup-password" className="labelLine">Password</label >
-            <div className="showHidePassIcon">
+            <label htmlFor="signup-password" className="label-line">Password</label >
+            <div className="show-hide-pass-icon">
                 <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
                     onClick={() => setShowPassword(!showPassword)} 
                     role="button" 
@@ -167,17 +168,17 @@ export default function SignUp() {
           </div>
         </div>
 
-        <label className="termsHolder">
+        <label className="terms-holder">
           <input type="checkbox" aria-required="true" required />
-          <span className="checkMark" aria-hidden="true"></span>
+          <span className="check-mark" aria-hidden="true"></span>
           <div>I agree to Terms & Conditions</div>
         </label>
 
-        {error && <div className="errorMessage" role="alert">{error}</div>}
+        {error && <div className="error-message" role="alert">{error}</div>}
 
         <button
           type="submit"
-          className="createAccount"
+          className="action-button proceed-to-account"
           disabled={isLoading}
           aria-busy={isLoading}
         >
@@ -185,16 +186,16 @@ export default function SignUp() {
         </button>
       </form>
 
-      <div className="signUpVia">
+      <div className="enter-via">
         <div className="line" aria-hidden="true"></div>
         <div className="text">or sign up via</div>
         <div className="line right" aria-hidden="true"></div>
       </div>
 
-      <div className="signUpOptions">
+      <div className="account-options">
         <button
           type="button"
-          className="googleSignUp"
+          className="action-button google"
           onClick={handleGoogleSignUp}
           disabled={isLoading}
         >
@@ -203,7 +204,7 @@ export default function SignUp() {
 
         <button
           type="button"
-          className="githubSignUp"
+          className="action-button github"
           onClick={handleGithubSignUp}
           disabled={isLoading}
         >
@@ -211,7 +212,7 @@ export default function SignUp() {
         </button>
       </div>
 
-      <Link to="/auth" className="goBack">
+      <Link to="/auth" className="go-back">
         <img
           src={authGoBackButton}
           alt="Go back to main authentication page"

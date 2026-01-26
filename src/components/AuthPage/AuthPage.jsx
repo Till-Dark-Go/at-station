@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'  // Outlet is used for the NESTED routing we use in App.jsx
+import './authpage.css'
 
 export default function AuthPage() {
   return (

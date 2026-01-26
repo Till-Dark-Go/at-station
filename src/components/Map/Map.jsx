@@ -1,16 +1,17 @@
 import { useRef, useEffect, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { getStations } from '../api/stations.js'
+import { getStations } from '../../api/stations.js'
+import './map.css'
 
-import marker_logo from '../assets/images/marker.svg'
-import hovered_marker_logo from '../assets/images/hovered_marker.png'
-import user_marker_logo from '../assets/images/black_user_marker.svg'
-import todo_list_logo from '../assets/images/todo_list.svg'
-import user_pf_logo from '../assets/images/user_profile.svg'
-import close_popup_button from '../assets/images/authGoBackButton.svg'
+import marker_logo from '../../assets/images/marker.svg'
+import hovered_marker_logo from '../../assets/images/hovered_marker.png'
+import user_marker_logo from '../../assets/images/black_user_marker.svg'
+import todo_list_logo from '../../assets/images/todo_list.svg'
+import user_pf_logo from '../../assets/images/user_profile.svg'
+import close_popup_button from '../../assets/images/authGoBackButton.svg'
 
-import { calcStationParameters } from '../assets/utils/mapFunctions.js'
+import { calcStationParameters } from '../../assets/utils/mapFunctions.js'
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()

@@ -1,0 +1,229 @@
+/* Link to go back to the previous page */
+.redirection-text {
+    width: 500px;
+    color: #D0D0D0;
+    font-size: 16px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.redirection-text-button {
+    margin-left: 5px;
+    color: #FFC973;
+}
+
+.inputs-holder {
+    width: 501px;
+}
+
+/* Div which holds the input */
+.entry-area {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding-top: 14px;
+    margin-block: 10px;
+}
+
+/* Input itself */
+.entry-area input {
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 14px;
+    padding: 15px 0;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 1px solid #949494;
+    transition: 0.1s ease;
+    background: transparent;
+    z-index: 1111;
+    color: #949494;
+    cursor: pointer;
+}
+
+/* Gray label, e.g. "password" */
+.label-line {
+    position: absolute;
+    font-size: 16px;
+    color: #848484;
+    background-color: #0A0A0A;
+    margin-left: 20px;
+    transition: 0.2s ease;
+    line-height: 50px;
+}
+
+/* Different styles when clicking on the input */
+.entry-area input:focus, input:not(:placeholder-shown) {
+    color: white;
+    border-color: white;
+    font-size: 14px;
+}
+
+.entry-area input:focus + .label-line,
+input:not(:placeholder-shown) + .label-line {
+    color: white;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 12px;
+    transform: translate(-20px, -12px) scale(0.84);
+    z-index: 2222;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+/* Eye icon */
+.show-hide-pass-icon {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.show-hide-pass-icon img {
+    flex-shrink: 0;
+    width: 20px;
+    max-width: 100%;
+    margin-right: 20px;
+    z-index: 4444;
+    cursor: pointer;
+}
+
+.terms-holder {
+    display: flex;
+    height: 20px;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.terms-holder input {
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+    height: 16px;
+    width: 16px;
+}
+
+.check-mark {
+    position: relative;
+    height: 16px;
+    width: 16px;
+    background-color: #02020257;
+    border: 1px solid #949494;
+    border-radius: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.terms-holder input:hover .check-mark {
+    background-color: #3f3f3fa8;
+}
+
+.terms-holder input:checked + .check-mark {
+    background-color: #53535360;
+}
+
+/* Custom checkmark */
+.check-mark:after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.terms-holder input:checked + .check-mark:after {
+    display: block;
+}
+
+.terms-holder div {
+    margin-left: 8px;
+    color: #D0D0D0;
+}
+
+/* Buttons */
+.proceed-to-account, .google, .github {
+    width: 100%;
+    height: 65px;
+    line-height: 65px;
+    background-color: #00000085;
+    border: 1px solid #949494;
+}
+
+.proceed-to-account {
+    margin-top: 20px;
+}
+
+.google, .github {
+    width: 300px;
+    color: #D0D0D0;
+    font-weight: 300;
+}
+
+.proceed-to-account:hover, .google:hover, .github:hover {
+    border: 1px solid #FFC973;
+    box-shadow: 
+        0 0 15px #ffc973a8,
+        inset 0 0 15px #ffc973a8;
+}
+
+.enter-via, .account-options {
+    color: #D0D0D0;
+    width: 500px; 
+    margin-top: 25px;
+    margin-bottom: 35px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.account-options {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    width: 500px;
+}
+
+.account-options button {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-options button img {
+    margin-right: 6px;
+}
+
+/* Left gradient line near "enter via" */
+.line {
+    background: linear-gradient(20deg, #454545, #FFFFFF);
+    width: 32%;
+    height: 2px;
+    border-radius: 3px;
+}
+
+/* Right gradient line */
+.right {
+    background: linear-gradient(20deg, #a1a1a1, #FFFFFF);
+}
+
+.go-back img {
+    display: block;
+    width: 23px;
+    margin-top: 10px;
+}
+
+.error-message {
+    margin-top: 10px;
+    color: rgb(255, 93, 93);
+}
