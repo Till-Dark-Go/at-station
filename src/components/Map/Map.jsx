@@ -67,8 +67,6 @@ export default function Map() {
             maxZoom: 7
         });
 
-        console.log(userStartingPoint.lng, userStartingPoint.lat)
-
         // Create markers once
         arrayOfStations.forEach((station) => {
             let stationMarker = new mapboxgl.Marker()
@@ -84,16 +82,27 @@ export default function Map() {
             });
         });
 
-        return () => {
+        return () => {   // This runs when the dependency array changes
             // Clean up markers
             markersRef.current.forEach(({ marker }) => marker.remove());
             markersRef.current = [];
-            mapRef.current.remove();
         };
     }, [userStartingPoint]);
 
     useEffect(() => {
-        if (!userStartingPoint || markersRef.current.length === 0) return;
+        arrayOfStations.forEach((station) => {
+            let stationMarker = new mapboxgl.Marker()
+                .setLngLat([station['longitude'], station['latitude']])
+                .addTo(mapRef.current);
+            
+            stationMarker.getElement().classList.add(station['id']);
+            
+            // Store marker with its station data
+            markersRef.current.push({
+                marker: stationMarker,
+                station: station
+            });
+        });
 
         markersRef.current.forEach(({ marker, station }) => {
             const markerElement = marker.getElement();
@@ -140,95 +149,7 @@ export default function Map() {
                 };
             }
         });
-
-        return () => {
-            // Clean up markers
-            markersRef.current.forEach(({ marker }) => marker.remove());
-            markersRef.current = [];
-            mapRef.current.remove();
-        };
     }, [userStartingPoint]);
-
-
-
-    
-    // Everything set up in useEffect only ONCE when the map is first loaded
-    // useEffect(() => {
-    //         if (!userStartingPoint) return; // wait for firestore 
-    //         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
-    //         mapRef.current = new mapboxgl.Map({
-    //             container: mapContainerRef.current,
-    //             style: "mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe",
-    //             center: [userStartingPoint.lng, userStartingPoint.lat],        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CHANGE THIS TO INFO FROM DB
-    //             zoom: 7,
-    //             minZoom: 5,
-    //             maxZoom: 7
-    //         }, [userStartingPoint]);
-
-    //     // Automatically plotting all the station markers on the map from the data we got from Firebase
-    //     arrayOfStations.forEach((station) => {  // DOES NOT return the HTML div, arrayOfStations is an ARRAY with objects (db entries) inside
-    //         let stationMarker = new mapboxgl.Marker()
-    //                                     .setLngLat([station['longitude'], station['latitude']])
-    //                                     .addTo(mapRef.current);
-    //         let stationID = station['id'];
-    //         stationMarker.addClassName(stationID);
-
-    //         if (station['longitude'] == userStartingPoint.lng && station['latitude'] == userStartingPoint.lat) {
-    //             stationMarker.addClassName('userMarker');
-    //         }
-    //     });
-
-    //     let markers = document.querySelectorAll(".mapboxgl-marker");  // Getting all the marker divs
-
-    //     markers.forEach((marker) => {
-    //         let markerIDClass = marker.className.split(' ')[marker.className.split(' ').length - 1];
-
-    //         // Setting custom marker svg
-    //         marker.innerHTML = "<img>";
-    //         let marker_img = marker.children[0];
-
-    //         if (markerIDClass == "userMarker") {
-    //             marker_img.src = user_marker_logo;
-
-    //         } else {
-    //             marker_img.src = marker_logo;
-    //             let hoverResults;
-
-    //             marker_img.onmouseenter = () => {  // Enter marker -> get coordinates and travel time to it
-    //                 marker_img.src = hovered_marker_logo;
-
-    //                 let station = arrayOfStations.find(item => item.id == markerIDClass);
-    //                 setNextStation({name: markerIDClass, country: station.country});
-
-    //                 hoverResults = calcStationParameters(station, userStartingPoint);
-    //                 if (hoverResults.hoursVar > 0) {
-    //                     setTravelTimeLabel(`Travel time: ${hoverResults.hoursVar} hr ${hoverResults.minutesVar} min`);
-    //                 } else {
-    //                     setTravelTimeLabel(`Travel time: ${hoverResults.minutesVar} min`);
-    //                 }
-    //             }
-
-    //             marker_img.onmouseleave = () => {  // Leave marker -> reset button's name and travel time on the bottom UI
-    //                 marker_img.src = marker_logo;
-    //                 if (!popupOpenRef.current) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
-    //                     setNextStation({name: 'at station', country: ''});
-    //                     setTravelTimeLabel('Awaiting travelling...');
-    //                 }
-    //             }
-
-    //             marker_img.onclick = () => {  // Click on marker -> open confirmation pop up window
-
-    //                 openPopup(hoverResults.hoursVar, hoverResults.minutesVar, hoverResults.nextLngVar, hoverResults.nextLatVar, markerIDClass);
-                    
-    //             };
-    //         }
-    //     });
-        
-    //     return () => {
-    //         mapRef.current.remove();
-    //     }
-    // }, [userStartingPoint])  // Empty dep array [] - useEffect run once when the map is first instantiated
 
     function openPopup(hoursVar, minutesVar, nextLngVar, nextLatVar, stationId) {  // Marker onClick function
         setTimeAndCoords({hours: hoursVar, minutes: minutesVar, nextLng: nextLngVar, nextLat: nextLatVar, stationId: stationId});  // Setting new values -> causes a re-render
@@ -273,7 +194,7 @@ export default function Map() {
                         center: [nextLng, nextLat],
                         zoom: 15,
                         //duration: 60000*travelTime // 1 minute = 60 000 ms and we set duration in ms
-                        duration: 10000
+                        duration: 5000
                     });
 
                     // Changing zoom back to normal
