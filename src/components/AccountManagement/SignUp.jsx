@@ -8,11 +8,18 @@ import github from "../../assets/images/github.svg"
 import opened_eye from "../../assets/images/opened_eye.svg"
 import closed_eye from "../../assets/images/closed_eye.svg"
 
+// Imports for creating Firestore user document in users collection
+import { auth, db } from "../../api/firebase";              
+import { updateProfile } from "firebase/auth";      
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
 import { 
   doCreateUserWithEmailAndPassword,
   doSignInWithGoogle,
   doSignInWithGithub
 } from "../../firebase/auth";
+
+const DEFAULT_STATION_ID = "bern"
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -43,7 +50,24 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doCreateUserWithEmailAndPassword(email, password);
+      const result = await doCreateUserWithEmailAndPassword(email, password);
+      // Get auth user and username what will allow to write to users/{uid} document after signup
+      const user = result.user || auth.currentUser;
+      const username = signUpUsername.current.value;
+      // Sets displayName inside Firebase Auth what will allow to write to users/{uid} document after signup
+      await updateProfile(user, { displayName: username });
+
+      // Create Firestore user document for users collection
+      // It is Client side document creation, with issue that 
+      // if client fails after signup (network), user may exist in Auth but not in Firestore
+      // Later we can do hybride with Cloud Function to solve it
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        displayName: username,
+        currentStationId: DEFAULT_STATION_ID, // const is defined after imports, in the future user choses or closest to geolocation
+        stampsCount: 0,
+        createdAt: serverTimestamp(),
+      });
       handleSuccess();
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -64,7 +88,22 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doSignInWithGoogle();
+      const result = await doSignInWithGoogle();
+      // Get auth user what will allow to write to users/{uid} document after signup
+      // username comes from Google
+      const user = result.user || auth.currentUser;
+
+      // Create Firestore user document for users collection
+      await setDoc(doc(db, "users", user.uid),
+        {
+          email: user.email,
+          displayName: user.displayName ?? null,
+          currentStationId: DEFAULT_STATION_ID,
+          stampsCount: 0,
+          createdAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
       handleSuccess();
     } catch (err) {
       setError("Failed to sign up with Google: " + err.message);
@@ -79,7 +118,22 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doSignInWithGithub();
+      const result = await doSignInWithGithub();
+      // Get auth user what will allow to write to users/{uid} document after signup
+      // username comes from Github
+      const user = result.user || auth.currentUser;
+
+      // Create Firestore user document for users collection
+      await setDoc(doc(db, "users", user.uid),
+        {
+          email: user.email,
+          displayName: user.displayName ?? null,
+          currentStationId: DEFAULT_STATION_ID,
+          stampsCount: 0,
+          createdAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
       handleSuccess();
     } catch (err) {
       if (err.code === "auth/account-exists-with-different-credential") {

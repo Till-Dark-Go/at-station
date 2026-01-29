@@ -13,6 +13,8 @@ import close_popup_button from '../../assets/images/authGoBackButton.svg'
 
 import { calcStationParameters } from '../../assets/utils/mapFunctions.js'
 
+import { updateCurrentStation, getCurrentStationId } from '../../api/users.js';
+
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
 
@@ -20,64 +22,101 @@ export default function Map() {
     const mapRef = useRef();
     const mapContainerRef = useRef();
  
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! This will be taken from Firebase when we have personal info about each user - including their last/current stop
-    const userStartingPoint = { lng: 8.541694, lat: 47.376888};   // Zurich
-    const userStationName = 'Zurich';
+    const [userStartingPoint, setUserStartingPoint] = useState({lng: null, lat: null, name: null});
 
     const [nextStation, setNextStation] = useState({name: 'at station', country: ''});
     const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...');
     const [confirmTravelPopup, setConfirmTravelPopup] = useState(false);
     const popupOpenRef = useRef(false);
-    const [timeAndCoords, setTimeAndCoords] = useState({hours: null, minutes: null, nextLng: null, nextLat: null});  // These need to be kept between renders => use useState for this
+    const [timeAndCoords, setTimeAndCoords] = useState({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});  // These need to be kept between renders => use useState for this
     const UI_elements_div = useRef(null);  // For the UI elements container to make it pointer-events: auto when the pop up is opened (so that we can't move the map)
 
-    // Everything set up in useEffect only ONCE when the map is first loaded
+    const markersRef = useRef([]);
+
+    // Load current station
     useEffect(() => {
+        async function loadUserStation() {
+            const stationId = await getCurrentStationId();
+            if (!stationId) return;
+
+            const station = arrayOfStations.find(s => s.id === stationId);
+            if (!station) return;
+
+            setUserStartingPoint({
+                lng: station.longitude,
+                lat: station.latitude,
+                name: station.name
+            });
+        }
+
+        loadUserStation();
+    }, []);
+
+    useEffect(() => {
+        
+        if (mapRef.current || userStartingPoint.lng == null) return;
+        
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: "mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe",
-            center: [userStartingPoint.lng, userStartingPoint.lat],        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CHANGE THIS TO INFO FROM DB
+            center: [userStartingPoint.lng, userStartingPoint.lat],
             zoom: 7,
             minZoom: 5,
             maxZoom: 7
         });
 
-        // Automatically plotting all the station markers on the map from the data we got from Firebase
-        arrayOfStations.forEach((station) => {  // DOES NOT return the HTML div, arrayOfStations is an ARRAY with objects (db entries) inside
-            let stationMarker = new mapboxgl.Marker()
-                                        .setLngLat([station['longitude'], station['latitude']])
-                                        .addTo(mapRef.current);
-            let stationID = station['id'];
-            stationMarker.addClassName(stationID);
+        console.log(userStartingPoint.lng, userStartingPoint.lat)
 
-            if (station['longitude'] == userStartingPoint.lng && station['latitude'] == userStartingPoint.lat) {
-                stationMarker.addClassName('userMarker');
-            }
+        // Create markers once
+        arrayOfStations.forEach((station) => {
+            let stationMarker = new mapboxgl.Marker()
+                .setLngLat([station['longitude'], station['latitude']])
+                .addTo(mapRef.current);
+            
+            stationMarker.getElement().classList.add(station['id']);
+            
+            // Store marker with its station data
+            markersRef.current.push({
+                marker: stationMarker,
+                station: station
+            });
         });
 
-        let markers = document.querySelectorAll(".mapboxgl-marker");  // Getting all the marker divs
+        return () => {
+            // Clean up markers
+            markersRef.current.forEach(({ marker }) => marker.remove());
+            markersRef.current = [];
+            mapRef.current.remove();
+        };
+    }, [userStartingPoint]);
 
-        markers.forEach((marker) => {
-            let markerIDClass = marker.className.split(' ')[marker.className.split(' ').length - 1];
+    useEffect(() => {
+        if (!userStartingPoint || markersRef.current.length === 0) return;
 
-            // Setting custom marker svg
-            marker.innerHTML = "<img>";
-            let marker_img = marker.children[0];
+        markersRef.current.forEach(({ marker, station }) => {
+            const markerElement = marker.getElement();
+            const isUserMarker = station.longitude == userStartingPoint.lng && 
+                                station.latitude == userStartingPoint.lat;
 
-            if (markerIDClass == "userMarker") {
+            // Remove old userMarker class from all
+            markerElement.classList.remove('userMarker');
+            
+            // Clear previous event listeners and content
+            markerElement.innerHTML = "<img>";
+            const marker_img = markerElement.children[0];
+
+            if (isUserMarker) {
+                markerElement.classList.add('userMarker');
                 marker_img.src = user_marker_logo;
-
             } else {
                 marker_img.src = marker_logo;
                 let hoverResults;
 
-                marker_img.onmouseenter = () => {  // Enter marker -> get coordinates and travel time to it
+                marker_img.onmouseenter = () => {
                     marker_img.src = hovered_marker_logo;
-
-                    let station = arrayOfStations.find(item => item.id == markerIDClass);
-                    setNextStation({name: markerIDClass, country: station.country});
+                    setNextStation({name: station.id, country: station.country});
 
                     hoverResults = calcStationParameters(station, userStartingPoint);
                     if (hoverResults.hoursVar > 0) {
@@ -85,44 +124,127 @@ export default function Map() {
                     } else {
                         setTravelTimeLabel(`Travel time: ${hoverResults.minutesVar} min`);
                     }
-                }
+                };
 
-                marker_img.onmouseleave = () => {  // Leave marker -> reset button's name and travel time on the bottom UI
+                marker_img.onmouseleave = () => {
                     marker_img.src = marker_logo;
-                    if (!popupOpenRef.current) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
+                    if (!popupOpenRef.current) {
                         setNextStation({name: 'at station', country: ''});
                         setTravelTimeLabel('Awaiting travelling...');
                     }
-                }
+                };
 
-                marker_img.onclick = () => {  // Click on marker -> open confirmation pop up window
-
-                    openPopup(hoverResults.hoursVar, hoverResults.minutesVar, hoverResults.nextLngVar, hoverResults.nextLatVar);
-                    
+                marker_img.onclick = () => {
+                    openPopup(hoverResults.hoursVar, hoverResults.minutesVar, 
+                            hoverResults.nextLngVar, hoverResults.nextLatVar, station.id);
                 };
             }
         });
-        
-        return () => {
-            mapRef.current.remove();
-        }
-    }, [])  // Empty dep array [] - useEffect run once when the map is first instantiated
 
-    function openPopup(hoursVar, minutesVar, nextLngVar, nextLatVar) {  // Marker onClick function
-        setTimeAndCoords({hours: hoursVar, minutes: minutesVar, nextLng: nextLngVar, nextLat: nextLatVar});  // Setting new values -> causes a re-render
+        return () => {
+            // Clean up markers
+            markersRef.current.forEach(({ marker }) => marker.remove());
+            markersRef.current = [];
+            mapRef.current.remove();
+        };
+    }, [userStartingPoint]);
+
+
+
+    
+    // Everything set up in useEffect only ONCE when the map is first loaded
+    // useEffect(() => {
+    //         if (!userStartingPoint) return; // wait for firestore 
+    //         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+
+    //         mapRef.current = new mapboxgl.Map({
+    //             container: mapContainerRef.current,
+    //             style: "mapbox://styles/ulvenrev/cmiisp64o00na01qtg8i24fpe",
+    //             center: [userStartingPoint.lng, userStartingPoint.lat],        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CHANGE THIS TO INFO FROM DB
+    //             zoom: 7,
+    //             minZoom: 5,
+    //             maxZoom: 7
+    //         }, [userStartingPoint]);
+
+    //     // Automatically plotting all the station markers on the map from the data we got from Firebase
+    //     arrayOfStations.forEach((station) => {  // DOES NOT return the HTML div, arrayOfStations is an ARRAY with objects (db entries) inside
+    //         let stationMarker = new mapboxgl.Marker()
+    //                                     .setLngLat([station['longitude'], station['latitude']])
+    //                                     .addTo(mapRef.current);
+    //         let stationID = station['id'];
+    //         stationMarker.addClassName(stationID);
+
+    //         if (station['longitude'] == userStartingPoint.lng && station['latitude'] == userStartingPoint.lat) {
+    //             stationMarker.addClassName('userMarker');
+    //         }
+    //     });
+
+    //     let markers = document.querySelectorAll(".mapboxgl-marker");  // Getting all the marker divs
+
+    //     markers.forEach((marker) => {
+    //         let markerIDClass = marker.className.split(' ')[marker.className.split(' ').length - 1];
+
+    //         // Setting custom marker svg
+    //         marker.innerHTML = "<img>";
+    //         let marker_img = marker.children[0];
+
+    //         if (markerIDClass == "userMarker") {
+    //             marker_img.src = user_marker_logo;
+
+    //         } else {
+    //             marker_img.src = marker_logo;
+    //             let hoverResults;
+
+    //             marker_img.onmouseenter = () => {  // Enter marker -> get coordinates and travel time to it
+    //                 marker_img.src = hovered_marker_logo;
+
+    //                 let station = arrayOfStations.find(item => item.id == markerIDClass);
+    //                 setNextStation({name: markerIDClass, country: station.country});
+
+    //                 hoverResults = calcStationParameters(station, userStartingPoint);
+    //                 if (hoverResults.hoursVar > 0) {
+    //                     setTravelTimeLabel(`Travel time: ${hoverResults.hoursVar} hr ${hoverResults.minutesVar} min`);
+    //                 } else {
+    //                     setTravelTimeLabel(`Travel time: ${hoverResults.minutesVar} min`);
+    //                 }
+    //             }
+
+    //             marker_img.onmouseleave = () => {  // Leave marker -> reset button's name and travel time on the bottom UI
+    //                 marker_img.src = marker_logo;
+    //                 if (!popupOpenRef.current) {  // Means we haven't clicked the marker yet, so we didn't record the new time and coords => we haven't opened the pop up window => we just keep looking at the stations and don't need to save the name yet
+    //                     setNextStation({name: 'at station', country: ''});
+    //                     setTravelTimeLabel('Awaiting travelling...');
+    //                 }
+    //             }
+
+    //             marker_img.onclick = () => {  // Click on marker -> open confirmation pop up window
+
+    //                 openPopup(hoverResults.hoursVar, hoverResults.minutesVar, hoverResults.nextLngVar, hoverResults.nextLatVar, markerIDClass);
+                    
+    //             };
+    //         }
+    //     });
+        
+    //     return () => {
+    //         mapRef.current.remove();
+    //     }
+    // }, [userStartingPoint])  // Empty dep array [] - useEffect run once when the map is first instantiated
+
+    function openPopup(hoursVar, minutesVar, nextLngVar, nextLatVar, stationId) {  // Marker onClick function
+        setTimeAndCoords({hours: hoursVar, minutes: minutesVar, nextLng: nextLngVar, nextLat: nextLatVar, stationId: stationId});  // Setting new values -> causes a re-render
         setConfirmTravelPopup(prev => !prev);  // This re-render is triggered ONLY after the previous line
         popupOpenRef.current = true;
         UI_elements_div.current.style.pointerEvents = 'auto';
     }
 
     function closePopup(popupOpenRef) {
-        setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null});
+        setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});
         setConfirmTravelPopup(prev => !prev);
         popupOpenRef.current = false;
         UI_elements_div.current.style.pointerEvents = 'none';
     }
 
-    function animateMapMovement(nextLng, nextLat, travelTime) {
+    async function animateMapMovement(nextLng, nextLat, travelTime, stationId) {
         setConfirmTravelPopup(prev => !prev);
         popupOpenRef.current = false;
         UI_elements_div.current.style.pointerEvents = 'auto';
@@ -150,7 +272,8 @@ export default function Map() {
                     mapRef.current.easeTo({
                         center: [nextLng, nextLat],
                         zoom: 15,
-                        duration: 60000*travelTime  // 1 minute = 60 000 ms and we set duration in ms
+                        //duration: 60000*travelTime // 1 minute = 60 000 ms and we set duration in ms
+                        duration: 10000
                     });
 
                     // Changing zoom back to normal
@@ -158,10 +281,31 @@ export default function Map() {
                         mapRef.current.zoomTo(7, {
                             duration: 10000
                         });
-                        mapRef.current.once('moveend', () => {     
+                        mapRef.current.once('moveend', async () => {     
                             mapRef.current.setMaxZoom(7);
-                            setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null});
+                            setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});
                             UI_elements_div.current.style.pointerEvents = 'none';
+
+                            if (stationId) {
+                                try {
+                                    // update current station
+                                    await updateCurrentStation(stationId);
+                                    console.log("Updated currentStationId: ", stationId);
+
+                                    // Update local state so app does not reset
+                                    const station = arrayOfStations.find(s => s.id === stationId);
+                                    if (station) {
+                                        setUserStartingPoint({
+                                            lng: station.longitude,
+                                            lat: station.latitude,
+                                            name: station.name
+                                        });
+                                    }
+
+                                } catch (err) {
+                                    console.error("Failed to update currentStation:", err);
+                                }
+                            }
                         });
                     });
                 });
@@ -179,7 +323,7 @@ export default function Map() {
         <div className='UI-elements' ref={UI_elements_div}>
             <div className='top-curr-station-name'>
                 <div className='lable'>Current station is</div>
-                <div className='station-name'>{userStationName}</div>
+                <div className='station-name'>{userStartingPoint.name}</div>
                 <div className='line'></div>
             </div>
             {confirmTravelPopup && 
@@ -197,7 +341,7 @@ export default function Map() {
                     <div className='button'>
                         <button className='confirm-travel-button' 
                             onClick={() => 
-                                animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeAndCoords.hours*60+timeAndCoords.minutes)}
+                                animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeAndCoords.hours*60+timeAndCoords.minutes, timeAndCoords.stationId)}
                         >CONFIRM</button>
                     </div>
                 </div>

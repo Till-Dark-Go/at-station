@@ -44,7 +44,7 @@ async function uploadStations() {  // async allows to use await which is needed 
             */
            // Admin SDK syntax version of Client SDK syntax: await setDoc(doc(db, 'stations', stationID), {});
             await db.collection("stations").doc(stationID).set({ // await tells the code to firstly WAIT for this part to complete,
-                // Remember when exporting outside Firestore stationID is implicitly known by Firestore
+                // Remember when exporting outside Firestore stationID is only implicitly known by Firestore, so we do not really have id
                 name: station.name,
                 latitude: station.latitude,
                 longitude: station.longitude,
@@ -54,7 +54,7 @@ async function uploadStations() {  // async allows to use await which is needed 
             console.log(`Imported: ${station.name}`);
         } catch (error)
         {
-            console.log(`FAILED ============, `, error);
+            console.log(`FAILED, `, error);
         }
     }
 }

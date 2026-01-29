@@ -4,19 +4,31 @@
       "name": "Zurich HB",
       "latitude": 47.3769,
       "longitude": 8.5417,
-      "country": "Switzerland"
+      "country": "Switzerland",
+      "stamps": {
+        "image": "/stamps/zurich.png",
+        "title": "Zurich Explorer"
+      }
     },
     {
       "name": "Geneva",
       "latitude": 46.2104,
       "longitude": 6.1420,
-      "country": "Switzerland"
+      "country": "Switzerland",
+      "stamps": {
+        "image": "/stamps/geneva.png",
+        "title": "Geneva Explorer"
+      }
     },
     {
       "name": "Bern",
       "latitude": 46.9489,
       "longitude": 7.4395,
-      "country": "Switzerland"
+      "country": "Switzerland",
+      "stamps": {
+        "image": "/stamps/bern.png",
+        "title": "Bern Explorer"
+      }
     },
     {
       "name": "Frankfurt am Main",
