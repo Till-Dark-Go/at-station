@@ -44,6 +44,20 @@
     z-index: 100;
 }
 
+.train-icon {
+    position: fixed;
+    top: 50.2%;
+    left: 51.2%;
+    margin-top: -50px;
+    margin-left: -50px;
+    transition: 0.4s ease;
+    opacity: 0;
+}
+
+.train-icon img {
+    scale: 0.35;
+}
+
 .top-curr-station-name {
     margin-top: 28px;
     text-align: center;
@@ -75,7 +89,7 @@
     width: 40%;
 }
 
-.confrim-travel-popup {
+.confirm-travel-popup {
     width: 49%;
     height: 50%;
     background-color: #00000070;
@@ -140,6 +154,11 @@
     color: #fff;
 }
 
+.progress-lost {
+    font-size: 30px;
+    margin-block: 15px;
+}
+
 .travel-time strong {
     color: #fff;
 }
@@ -150,11 +169,6 @@
     margin-bottom: 15px;
     line-height: 27px;
     text-align: center;
-}
-
-.confirm-travel-button {
-    transition: 0.4s ease;
-    cursor: pointer;
 }
 
 .bottom-UI {
@@ -237,6 +251,12 @@
     width: 200px;
     height: 60px;
     font-size: 20px;
+    transition: 0.4s ease;
+    cursor: pointer;
+}
+
+.stop-travelling-button {
+    width: 240px;
 }
 
 .todo-list-button, .profile-button {
@@ -252,7 +272,12 @@
     pointer-events: auto;
 }
 
-.todo-list-button:hover, .profile-button:hover, .confirm-travel-button:hover {
+.travelling {
+    transition: 0.4s ease;
+    cursor: pointer;
+}
+
+.todo-list-button:hover, .profile-button:hover, .confirm-travel-button:hover, .travelling:hover {
     background-color: #0000009d;
     box-shadow: 0 0 15px #949494;
 }
