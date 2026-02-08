@@ -89,7 +89,7 @@
     width: 40%;
 }
 
-.confirm-travel-popup {
+.popup-window {
     width: 49%;
     height: 50%;
     background-color: #00000070;
@@ -120,7 +120,7 @@
     object-fit: contain;
 }
 
-.travel-info {
+.window-info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -132,20 +132,19 @@
     height: 100%;
 }
 
-.travel-info .info {
+.window-info .info {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
     margin-block: 25px;
     color: #D0D0D0;
 }
 
-.next-station-lable {
+.small-lable {
     font-size: 14px;
 }
 
-.next-station-name {
+.main-lable {
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 35px;
@@ -163,7 +162,7 @@
     color: #fff;
 }
 
-.station-description {
+.description {
     width: 80%;
     margin-top: 35px;
     margin-bottom: 15px;
@@ -233,7 +232,7 @@
     width: 100%;
 }
 
-.at-station-button, .confirm-travel-button {
+.at-station-button, .confirmation-button {
     width: 255px;
     height: 80px;
     background-color: #00000070;
@@ -247,7 +246,7 @@
     pointer-events: auto;
 }
 
-.confirm-travel-button {
+.confirmation-button {
     width: 200px;
     height: 60px;
     font-size: 20px;
@@ -277,12 +276,12 @@
     cursor: pointer;
 }
 
-.todo-list-button:hover, .profile-button:hover, .confirm-travel-button:hover, .travelling:hover {
+.todo-list-button:hover, .profile-button:hover, .confirmation-button:hover, .travelling:hover {
     background-color: #0000009d;
     box-shadow: 0 0 15px #949494;
 }
 
-.confirm-travel-button {
+.confirmation-button {
     margin-bottom: 40px;
     background-color: transparent;
 }
