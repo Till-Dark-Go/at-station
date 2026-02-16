@@ -40,7 +40,7 @@ export default function Map() {
     const markersRef = useRef([]);
 
     useEffect(() => {
-        if (!currentlyTravelling.current) return;
+        if (!currentlyTravelling) return;
 
         function handleOnBeforeUnload(event) {
             event.preventDefault();
@@ -83,7 +83,8 @@ export default function Map() {
             center: [userStartingPoint.lng, userStartingPoint.lat],
             zoom: 7,
             minZoom: 6,
-            maxZoom: 7
+            maxZoom: 7,
+            disputed: true
         });
 
         // Create markers once
@@ -211,8 +212,8 @@ export default function Map() {
         mapRef.current.once('moveend', () => {  // .once('moveend') is used to track when the PREV animation ENDED - then we start a new one, otherwise it will be jumpy
             // Zooming in 
 
-            mapRef.current.setMaxZoom(12);
-            mapRef.current.zoomTo(12, {
+            mapRef.current.setMaxZoom(11.8);
+            mapRef.current.zoomTo(11.8, {
                 duration: 5000
             });
 
@@ -222,9 +223,9 @@ export default function Map() {
 
                     mapRef.current.easeTo({
                         center: [nextLng, nextLat],
-                        zoom: 12,
-                        // duration: 60000*travelTime // 1 minute = 60 000 ms and we set duration in ms
-                        duration: 10000
+                        zoom: 11.8,
+                        duration: 60000*travelTime // 1 minute = 60 000 ms and we set duration in ms
+                        // duration: 10000
                     });
 
                     // Changing zoom back to normal
@@ -317,6 +318,7 @@ export default function Map() {
                 currentlyTravelling = {currentlyTravelling}
                 nextStation = {nextStation}
                 openPopup = {openPopup}
+                timerDuration = {timeAndCoords.hours*60+timeAndCoords.minutes}
             />
         </div>
         </>

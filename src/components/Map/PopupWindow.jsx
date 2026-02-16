@@ -20,7 +20,7 @@ export default function PopupWindow(props) {
             <div className='info'>
                 <div className='small-lable'>You are about to end your journey!</div>
                 <div className='main-lable progress-lost'>Your progress will be lost</div>
-                <div className='travel-time'>You have __:__ of the road left to get to your destination</div>
+                {/* <div className='travel-time'>You have __:__ of the road left to get to your destination</div> */}
                 <div className='description'>By clicking the button below, the travelling time will reset and you will be back at your starting station. Are you sure you want to proceed?</div>
             </div>
         )

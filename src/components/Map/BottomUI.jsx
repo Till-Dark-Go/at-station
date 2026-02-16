@@ -1,10 +1,18 @@
 import todo_list_logo from '../../assets/images/todo_list.svg'
 import user_pf_logo from '../../assets/images/user_profile.svg'
 
+import Timer from './Timer.jsx'
+
 export default function BottomUI(props) {
+
+    
+
     return (
         <div className='bottom-UI'>
-            <div className='travel-time-bar'>{props.travelTimeLabel}</div>
+            {!props.currentlyTravelling.current && <div className='travel-time-bar'>{props.travelTimeLabel}</div>}
+            {props.currentlyTravelling.current && <div className='travel-time-bar'>
+                <Timer duration = {props.timerDuration}/>
+            </div>}
             <div className='buttons'>
                 <button
                     className='todo-list-button'
