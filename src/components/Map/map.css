@@ -1,47 +1,50 @@
 #map-wrap {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 
 #map-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .mapboxgl-control-container {
-    display: none;
+  display: none;
 }
 
 .mapboxgl-marker img {
-    transition: transform 0.2s ease, opacity 0.3s ease;
-    scale: 0.35;
+  transition:
+    transform 0.2s ease,
+    opacity 0.3s ease;
+  scale: 0.35;
 }
 
 .mapboxgl-marker img:hover {
-    transform: scale(1.5);
+  transform: scale(1.5);
 }
 
 /* UI Elements alongside Map div styles */
 
 .UI-elements {
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    color: #DADADA;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: #dadada;
 }
 
-.UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
-    pointer-events: auto;
-    z-index: 100;
+.UI-elements > * {
+  /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
+  pointer-events: auto;
+  z-index: 100;
 }
 
 .at-station-logo {
@@ -66,98 +69,99 @@
 }
 
 .top-curr-station-name {
-    margin-top: 28px;
-    text-align: center;
-    width: 500px;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: default;
+  margin-top: 28px;
+  text-align: center;
+  width: 500px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
 }
 
 .top-curr-station-name .lable {
-    font-size: 14px;
-    pointer-events: auto;
+  font-size: 14px;
+  pointer-events: auto;
 }
 
 .top-curr-station-name .station-name {
-    font-size: 30px;
-    text-transform: uppercase;
-    margin-top: 15px;
-    margin-bottom: 17px;
-    letter-spacing: 2px;
-    pointer-events: auto;
-    color: #fff;
+  font-size: 30px;
+  text-transform: uppercase;
+  margin-top: 15px;
+  margin-bottom: 17px;
+  letter-spacing: 2px;
+  pointer-events: auto;
+  color: #fff;
 }
 
 .top-curr-station-name .line {
-    width: 40%;
+  width: 40%;
 }
 
-.popup-window {
-    width: 49%;
-    height: 50%;
-    background-color: #00000070;
-    border: 2px solid #949494; 
-    border-radius: 10px;
-    backdrop-filter: blur(2px);
-    font-weight: 300;
+.confrim-travel-popup {
+  width: 49%;
+  height: 50%;
+  background-color: #00000070;
+  border: 2px solid #949494;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+  font-weight: 300;
 }
 
 .popup-close-button {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: relative;
-    z-index: 8888;
-    margin-top: 25px;
-    margin-left: 15px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 8888;
+  margin-top: 25px;
+  margin-left: 15px;
 }
 
 .popup-close-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.window-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.travel-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.window-info .info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-block: 25px;
-    color: #D0D0D0;
+.travel-info .info {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  margin-block: 25px;
+  color: #d0d0d0;
 }
 
-.small-lable {
-    font-size: 14px;
+.next-station-lable {
+  font-size: 14px;
 }
 
-.main-lable {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 35px;
-    font-weight: 500;
-    margin-block: 10px;
-    color: #fff;
+.next-station-name {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 35px;
+  font-weight: 500;
+  margin-block: 10px;
+  color: #fff;
 }
 
 .progress-lost {
@@ -166,135 +170,126 @@
 }
 
 .travel-time strong {
-    color: #fff;
+  color: #fff;
 }
 
-.description {
-    width: 80%;
-    margin-top: 35px;
-    margin-bottom: 15px;
-    line-height: 27px;
-    text-align: center;
+.station-description {
+  width: 80%;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  line-height: 27px;
+  text-align: center;
+}
+
+.confirm-travel-button {
+  transition: 0.4s ease;
+  cursor: pointer;
 }
 
 .bottom-UI {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 60px;
-    align-items: center;
-    width: 460px;
-    height: 150px;
-    pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 60px;
+  align-items: center;
+  width: 460px;
+  height: 150px;
+  pointer-events: none;
 }
 
 .travel-time-bar {
-    width: 255px;
-    position: relative;
-    background: transparent;
-    padding: 8px 0;
-    color: #DADADA;
-    text-align: center;
-    font-size: 14px;
-    isolation: isolate;
-    letter-spacing: 1px;
-    pointer-events: auto;
-    cursor: default;
+  width: 255px;
+  position: relative;
+  background: transparent;
+  padding: 8px 0;
+  color: #dadada;
+  text-align: center;
+  font-size: 14px;
+  isolation: isolate;
+  letter-spacing: 1px;
+  pointer-events: auto;
+  cursor: default;
 }
 
 .travel-time-bar::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50px;
-    padding: 2px;
-    background:
-        linear-gradient(20deg, #3B3B3B, #BDBDBD);
-    z-index: 0;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  padding: 2px;
+  background: linear-gradient(20deg, #3b3b3b, #bdbdbd);
+  z-index: 0;
 
-    mask: 
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask-composite: exclude;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .travel-time-bar::after {
-    content: '';
-    position: absolute;
-    inset: 2px; /* Match the padding/border width */
-    border-radius: 48px; /* Slightly smaller than ::before */
-    background: #00000070;
-    backdrop-filter: blur(2px);
-    z-index: -1;
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 2px; /* Match the padding/border width */
+  border-radius: 48px; /* Slightly smaller than ::before */
+  background: #00000070;
+  backdrop-filter: blur(2px);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .bottom-UI .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.at-station-button, .confirmation-button {
-    width: 255px;
-    height: 80px;
-    background-color: #00000070;
-    border: 2px solid #949494; 
-    border-radius: 10px;
-    text-transform: uppercase;
-    color: #DADADA;
-    font-size: 25px;
-    letter-spacing: 1px;
-    backdrop-filter: blur(2px);
-    pointer-events: auto;
+.at-station-button,
+.confirm-travel-button {
+  width: 255px;
+  height: 80px;
+  background-color: #00000070;
+  border: 2px solid #949494;
+  border-radius: 10px;
+  text-transform: uppercase;
+  color: #dadada;
+  font-size: 25px;
+  letter-spacing: 1px;
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
 }
 
-.confirmation-button {
-    width: 200px;
-    height: 60px;
-    font-size: 20px;
-    transition: 0.4s ease;
-    cursor: pointer;
+.confirm-travel-button {
+  width: 200px;
+  height: 60px;
+  font-size: 20px;
 }
 
-.stop-travelling-button {
-    width: 240px;
+.todo-list-button,
+.profile-button {
+  width: 66px;
+  height: 66px;
+  background-color: #00000070;
+  border: 2px solid #949494;
+  border-radius: 10px;
+  color: #dadada;
+  transition: 0.4s ease;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
 }
 
-.todo-list-button, .profile-button, .end-travelling-button {
-    width: 66px;
-    height: 66px;
-    background-color: #00000070;
-    border: 2px solid #949494; 
-    border-radius: 10px;
-    color: #DADADA;
-    transition: 0.4s ease;
-    cursor: pointer;
-    backdrop-filter: blur(2px);
-    pointer-events: auto;
+.todo-list-button:hover,
+.profile-button:hover,
+.confirm-travel-button:hover {
+  background-color: #0000009d;
+  box-shadow: 0 0 15px #949494;
 }
 
-.end-travelling-button {
-    position: fixed;
-    top: 50px;
-    right: 50px;
-}
-
-.travelling {
-    transition: 0.4s ease;
-    cursor: pointer;
-}
-
-.todo-list-button:hover, .profile-button:hover, .confirmation-button:hover, .travelling:hover {
-    background-color: #0000009d;
-    box-shadow: 0 0 15px #949494;
-}
-
-.confirmation-button {
-    margin-bottom: 40px;
-    background-color: transparent;
+.confirm-travel-button {
+  margin-bottom: 40px;
+  background-color: transparent;
 }
