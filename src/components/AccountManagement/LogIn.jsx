@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import authGoBackButton from '../assets/authGoBackButton.svg';
-import google from '../assets/google.svg'
-import github from '../assets/github.svg'
-import opened_eye from '../assets/opened_eye.svg'
-import closed_eye from '../assets/closed_eye.svg'
+import authGoBackButton from '../../assets/images/authGoBackButton.svg';
+import google from '../../assets/images/google.svg'
+import github from '../../assets/images/github.svg'
+import opened_eye from '../../assets/images/opened_eye.svg'
+import closed_eye from '../../assets/images/closed_eye.svg'
+import './signup_and_login.css'
 
 import { useRef, useState } from 'react';
 
@@ -11,7 +12,7 @@ import {
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
   doSignInWithGithub,
-} from '../firebase/auth';
+} from '../../firebase/auth';
 
 
 export default function LogIn() {
@@ -99,14 +100,14 @@ export default function LogIn() {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="logInElements">
+        <div className="main-block">
             <div className="title">Log in to an existing account</div>
 
-            <div className="signUpRedirectionText">
+            <div className="redirection-text">
                 Don&apos;t have an account?
                 <Link
                 to="/auth/sign-up"
-                className="signUpRedirectionTextButton"
+                className="redirection-text-button"
                 >
                 Sign up
                 </Link>
@@ -120,44 +121,44 @@ export default function LogIn() {
                 }}
                 id="login-form"
             >
-                <div className="logInInputs">
-                <div className="entryArea">
-                    <input
-                    id="login-email"
-                    type="email"
-                    placeholder=" "
-                    ref={logInEmail}
-                    disabled={isLoading}
-                    autoComplete="email"
-                    required
-                    />
-                    <label htmlFor="login-email" className="labelLine">Email</label>
-                </div>
+                <div className="inputs-holder">
+                    <div className="entry-area">
+                        <input
+                        id="login-email"
+                        type="email"
+                        placeholder=" "
+                        ref={logInEmail}
+                        disabled={isLoading}
+                        autoComplete="email"
+                        required
+                        />
+                        <label htmlFor="login-email" className="label-line">Email</label>
+                    </div>
 
-                <div className="entryArea">
-                    <input
-                    id="login-password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder=" "
-                    ref={logInPass}
-                    disabled={isLoading}
-                    autoComplete="current-password"
-                    required
-                    />
-                    <label htmlFor="login-password" className="labelLine">Password</label>
-                    <div className='showHidePassIcon'>
-                        <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
-                            onClick={() => setShowPassword(!showPassword)} 
-                            role="button" />
+                    <div className="entry-area">
+                        <input
+                        id="login-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder=" "
+                        ref={logInPass}
+                        disabled={isLoading}
+                        autoComplete="current-password"
+                        required
+                        />
+                        <label htmlFor="login-password" className="label-line">Password</label>
+                        <div className='show-hide-pass-icon'>
+                            <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
+                                onClick={() => setShowPassword(!showPassword)} 
+                                role="button" />
+                        </div>
                     </div>
                 </div>
-                </div>
 
-                {error && <div className="errorMessage">{error}</div>}
+                {error && <div className="error-message">{error}</div>}
 
                 <button
                 type="submit"
-                className="logIntoAccount"
+                className="action-button proceed-to-account"
                 disabled={isLoading}
                 aria-busy={isLoading}
                 >
@@ -165,16 +166,16 @@ export default function LogIn() {
                 </button>
             </form>
 
-            <div className="logInVia">
+            <div className="enter-via">
                 <div className="line" aria-hidden="true" />
                 <div className="text">or log in via</div>
                 <div className="line right" aria-hidden="true" />
             </div>
 
-            <div className="logInOptions">
+            <div className="account-options">
                 <button
                 type="button"
-                className="googleLogIn"
+                className="action-button google"
                 onClick={async () => {
                     setIsLoading(true);
                     setError('');
@@ -194,7 +195,7 @@ export default function LogIn() {
 
                 <button
                 type="button"
-                className="githubLogIn"
+                className="action-button github"
                 onClick={async () => {
                     setIsLoading(true);
                     setError('');
@@ -213,7 +214,7 @@ export default function LogIn() {
                 </button>
             </div>
 
-            <Link to="/auth/sign-up" className="goBack">
+            <Link to="/auth/sign-up" className="go-back">
                 <img src={authGoBackButton} alt="Go back to sign up" 
                     role="button" />
             </Link>

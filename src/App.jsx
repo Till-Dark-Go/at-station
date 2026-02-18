@@ -1,9 +1,9 @@
-import Map from './components/Map'
-import AuthPage from './components/AuthPage'
+import Map from './components/Map/Map'
+import AuthPage from './components/AuthPage/AuthPage'
 import ProtectedRoute from './firebase/ProtectedRoute';
-import GreetingScreen from './components/GreetingScreen'
-import SignUp from './components/SignUp'
-import LogIn from './components/LogIn'
+import GreetingScreen from './components/GreetingScreen/GreetingScreen'
+import SignUp from './components/AccountManagement/SignUp'
+import LogIn from './components/AccountManagement/LogIn'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 

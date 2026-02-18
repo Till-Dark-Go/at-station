@@ -20,7 +20,6 @@ const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
-
 const db = admin.firestore();
 
 async function deleteStations() {

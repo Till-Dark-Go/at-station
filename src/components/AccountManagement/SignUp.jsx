@@ -1,17 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
+import './signup_and_login.css'
 
-import authGoBackButton from "../assets/authGoBackButton.svg";
-import google from "../assets/google.svg"
-import github from "../assets/github.svg"
-import opened_eye from "../assets/opened_eye.svg"
-import closed_eye from "../assets/closed_eye.svg"
+import authGoBackButton from "../../assets/images/authGoBackButton.svg";
+import google from "../../assets/images/google.svg"
+import github from "../../assets/images/github.svg"
+import opened_eye from "../../assets/images/opened_eye.svg"
+import closed_eye from "../../assets/images/closed_eye.svg"
+
+// Imports for creating Firestore user document in users collection
+import { auth, db } from "../../api/firebase";              
+import { updateProfile } from "firebase/auth";      
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 import { 
   doCreateUserWithEmailAndPassword,
   doSignInWithGoogle,
   doSignInWithGithub
-} from "../firebase/auth";
+} from "../../firebase/auth";
+
+const DEFAULT_STATION_ID = "bern"
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -42,7 +50,24 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doCreateUserWithEmailAndPassword(email, password);
+      const result = await doCreateUserWithEmailAndPassword(email, password);
+      // Get auth user and username what will allow to write to users/{uid} document after signup
+      const user = result.user || auth.currentUser;
+      const username = signUpUsername.current.value;
+      // Sets displayName inside Firebase Auth what will allow to write to users/{uid} document after signup
+      await updateProfile(user, { displayName: username });
+
+      // Create Firestore user document for users collection
+      // It is Client side document creation, with issue that 
+      // if client fails after signup (network), user may exist in Auth but not in Firestore
+      // Later we can do hybride with Cloud Function to solve it
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        displayName: username,
+        currentStationId: DEFAULT_STATION_ID, // const is defined after imports, in the future user choses or closest to geolocation
+        stampsCount: 0,
+        createdAt: serverTimestamp(),
+      });
       handleSuccess();
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -63,7 +88,22 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doSignInWithGoogle();
+      const result = await doSignInWithGoogle();
+      // Get auth user what will allow to write to users/{uid} document after signup
+      // username comes from Google
+      const user = result.user || auth.currentUser;
+
+      // Create Firestore user document for users collection
+      await setDoc(doc(db, "users", user.uid),
+        {
+          email: user.email,
+          displayName: user.displayName ?? null,
+          currentStationId: DEFAULT_STATION_ID,
+          stampsCount: 0,
+          createdAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
       handleSuccess();
     } catch (err) {
       setError("Failed to sign up with Google: " + err.message);
@@ -78,7 +118,22 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
 
-      await doSignInWithGithub();
+      const result = await doSignInWithGithub();
+      // Get auth user what will allow to write to users/{uid} document after signup
+      // username comes from Github
+      const user = result.user || auth.currentUser;
+
+      // Create Firestore user document for users collection
+      await setDoc(doc(db, "users", user.uid),
+        {
+          email: user.email,
+          displayName: user.displayName ?? null,
+          currentStationId: DEFAULT_STATION_ID,
+          stampsCount: 0,
+          createdAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
       handleSuccess();
     } catch (err) {
       if (err.code === "auth/account-exists-with-different-credential") {
@@ -99,14 +154,14 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="signUpElements">
+    <div className="main-block">
       <div className="title">Register for your first ride</div>
 
-      <div className="logInRedirectionText">
+      <div className="redirection-text">
         Had a ride before?
         <Link
           to="/auth/log-in"
-          className="logInRedirectionTextButton"
+          className="redirection-text-button"
         >
           Log in
         </Link>
@@ -120,34 +175,34 @@ export default function SignUp() {
         }}
         id="signup-form"
       >
-        <div className="signUpInputs">
-          <div className="entryArea">
-            <input
-              id="signup-username"
-              type="text"
-              placeholder=" "
-              ref={signUpUsername}
-              disabled={isLoading}
-              autoComplete="username"
-              required
-            />
-            <label htmlFor="signup-username" className="labelLine">Username</label >
+        <div className="inputs-holder">
+            <div className="entry-area">
+              <input
+                id="signup-username"
+                type="text"
+                placeholder=" "
+                ref={signUpUsername}
+                disabled={isLoading}
+                autoComplete="username"
+                required
+              />
+              <label htmlFor="signup-username" className="label-line">Username</label >
+            </div>
+
+            <div className="entry-area">
+              <input
+                id="signup-email"
+                type="email"
+                placeholder=" "
+                ref={signUpEmail}
+                disabled={isLoading}
+                autoComplete="email"
+                required
+              />
+              <label htmlFor="signup-email" className="label-line">Email</label >
           </div>
 
-          <div className="entryArea">
-            <input
-              id="signup-email"
-              type="email"
-              placeholder=" "
-              ref={signUpEmail}
-              disabled={isLoading}
-              autoComplete="email"
-              required
-            />
-            <label htmlFor="signup-email" className="labelLine">Email</label >
-          </div>
-
-          <div className="entryArea">
+          <div className="entry-area">
             <input
               id="signup-password"
               type={showPassword ? "text" : "password"}
@@ -157,8 +212,8 @@ export default function SignUp() {
               autoComplete="new-password"
               required
             />
-            <label htmlFor="signup-password" className="labelLine">Password</label >
-            <div className="showHidePassIcon">
+            <label htmlFor="signup-password" className="label-line">Password</label >
+            <div className="show-hide-pass-icon">
                 <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
                     onClick={() => setShowPassword(!showPassword)} 
                     role="button" 
@@ -167,17 +222,17 @@ export default function SignUp() {
           </div>
         </div>
 
-        <label className="termsHolder">
+        <label className="terms-holder">
           <input type="checkbox" aria-required="true" required />
-          <span className="checkMark" aria-hidden="true"></span>
+          <span className="check-mark" aria-hidden="true"></span>
           <div>I agree to Terms & Conditions</div>
         </label>
 
-        {error && <div className="errorMessage" role="alert">{error}</div>}
+        {error && <div className="error-message" role="alert">{error}</div>}
 
         <button
           type="submit"
-          className="createAccount"
+          className="action-button proceed-to-account"
           disabled={isLoading}
           aria-busy={isLoading}
         >
@@ -185,16 +240,16 @@ export default function SignUp() {
         </button>
       </form>
 
-      <div className="signUpVia">
+      <div className="enter-via">
         <div className="line" aria-hidden="true"></div>
         <div className="text">or sign up via</div>
         <div className="line right" aria-hidden="true"></div>
       </div>
 
-      <div className="signUpOptions">
+      <div className="account-options">
         <button
           type="button"
-          className="googleSignUp"
+          className="action-button google"
           onClick={handleGoogleSignUp}
           disabled={isLoading}
         >
@@ -203,7 +258,7 @@ export default function SignUp() {
 
         <button
           type="button"
-          className="githubSignUp"
+          className="action-button github"
           onClick={handleGithubSignUp}
           disabled={isLoading}
         >
@@ -211,7 +266,7 @@ export default function SignUp() {
         </button>
       </div>
 
-      <Link to="/auth" className="goBack">
+      <Link to="/auth" className="go-back">
         <img
           src={authGoBackButton}
           alt="Go back to main authentication page"
