@@ -8,6 +8,7 @@ import marker_logo from '../../assets/images/marker.svg'
 import hovered_marker_logo from '../../assets/images/hovered_marker.png'
 import user_marker_logo from '../../assets/images/black_user_marker.svg'
 import train_icon from '../../assets/images/train_icon.png'
+import exit from '../../assets/images/exit.svg'
 
 import { calcStationParameters } from '../../assets/utils/mapFunctions.js'
 
@@ -82,9 +83,8 @@ export default function Map() {
             style: "mapbox://styles/ulven-rev/cml9m8wbr007001sj277u888r",
             center: [userStartingPoint.lng, userStartingPoint.lat],
             zoom: 7,
-            minZoom: 6,
-            maxZoom: 7,
-            disputed: true
+            minZoom: 1,
+            maxZoom: 7
         });
 
         // Create markers once
@@ -224,8 +224,9 @@ export default function Map() {
                     mapRef.current.easeTo({
                         center: [nextLng, nextLat],
                         zoom: 11.8,
-                        duration: 60000*travelTime // 1 minute = 60 000 ms and we set duration in ms
-                        // duration: 10000
+                        duration: 60000*travelTime, // 1 minute = 60 000 ms and we set duration in ms
+                        // duration: 20000,
+                        easing: (t) => t  // Linear animation - no slowdown at the end
                     });
 
                     // Changing zoom back to normal
@@ -276,7 +277,7 @@ export default function Map() {
         popupOpenRef.current = false;
         currentlyTravelling.current = false;
 
-        mapRef.current.zoomTo(7, {  // Zomming back out
+        mapRef.current.zoomTo(7, {  // Zooming back out
             duration: 5000
         });
         mapRef.current.once('moveend', () => {
@@ -288,6 +289,11 @@ export default function Map() {
             setTravelTimeLabel('Awaiting travelling...');
         });
     }
+
+    function pauseTravelling() {
+        mapRef.current.stop();
+        console.log("PAUSED");
+    }
     
     return (
         <>
@@ -297,6 +303,12 @@ export default function Map() {
 
         {/* All UI components displayed "on top" of the map - the TODO LIST AS WELL */}
         <div className='UI-elements' ref={UI_elements_div}>
+            <div className='at-station-logo'>@station</div>
+            {currentlyTravelling.current && 
+            <button className='end-travelling-button'
+                onClick = {openPopup}>
+                <img src={exit} alt="End travelling icon" />
+            </button>}
             <div className='train-icon' ref={train_icon_div}><img src={train_icon} alt="Train icon" /></div>
             <TopUI 
                 currentlyTravelling = {currentlyTravelling}
@@ -317,7 +329,7 @@ export default function Map() {
                 travelTimeLabel = {travelTimeLabel}
                 currentlyTravelling = {currentlyTravelling}
                 nextStation = {nextStation}
-                openPopup = {openPopup}
+                pauseTravelling = {pauseTravelling}
                 timerDuration = {timeAndCoords.hours*60+timeAndCoords.minutes}
             />
         </div>

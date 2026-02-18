@@ -4,9 +4,6 @@ import user_pf_logo from '../../assets/images/user_profile.svg'
 import Timer from './Timer.jsx'
 
 export default function BottomUI(props) {
-
-    
-
     return (
         <div className='bottom-UI'>
             {!props.currentlyTravelling.current && <div className='travel-time-bar'>{props.travelTimeLabel}</div>}
@@ -23,9 +20,9 @@ export default function BottomUI(props) {
                 </button>}
                 {props.currentlyTravelling.current && 
                 <button className='at-station-button travelling'
-                    onClick = {props.openPopup}
+                    onClick = {props.pauseTravelling}
                 >
-                    end journey
+                    pause
                 </button>}
                 <button
                     className='profile-button'

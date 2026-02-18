@@ -44,6 +44,13 @@
     z-index: 100;
 }
 
+.at-station-logo {
+    position: fixed;
+    top: 50px;
+    left: 60px;
+    font-size: 1.1em;
+}
+
 .train-icon {
     position: fixed;
     top: 50.2%;
@@ -258,7 +265,7 @@
     width: 240px;
 }
 
-.todo-list-button, .profile-button {
+.todo-list-button, .profile-button, .end-travelling-button {
     width: 66px;
     height: 66px;
     background-color: #00000070;
@@ -269,6 +276,12 @@
     cursor: pointer;
     backdrop-filter: blur(2px);
     pointer-events: auto;
+}
+
+.end-travelling-button {
+    position: fixed;
+    top: 50px;
+    right: 50px;
 }
 
 .travelling {
