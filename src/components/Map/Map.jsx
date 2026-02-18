@@ -32,6 +32,7 @@ export default function Map() {
     const [nextStation, setNextStation] = useState({name: 'at station', country: ''});
     const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...');
     const [popupWindow, setPopupWindow] = useState(false);
+    
     const popupOpenRef = useRef(false);
 
     const currentlyTravelling = useRef(false);
@@ -41,7 +42,9 @@ export default function Map() {
     const markersRef = useRef([]);
 
     useEffect(() => {
-        if (!currentlyTravelling) return;
+        if (!currentlyTravelling.current) {
+            return;
+        };
 
         function handleOnBeforeUnload(event) {
             event.preventDefault();
@@ -51,7 +54,7 @@ export default function Map() {
         return () => {
             window.removeEventListener('beforeunload', handleOnBeforeUnload, { capture: true });
         }
-    }, [currentlyTravelling]);
+    }, [currentlyTravelling.current]);
 
     // Load current station
     useEffect(() => {
