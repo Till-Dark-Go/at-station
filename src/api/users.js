@@ -1,5 +1,37 @@
-import { doc, setDoc, updateDoc, getDoc, serverTimestamp, increment, runTransaction} from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDoc, deleteDoc, serverTimestamp, increment, runTransaction} from "firebase/firestore";
 import { db, auth} from "./firebase"; 
+
+// Delete user
+export async function deleteUserDocument() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    await deleteDoc(userRef);
+  } catch (err) {
+    console.error("Failed to delete Firestore user document:", err);
+    throw err;
+  }
+}
+
+// Reset user data including stamps and current station
+export async function resetUserData() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, {
+      stampsCount: 0,
+      currentStationId: "bern"
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to reset user data:", err);
+    throw err;
+  }
+}
 
 // Get the full user document
 export async function getUserDoc() {
@@ -32,14 +64,8 @@ export async function updateUserField(fieldName, value) {
     const user = auth.currentUser;
     if (!user) throw new Error("Not signed in");
 
-    try {
-        const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, { [fieldName]: value });
-        return true;
-    } catch (err) {
-        console.error(`Failed to update field ${fieldName}:`, err);
-        return false;
-    }
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, { [fieldName]: value });
 }
 
 // Examples for email, displayName, currentStationId, stampsCount
@@ -50,38 +76,39 @@ export const getStampsCount = () => getUserField("stampsCount");
 
 export const updateDisplayName = (name) => updateUserField("displayName", name);
 export const updateCurrentStation = (stationId) => updateUserField("currentStationId", stationId);
+export const updateEmail = (email) => updateUserField("email", email);
 
 
 // Add (or update) a stamp document users/{uid}/stamps/{stationId}
-export async function addStamp(stationId) {
-    const user = auth.currentUser;
-    if (!user) throw new Error("Not signed in");
+// export async function addStamp(stationId) {
+//     const user = auth.currentUser;
+//     if (!user) throw new Error("Not signed in");
 
-    const stampRef = doc(db, "users", user.uid, "stamps", stationId);
-    const userRef = doc(db, "users", user.uid);
+//     const stampRef = doc(db, "users", user.uid, "stamps", stationId);
+//     const userRef = doc(db, "users", user.uid);
 
-    try {
-        return await runTransaction(db, async (tx) => {
-            const stampSnap = await tx.get(stampRef);
-            if (stampSnap.exists()) return { created: false };
+//     try {
+//         return await runTransaction(db, async (tx) => {
+//             const stampSnap = await tx.get(stampRef);
+//             if (stampSnap.exists()) return { created: false };
 
-            // create stamp
-            tx.set(stampRef, { earnedAt: serverTimestamp() });
+//             // create stamp
+//             tx.set(stampRef, { earnedAt: serverTimestamp() });
 
-            // increment stampsCount safely
-            try {
-                tx.update(userRef, { stampsCount: increment(1) });
-            } catch {
-                tx.set(userRef, { stampsCount: 1 }, { merge: true });
-            }
+//             // increment stampsCount safely
+//             try {
+//                 tx.update(userRef, { stampsCount: increment(1) });
+//             } catch {
+//                 tx.set(userRef, { stampsCount: 1 }, { merge: true });
+//             }
 
-            return { created: true };
-        });
-    } catch (err) {
-        console.error("Failed to add stamp:", err);
-        return { created: false, error: err };
-    }
-}
+//             return { created: true };
+//         });
+//     } catch (err) {
+//         console.error("Failed to add stamp:", err);
+//         return { created: false, error: err };
+//     }
+// }
 
 
 // // Update the user's currentStationId fieldnat users/{uid}

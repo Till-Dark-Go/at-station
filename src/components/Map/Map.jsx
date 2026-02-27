@@ -17,6 +17,7 @@ import { updateCurrentStation, getCurrentStationId } from '../../api/users.js';
 import TopUI from './TopUI.jsx'
 import PopupWindow from './PopupWindow.jsx'
 import BottomUI from './BottomUI.jsx'
+import Profile from '../Profile/Profile.jsx'
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
@@ -31,8 +32,11 @@ export default function Map() {
 
     const [nextStation, setNextStation] = useState({name: 'at station', country: ''});
     const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...');
+
     const [popupWindow, setPopupWindow] = useState(false);
     const popupOpenRef = useRef(false);
+
+    const [profileWindow, setProfileWindow] = useState(false);
 
     const currentlyTravelling = useRef(false);
     const [timeAndCoords, setTimeAndCoords] = useState({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});  // These need to be kept between renders => use useState for this
@@ -294,6 +298,10 @@ export default function Map() {
         mapRef.current.stop();
         console.log("PAUSED");
     }
+
+    function toggleProfileWindow() {
+        setProfileWindow(prev => !prev);
+    }
     
     return (
         <>
@@ -325,12 +333,14 @@ export default function Map() {
                 stopTravelling = {stopTravelling}
                 closePopup = {() => closePopup(popupOpenRef)}
             />}
+            {profileWindow &&  <Profile />}
             <BottomUI 
                 travelTimeLabel = {travelTimeLabel}
                 currentlyTravelling = {currentlyTravelling}
                 nextStation = {nextStation}
                 pauseTravelling = {pauseTravelling}
                 timerDuration = {timeAndCoords.hours*60+timeAndCoords.minutes}
+                toggleProfileWindow = {toggleProfileWindow}
             />
         </div>
         </>

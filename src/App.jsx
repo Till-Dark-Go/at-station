@@ -15,7 +15,7 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Map />
       </ProtectedRoute>
-    ),
+    )
   },
   {
     // public route, anyone can access so ProtectedRoute is not needed 

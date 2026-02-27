@@ -1,0 +1,8 @@
+.main-block {
+    width: 500px;
+    height: 500px;
+    background-color: #0c0c0c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

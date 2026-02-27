@@ -1,0 +1,99 @@
+import { useState, useEffect } from "react";
+
+import './confirmation_popup.css' // need to be edited
+
+// Assets
+import opened_eye from "../../assets/images/opened_eye.svg";
+import closed_eye from "../../assets/images/closed_eye.svg";
+
+export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
+    const [password, setPassword] = useState("");  // Always required for reauthentication
+    const [newValue, setNewValue] = useState("");  // New username, email, or password
+    // Toggle the password"s eye button to show/hide it
+    const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        setPassword("");
+        setNewValue("");
+    }, [type]);
+
+    // Determine if password is needed
+    const needsPassword = type === "username" || type === "email" || type === "password" || type === "delete";
+    // Determine if new input field is needed for this action
+    const needsNewValue = type === "username" || type === "email" || type === "password";
+
+    // Handle confirm click
+    const handleConfirmClick = () => {
+        const data = {
+            password, // always reauthentication
+            newPassword: type === "password" ? newValue : undefined,
+            newUsername: type === "username" ? newValue : undefined,
+            newEmail: type === "email" ? newValue : undefined,
+        };
+        onConfirm(data); // calls Profile.jsx function
+        setPassword("");
+        setNewValue("");
+    };
+
+    // Handle cancel click
+    const handleCancelClick = () => {
+        setPassword("");
+        setNewValue("");
+        onCancel(); // calls Profile.jsx function
+    };
+        
+
+    return (
+        <div className="confirmation-popup">
+            <h3>
+                {type === "delete" ? "Are you sure you want to delete your account? This is permanent." :
+                 type === "reset" ? "Are you sure you want to reset your data? This is permanent." :
+                 type === "logout" ? "Are you sure you want to log out?" : 
+                 "Confirm your changes."}
+            </h3>
+
+            {/* Ask for current password */}
+            {needsPassword && (
+                <div className="input-group"> 
+                    <label>Confirm current password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter current password"
+                    />
+                </div>
+            )}
+
+            {/* Ask for new values */}
+            {needsNewValue && (
+                <div className="input-group">
+                    <label>{type === "username" ? "Enter new username" :
+                            type === "email" ? "Enter new email" :
+                            type === "password" ? "Enter new password" :
+                            ""}
+                    </label>
+                    <input
+                        className="input-box"
+                        type={type === "password" ? "password" : "text"}
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                        placeholder={type === "username" ? "Enter new username" :
+                                    type === "email" ? "Enter new email" :
+                                    type === "password" ? "Enter new password" :
+                                    ""}
+                    />
+                    <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"} onClick={() => setShowPassword(!showPassword)} role="button" />
+                </div>
+            )}
+
+            {/* Buttons */}
+            <div className="popup-buttons">
+                <button className="cancel-button" onClick={handleCancelClick}>Cancel</button>
+                <button className="confirm-button" onClick={handleConfirmClick}>Confirm</button>
+            </div>
+
+        </div>
+    );
+
+}
