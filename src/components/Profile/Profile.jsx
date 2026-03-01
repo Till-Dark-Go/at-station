@@ -9,6 +9,7 @@ import { useAuth } from "../../firebase/AuthContext";
 // Styles and assets
 import '../AccountManagement/signup_and_login.css'; // need to be customized 
 import './profile.css' // need to be customized 
+import cancel_cross from "../../assets/images/cancel_cross.svg";
 import editIcon from "../../assets/images/edit.svg";
 
 // Popup page
@@ -45,6 +46,17 @@ export default function Profile() {
  
   // Detect provider type (eg. "password", "google.com", "github.com"), we can chnge password and email only with "password"
   const providerId = currentUser?.providerData[0]?.providerId || "";
+
+   // Clears success/error messages after 5 sec
+  useEffect(() => {
+    if (!error && !success) return;
+
+    const timer = setTimeout(() => {
+      clearMessages();
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer); // cleanup on re-render
+  }, [error, success]);
 
   // Load current user info from users to display in profile
   // users doesn't store password, so it should be dispalyed as "********", nobody should have access to password
@@ -132,8 +144,14 @@ export default function Profile() {
 
   return (
     <div className="main-block">
-      {error && <div className="error-message" role="alert">{error}</div>}
-      {success && <div className="success-message" role="alert">{success}</div>}
+      {error && (
+        <div className="error-message" role="alert">{error}<img src={cancel_cross} 
+        className="close-messages" alt="Cancel Message" onClick={() => clearMessages()} role="button"/>
+        </div>)}
+      {success && (
+        <div className="success-message" role="alert">{success}<img src={cancel_cross}
+        className="close-messages" alt="Cancel Message" onClick={() => clearMessages()} role="button"/>
+        </div>)}
       <div className="title">Edit Profile</div>
 
       <form id="profile-form" onSubmit={e => e.preventDefault()}>
@@ -145,13 +163,11 @@ export default function Profile() {
               type="text"
               placeholder=""
               value={username}
-  
-              onChange={e => setUsername(e.target.value)}
+              readOnly
             />
             <label className="label-line">Username</label>
           </div>
           <div className="show-hide-edit-icon">
-              {/*<button type="button" onClick={() => openPopup("username")}>Save</button>*/}
             <img src={editIcon} alt="Edit username" onClick={() => openPopup("username")} role="button" />
           </div>
 
@@ -161,13 +177,10 @@ export default function Profile() {
               type="text"
               placeholder=""
               value={email}
-              disabled={providerId !== "password"} // Only editable if provider is password
-              onChange={e => setEmail(e.target.value)}
+              readOnly
             />
             <label className="label-line">Email</label>
           </div>
-          {/*<img src={editIcon} alt="Edit email" onClick={() => setIsEditingEmail(true)} role="button" />
-          <button type="button" onClick={() => openPopup("email")}>Save</button>*/}
           <div className="show-hide-edit-icon">
             {providerId === "password" ? (
                 <img src={editIcon} alt="Edit email" onClick={() => openPopup("email")} role="button" />
@@ -182,8 +195,7 @@ export default function Profile() {
               type="password"
               placeholder=""
               value="********"
-              disabled={providerId !== "password"} // Only editable if provider is password
-              onChange={e => setEmail(e.target.value)}
+              readOnly
             /> 
             <label className="label-line">Password</label>
           </div>

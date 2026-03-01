@@ -10,7 +10,9 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
     const [password, setPassword] = useState("");  // Always required for reauthentication
     const [newValue, setNewValue] = useState("");  // New username, email, or password
     // Toggle the password"s eye button to show/hide it
-    const [showPassword, setShowPassword] = useState(false);
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+
 
     useEffect(() => {
         setPassword("");
@@ -57,11 +59,14 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
                 <div className="input-group"> 
                     <label>Confirm current password:</label>
                     <input
-                        type="password"
+                        type={showCurrentPassword ? "text" : "password"} 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter current password"
                     />
+                    <div className='show-hide-pass-icon'>
+                        <img src={showCurrentPassword ? opened_eye : closed_eye} alt={showCurrentPassword ? "Opened eye icon" : "Closed eye icon"} onClick={() => setShowCurrentPassword(!showCurrentPassword)} role="button" />
+                    </div>
                 </div>
             )}
 
@@ -75,7 +80,7 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
                     </label>
                     <input
                         className="input-box"
-                        type={type === "password" ? "password" : "text"}
+                        type={type === "password" ? (showNewPassword ? "text" : "password") : "text"}
                         value={newValue}
                         onChange={(e) => setNewValue(e.target.value)}
                         placeholder={type === "username" ? "Enter new username" :
@@ -83,7 +88,13 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
                                     type === "password" ? "Enter new password" :
                                     ""}
                     />
-                    <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"} onClick={() => setShowPassword(!showPassword)} role="button" />
+                    <div className="show-hide-pass-icon">
+                        {type === "password" ? (
+                            <img src={showNewPassword ? opened_eye : closed_eye} alt={showNewPassword ? "Opened eye icon" : "Closed eye icon"} onClick={() => setShowNewPassword(!showNewPassword)} role="button" />
+                        ) : (
+                            ""
+                        )}
+                    </div>
                 </div>
             )}
 
