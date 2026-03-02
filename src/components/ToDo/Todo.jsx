@@ -29,7 +29,13 @@ export default function Todo() {
     setTodos(todos.filter((t) => t.id !== todoId));
   };
 
-
+  //create a new todo
+  const handleCreate = async () => {
+    if (!newTitle.trim()) return;
+    const id = await createTodo(userId, newTitle);
+    setTodos([...todos, { id, title: newTitle, completed: false }]);
+    setNewTitle("");
+  };
 
   return (
     <div className="todo-list">
