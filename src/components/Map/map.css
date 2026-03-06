@@ -94,6 +94,7 @@
 
 .top-curr-station-name .line {
     width: 40%;
+    background: white;
 }
 
 .popup-window {
@@ -191,44 +192,16 @@
 .travel-time-bar {
     width: 255px;
     position: relative;
-    background: transparent;
     padding: 8px 0;
     color: #DADADA;
     text-align: center;
     font-size: 14px;
-    isolation: isolate;
     letter-spacing: 1px;
     pointer-events: auto;
     cursor: default;
-}
-
-.travel-time-bar::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    background-color: #00000070;
+    border: 2px solid #949494; 
     border-radius: 50px;
-    padding: 2px;
-    background:
-        linear-gradient(20deg, #3B3B3B, #BDBDBD);
-    z-index: 0;
-
-    mask: 
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-
-    pointer-events: none;
-}
-
-.travel-time-bar::after {
-    content: '';
-    position: absolute;
-    inset: 2px; /* Match the padding/border width */
-    border-radius: 48px; /* Slightly smaller than ::before */
-    background: #00000070;
-    backdrop-filter: blur(2px);
-    z-index: -1;
-    pointer-events: none;
 }
 
 .bottom-UI .buttons {
