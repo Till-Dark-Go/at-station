@@ -41,6 +41,7 @@ export default function Map() {
 
     const [timeAndCoords, setTimeAndCoords] = useState({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});  // These need to be kept between renders => use useState for this
     const UI_elements_div = useRef(null);  // For the UI elements container to make it pointer-events: auto when the pop up is opened (so that we can't move the map)
+    const [loadingScreen, setLoadingScreen] = useState(true);
 
     const markersRef = useRef([]);
 
@@ -59,7 +60,7 @@ export default function Map() {
         }
     }, [currentlyTravelling.current]);
 
-    // Load current station
+    // Load current station from database
     useEffect(() => {
         async function loadUserStation() {
             const stationId = await getCurrentStationId();
@@ -82,6 +83,7 @@ export default function Map() {
         
         if (mapRef.current || userStartingPoint.lng == null) return;
         
+        // Set up the map
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
         mapRef.current = new mapboxgl.Map({
@@ -93,6 +95,11 @@ export default function Map() {
             maxZoom: 7,
             pitchWithRotate: false  // Do disable the tilting ability
         });
+
+        // This fires up after all the tiles of the map were fully loaded - then we remove the loading "screen"
+        mapRef.current.on('idle', () => {
+            setLoadingScreen(false);
+        })
 
         // Create markers once
         arrayOfStations.forEach((station) => {
@@ -308,11 +315,14 @@ export default function Map() {
     
     return (
         <>
+        {loadingScreen && <div className='loading-screen'>
+            <div className='loader'></div>
+        </div>}
+        
         <div id = "map-wrap">
             <div ref={mapContainerRef} id = "map-container"></div>
         </div>
 
-        {/* All UI components displayed "on top" of the map - the TODO LIST AS WELL */}
         <div className='UI-elements' ref={UI_elements_div}>
             <div className='at-station-logo'>@station</div>
             {currentlyTravelling.current && 
@@ -324,6 +334,7 @@ export default function Map() {
             <TopUI 
                 currentlyTravelling = {currentlyTravelling}
                 userStartingPoint = {userStartingPoint}
+                nextStationName = {nextStation.name}
             />
             {popupOpenRef.current && 
             <PopupWindow 

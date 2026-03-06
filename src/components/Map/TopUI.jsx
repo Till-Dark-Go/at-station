@@ -4,7 +4,7 @@ export default function TopUI(props) {
             <div className='lable'>{
                 props.currentlyTravelling.current ? "Currently on the way to" : "Current station is"
             }</div>
-            <div className='station-name'>{props.userStartingPoint.name}</div>
+            <div className='station-name'>{props.currentlyTravelling.current ? props.nextStationName : props.userStartingPoint.name}</div>
             <div className='line'></div>
         </div>
     )
