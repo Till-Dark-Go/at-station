@@ -17,6 +17,7 @@ import { updateCurrentStation, getCurrentStationId } from '../../api/users.js';
 import TopUI from './TopUI.jsx'
 import PopupWindow from './PopupWindow.jsx'
 import BottomUI from './BottomUI.jsx'
+import { coordinates } from '@maptiler/sdk'
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 const arrayOfStations = await getStations();  // because ASYNC function getStations()
@@ -99,7 +100,7 @@ export default function Map() {
         // This fires up after all the tiles of the map were fully loaded - then we remove the loading "screen"
         mapRef.current.on('idle', () => {
             setLoadingScreen(false);
-        })
+        });
 
         // Create markers once
         arrayOfStations.forEach((station) => {
@@ -116,6 +117,37 @@ export default function Map() {
             });
         });
 
+        mapRef.current.on('load', () => {
+            mapRef.current.loadImage(train_icon, (error, image) => {
+                if (error) throw error;
+
+                mapRef.current.addImage('moving-icon', image);
+
+                mapRef.current.addSource('moving-marker', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: [userStartingPoint.lng, userStartingPoint.lat] }
+                    }
+                });
+
+                mapRef.current.addLayer({
+                    id: 'moving-marker-layer',
+                    type: 'symbol',
+                    source: 'moving-marker',
+                    layout: {
+                        'icon-image': 'moving-icon',
+                        'icon-size': 0.35,
+                        'icon-allow-overlap': true
+                    },
+                    paint: {
+                        'icon-opacity': 0,  
+                        'icon-opacity-transition': { duration: 1000, delay: 0 }
+                    }
+                });
+            });
+        });
+    
         return () => {   // This runs when the dependency array changes
             // Clean up markers
             markersRef.current.forEach(({ marker }) => marker.remove());
@@ -234,7 +266,8 @@ export default function Map() {
             currentlyPaused.current = false;
         }
 
-        train_icon_div.current.style.opacity = '1';
+        mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 1);
+
         mapRef.current.easeTo({
             center: [nextLng, nextLat],
             zoom: 11.8,
@@ -242,10 +275,23 @@ export default function Map() {
             // duration: 20000,
             easing: (t) => t  // Linear animation - no slowdown at the end
         });
+
+        mapRef.current.on('move', () => {
+            const center = mapRef.current.getCenter();
+            mapRef.current.getSource('moving-marker').setData({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [center.lng, center.lat]
+                }
+            });
+        });
+
         await waitForEvent(mapRef.current, 'moveend');
         if (!currentlyTravelling.current || currentlyPaused.current) return;
 
-        train_icon_div.current.style.opacity = '0';
+       mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 0);
+
         mapRef.current.zoomTo(7, { duration: 3200 });
         await waitForEvent(mapRef.current, 'zoomend');
         if (!currentlyTravelling.current || currentlyPaused.current) return;
@@ -325,12 +371,13 @@ export default function Map() {
 
         <div className='UI-elements' ref={UI_elements_div}>
             <div className='at-station-logo'>@station</div>
+
             {currentlyTravelling.current && 
             <button className='end-travelling-button'
                 onClick = {openPopup}>
                 <img src={exit} alt="End travelling icon" />
             </button>}
-            <div className='train-icon' ref={train_icon_div}><img src={train_icon} alt="Train icon" /></div>
+
             <TopUI 
                 currentlyTravelling = {currentlyTravelling}
                 userStartingPoint = {userStartingPoint}
