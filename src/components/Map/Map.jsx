@@ -167,7 +167,7 @@ export default function Map() {
                     source: 'moving-marker',
                     layout: {
                         'icon-image': 'moving-icon',
-                        'icon-size': 0.5,
+                        'icon-size': 0.4,
                         'icon-allow-overlap': true
                     },
                     paint: {
