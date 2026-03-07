@@ -121,6 +121,36 @@ export default function Map() {
             mapRef.current.loadImage(train_icon, (error, image) => {
                 if (error) throw error;
 
+                // Pre-setting the line between two stations, will just change the opacity when needed to show it
+                mapRef.current.addSource('route', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: []
+                        }
+                    }
+                });
+
+                mapRef.current.addLayer({
+                    id: 'route',
+                    type: 'line',
+                    source: 'route',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    paint: {
+                        'line-color': '#fff',
+                        'line-width': 3,
+                        'line-emissive-strength': 1,
+                        'line-opacity': 0,
+                        'line-opacity-transition': { duration: 1000, delay: 0 }
+                    }
+                });
+
                 mapRef.current.addImage('moving-icon', image);
 
                 mapRef.current.addSource('moving-marker', {
@@ -137,7 +167,7 @@ export default function Map() {
                     source: 'moving-marker',
                     layout: {
                         'icon-image': 'moving-icon',
-                        'icon-size': 0.35,
+                        'icon-size': 0.5,
                         'icon-allow-overlap': true
                     },
                     paint: {
@@ -266,8 +296,11 @@ export default function Map() {
             currentlyPaused.current = false;
         }
 
+        // Displaying the train icon and the line between stations
         mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 1);
+        mapRef.current.setPaintProperty('route', 'line-opacity', 1);
 
+        // Starting the moving animation towards the new station
         mapRef.current.easeTo({
             center: [nextLng, nextLat],
             zoom: 11.8,
@@ -276,6 +309,7 @@ export default function Map() {
             easing: (t) => t  // Linear animation - no slowdown at the end
         });
 
+        // Displaing the train icon with new center coords everytime to make it move as we move
         mapRef.current.on('move', () => {
             const center = mapRef.current.getCenter();
             mapRef.current.getSource('moving-marker').setData({
@@ -285,12 +319,25 @@ export default function Map() {
                     coordinates: [center.lng, center.lat]
                 }
             });
+
+            mapRef.current.getSource('route').setData({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: [
+                        [center.lng, center.lat],
+                        [nextLng, nextLat]
+                    ]
+                }
+            })
         });
 
         await waitForEvent(mapRef.current, 'moveend');
         if (!currentlyTravelling.current || currentlyPaused.current) return;
 
-       mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 0);
+        // Hiding the train icon and the line between two stations
+        mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 0);
+        mapRef.current.setPaintProperty('route', 'line-opacity', 0);
 
         mapRef.current.zoomTo(7, { duration: 3200 });
         await waitForEvent(mapRef.current, 'zoomend');
@@ -336,7 +383,11 @@ export default function Map() {
         await waitForEvent(mapRef.current, 'moveend');
 
         mapRef.current.setMaxZoom(7);
-        train_icon_div.current.style.opacity = '0';
+
+        // Hiding the train icon and the line between two stations
+        mapRef.current.setPaintProperty('moving-marker-layer', 'icon-opacity', 0);
+        mapRef.current.setPaintProperty('route', 'line-opacity', 0);
+
         UI_elements_div.current.style.pointerEvents = 'none';
         setTimeAndCoords({hours: null, minutes: null, nextLng: null, nextLat: null, stationId: null});  // Nothing new for the new coordinates, they stay empty until the user chooses the next destination
         setNextStation({name: 'at station', country: ''});
