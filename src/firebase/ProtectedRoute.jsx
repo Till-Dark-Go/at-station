@@ -12,6 +12,6 @@ export default function ProtectedRoute({ children }) {
     return <div style={{ color: 'white' }}>Loading...</div>;
   }
 
-  // If logged in show page, otherwise redirect to /auth
+  // If logged in show page (in this case map), otherwise redirect to /auth
   return userLoggedIn ? children : <Navigate to="/auth" />;
 }
