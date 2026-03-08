@@ -14,7 +14,7 @@ export default function GreetingScreen() {
             <div className = 'sub-title'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
 
             {/* Wrapping our BUTTON into LINK and saying to which URL it will point when clicked - this way we simply load another page on the button press */}
-            <Link to = '/auth/sign-up' className='action-button'>
+            <Link to = '/auth/log-in' className='action-button'>
                 Start your journey
             </Link>
         </div>

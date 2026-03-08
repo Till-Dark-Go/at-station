@@ -33,7 +33,7 @@ export default function SignUp() {
 
   // Shared success handler (same philosophy as LogIn)
   const handleSuccess = () => {
-    navigate("/");
+    navigate('/auth/log-in');
   };
 
   // EMAIL / PASSWORD SIGN UP
