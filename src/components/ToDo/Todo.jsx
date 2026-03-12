@@ -5,24 +5,9 @@ import { createTodo, getTodos, updateTodo, deleteTodo } from "../../api/todo-db"
 import { auth } from "../../api/firebase";
 
 export default function Todo() {
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "Test task 1" },
-    { id: 2, text: "Test task 1 very long Test task 1 very long" },
-  ]);
-
-  function addTask() {
-    const value = prompt("Enter a task", "");
-    if (value) {
-      setTasks([...tasks, { id: Date.now(), text: value }]);
-    }
-  }
-
-  function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id));
-  }
   //state for the todolist and new task input
   const [todos, setTodos] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
+
   //get current logged in user'sid
   const userId = auth.currentUser?.uid;
 
@@ -46,40 +31,42 @@ export default function Todo() {
 
   //create a new todo
   const handleCreate = async () => {
-    if (!newTitle.trim()) return;
-    const id = await createTodo(userId, newTitle);
-    setTodos([...todos, { id, title: newTitle, completed: false }]);
-    setNewTitle("");
+    const value = prompt("Enter a task", "");
+    if (!value) return;
+    const id = await createTodo(userId, value);
+    setTodos([...todos, { id, title: value, completed: false }]);
   };
 
   return (
     <div className="todo-list">
       <h2 className="todo-list-title">Todo List</h2>
       <div className="input-todo">
-        <button className="input-todo-button" onClick={addTask}>
+        <button className="input-todo-button" onClick={handleCreate}>
           Input
         </button>
       </div>
       <div className="todo-tasks">
-        {tasks.map((task) => (
-          <div className="todo-task" key={task.id}>
+        {todos.map((todo) => (
+          <div className="todo-task" key={todo.id}>
             <div className="checkbox-container">
               <input
                 type="checkbox"
-                id={`task-${task.id}`}
+                id={`task-${todo.id}`}
                 className="task-checkbox"
+                checked={todo.completed}
+                onChange={() => handleToggle(todo)}
               />
             </div>
             <div className="task-text-container">
-              <label htmlFor={`task-${task.id}`} className="todo-task-text">
-                {task.text}
+              <label htmlFor={`task-${todo.id}`} className="todo-task-text">
+                {todo.title}
               </label>
               <div className="delete-button">
                 <img
                   src={x_icon}
                   alt="Button to remove the task"
                   className="close-button-icon"
-                  onClick={() => deleteTask(task.id)}
+                  onClick={() => handleDelete(todo.id)}
                 />
               </div>
             </div>
