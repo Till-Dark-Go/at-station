@@ -1,3 +1,27 @@
+.loading-screen {
+    width: 100%;
+    height: 100vh;
+    background: #1A1A1A;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 12;
+}
+
+.loader {
+  font-size: 1.2em;
+  animation: l1 1s linear infinite alternate;
+}
+.loader:before {
+  content:"Preparing the map..."
+}
+@keyframes l1 {to{opacity: 0}}
+
+
 #map-wrap {
   position: relative;
   width: 100%;
@@ -15,10 +39,10 @@
 }
 
 .mapboxgl-marker img {
-  transition:
-    transform 0.2s ease,
-    opacity 0.3s ease;
-  scale: 0.35;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    scale: 0.35;
+    margin-top: 34px;
+    margin-right: 2px;
 }
 
 .mapboxgl-marker img:hover {
@@ -41,10 +65,9 @@
   color: #dadada;
 }
 
-.UI-elements > * {
-  /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
-  pointer-events: auto;
-  z-index: 100;
+.UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
+    pointer-events: auto;
+    z-index: 10;
 }
 
 .at-station-logo {
@@ -52,20 +75,6 @@
   top: 50px;
   left: 60px;
   font-size: 1.1em;
-}
-
-.train-icon {
-  position: fixed;
-  top: 50.2%;
-  left: 51.2%;
-  margin-top: -50px;
-  margin-left: -50px;
-  transition: 0.4s ease;
-  opacity: 0;
-}
-
-.train-icon img {
-  scale: 0.35;
 }
 
 .top-curr-station-name {
@@ -96,7 +105,8 @@
 }
 
 .top-curr-station-name .line {
-  width: 40%;
+    width: 40%;
+    background: white;
 }
 
 .popup-window {
@@ -110,18 +120,18 @@
 }
 
 .popup-close-button {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  z-index: 8888;
-  margin-top: 25px;
-  margin-left: 15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 11;
+    margin-top: 25px;
+    margin-left: 15px;
 }
 
 .popup-close-button img {
@@ -192,45 +202,18 @@
 }
 
 .travel-time-bar {
-  width: 255px;
-  position: relative;
-  background: transparent;
-  padding: 8px 0;
-  color: #dadada;
-  text-align: center;
-  font-size: 14px;
-  isolation: isolate;
-  letter-spacing: 1px;
-  pointer-events: auto;
-  cursor: default;
-}
-
-.travel-time-bar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50px;
-  padding: 2px;
-  background: linear-gradient(20deg, #3b3b3b, #bdbdbd);
-  z-index: 0;
-
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-
-  pointer-events: none;
-}
-
-.travel-time-bar::after {
-  content: "";
-  position: absolute;
-  inset: 2px; /* Match the padding/border width */
-  border-radius: 48px; /* Slightly smaller than ::before */
-  background: #00000070;
-  backdrop-filter: blur(12px);
-  z-index: -1;
-  pointer-events: none;
+    width: 255px;
+    position: relative;
+    padding: 8px 0;
+    color: #DADADA;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+    pointer-events: auto;
+    cursor: default;
+    background-color: #00000070;
+    border: 2px solid #949494; 
+    border-radius: 50px;
 }
 
 .bottom-UI .buttons {

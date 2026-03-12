@@ -33,7 +33,7 @@ export default function SignUp() {
 
   // Shared success handler (same philosophy as LogIn)
   const handleSuccess = () => {
-    navigate("/");
+    navigate('/auth/log-in');
   };
 
   // EMAIL / PASSWORD SIGN UP
@@ -49,6 +49,12 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       setError("");
+
+      const forbiddenChars = /[ /\\|*]/;  // Regex expression
+
+      if (forbiddenChars.test(password)) {  // Regex built-in function to test if forbidden chars are in the password
+        throw new Error("Password contains forbidden characters (space, /, \\, |, *)");
+      }
 
       const result = await doCreateUserWithEmailAndPassword(email, password);
       // Get auth user and username what will allow to write to users/{uid} document after signup
@@ -75,7 +81,7 @@ export default function SignUp() {
       } else if (err.code === "auth/weak-password") {
         setError("Password should be at least 6 characters long.");
       } else {
-        setError("Failed to create account: " + err.message);
+        setError(err.message);
       }
     } finally {
       setIsLoading(false);

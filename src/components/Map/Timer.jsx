@@ -5,7 +5,7 @@ export default function Timer({ duration }) {
     
     useEffect(() => {
         setTimeout(() => {
-            setTime(time - 1)  // Total time in MINUTES - 1 MINUTE
+            setTime(time - 1);  // Total time in MINUTES - 1 MINUTE
         }, 60000)  // 1000 ms = 1s, I need the timer to change every MINUTE so 1000 ms * 60 s
     }, [time]);
 
