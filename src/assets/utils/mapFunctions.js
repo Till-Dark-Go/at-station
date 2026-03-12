@@ -8,18 +8,14 @@ export function calcStationParameters(station, userStartingPoint) {
     return { nextLngVar, nextLatVar, hoursVar, minutesVar };
 }
 
-function calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat) {
+export function calculateTravelTimeInMinutes(userStartingPoint, nextLng, nextLat) {
     // Using the vector formula and USER'S long lat calculate the distance
     let userLng = userStartingPoint.lng;
     let userLat = userStartingPoint.lat;
     let distance = haversine(userLng, userLat, nextLng, nextLat);  // haversine() - customer function at the bottom of the code
 
-    // Print to the console
-    console.log(distance);
-
     // Convert into some number of minutes
     let travelTime = Math.floor(distance * 0.2);  // * by 0.2 cuz we assume the train is going in a straight line at 300-350 kmph => 160 km will take about 30 minutes
-    console.log(travelTime + ' minutes');
 
     return travelTime;
 }

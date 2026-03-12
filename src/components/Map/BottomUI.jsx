@@ -6,8 +6,8 @@ import Timer from './Timer.jsx'
 export default function BottomUI(props) {
     return (
         <div className='bottom-UI'>
-            {!props.currentlyTravelling.current && <div className='travel-time-bar'>{props.travelTimeLabel}</div>}
-            {props.currentlyTravelling.current && <div className='travel-time-bar'>
+            {(!props.currentlyTravelling.current || props.currentlyPaused.current) && <div className='travel-time-bar'>{props.travelTimeLabel}</div>}
+            {props.currentlyTravelling.current && !props.currentlyPaused.current && <div className='travel-time-bar'>
                 <Timer duration = {props.timerDuration}/>
             </div>}
             <div className='buttons'>
@@ -20,9 +20,9 @@ export default function BottomUI(props) {
                 </button>}
                 {props.currentlyTravelling.current && 
                 <button className='at-station-button travelling'
-                    onClick = {props.pauseTravelling}
+                    onClick = {props.togglePauseState}
                 >
-                    pause
+                    {props.currentlyPaused.current ? "resume" : "pause"}
                 </button>}
                 <button
                     className='profile-button'
