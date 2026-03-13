@@ -1,0 +1,290 @@
+.todo-list {
+  position: absolute;
+  top: 17vh;
+  bottom: clamp(150px, 22vh, 230px);
+  left: 15vw;
+  width: clamp(280px, 25vw, 420px);
+  min-height: 300px;
+  padding: clamp(16px, 2.5vh, 28px) clamp(14px, 1.6vw, 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  background-color: rgba(10, 10, 10, 0.75);
+  border: 2px solid #949494;
+  z-index: 1000;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.todo-list-title {
+  color: #ffffff;
+  text-align: center;
+  font-size: clamp(14px, 2.2vh, 22px);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.todo-list-date {
+  color: #888;
+  font-size: clamp(11px, 1.3vh, 14px);
+  margin: 0 0 clamp(10px, 2vh, 20px);
+  letter-spacing: 0.04em;
+}
+
+.todo-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: clamp(10px, 1.6vh, 18px);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.todo-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  color: #ccc;
+  font-size: clamp(12px, 1.4vh, 15px);
+  padding: clamp(7px, 0.85vh, 12px) clamp(10px, 0.8vw, 16px);
+  outline: none;
+  font-style: italic;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+.todo-input::placeholder {
+  color: #555;
+}
+
+.todo-input:focus {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.todo-add-btn {
+  width: clamp(34px, 2.8vw, 42px);
+  height: clamp(34px, 2.8vw, 42px);
+  min-width: clamp(34px, 2.8vw, 42px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  color: #fff;
+  font-size: clamp(18px, 1.6vw, 24px);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.15s;
+  padding: 0 0 2px;
+  flex-shrink: 0;
+}
+
+.todo-add-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.todo-tasks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.todo-tasks::-webkit-scrollbar {
+  width: 4px;
+}
+
+.todo-tasks::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.todo-task {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 10px;
+  padding: 0 6px 0 4px;
+  box-sizing: border-box;
+  transition: 0.15s;
+  min-height: clamp(38px, 5vh, 50px);
+  border: 1.5px solid transparent;
+  flex-shrink: 0;
+}
+
+.todo-task:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.todo-task:hover .delete-btn {
+  opacity: 1;
+}
+
+.todo-task.completed .todo-task-text {
+  text-decoration: line-through;
+  color: #555;
+}
+
+.todo-task-inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1vw, 14px);
+  flex: 1;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 8px 0;
+  min-width: 0;
+}
+
+.task-checkbox {
+  display: none;
+}
+
+.custom-checkbox {
+  width: clamp(16px, 1.4vw, 22px);
+  height: clamp(16px, 1.4vw, 22px);
+  min-width: clamp(16px, 1.4vw, 22px);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.15s;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.todo-task:has(.task-checkbox:checked) .custom-checkbox {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.todo-task-text {
+  font-size: clamp(12px, 1.45vh, 15px);
+  color: #d8d8d8;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Delete button ── */
+.delete-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  opacity: 0;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: 0.15s;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Divider ── */
+.todo-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 6px 0;
+  flex-shrink: 0;
+}
+
+/* ── Tablet (≤ 1024px) ── */
+@media only screen and (max-width: 1024px) {
+  .todo-list {
+    width: clamp(260px, 38vw, 420px);
+    left: 5vw;
+    top: 12vh;
+    bottom: clamp(140px, 22vh, 230px);
+  }
+}
+
+/* ── Mobile landscape / small tablet (≤ 768px) ── */
+@media only screen and (max-width: 768px) {
+  .todo-list {
+    position: fixed;
+    width: calc(100vw - 32px);
+    max-width: 420px;
+    left: 50%;
+    top: 12vh;
+    bottom: clamp(130px, 24vh, 220px);
+    height: auto;
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Touch devices — always show delete button ── */
+@media (hover: none) and (pointer: coarse) {
+  .delete-btn {
+    opacity: 0.5;
+  }
+
+  .todo-task:active .delete-btn {
+    opacity: 1;
+  }
+}
+
+/* ── Mobile portrait (≤ 480px) ── */
+@media only screen and (max-width: 480px) {
+  .todo-list {
+    width: calc(100vw - 24px);
+    top: 10vh;
+    bottom: clamp(120px, 22vh, 200px);
+    height: auto;
+    border-radius: 16px;
+    padding: 18px 14px;
+  }
+
+  .todo-task-text {
+    font-size: 13px;
+  }
+
+  .todo-list-title {
+    font-size: 16px;
+  }
+}
+
+/* ── Very short screens (landscape phones) ── */
+@media only screen and (max-height: 500px) {
+  .todo-list {
+    top: 5vh;
+    bottom: 120px;
+    height: auto;
+  }
+
+  .todo-list-title {
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  .todo-list-date {
+    margin-bottom: 8px;
+  }
+}
