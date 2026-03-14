@@ -196,7 +196,8 @@
     justify-content: space-between;
     margin-bottom: 60px;
     align-items: center;
-    width: 460px;
+    /* width: 460px; */
+    width: auto;
     height: 150px;
     pointer-events: none;
 }
@@ -221,7 +222,10 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+}
+
+.bottom-UI .buttons button {
+    margin-inline: 10px;
 }
 
 .at-station-button, .confirmation-button {
@@ -250,7 +254,7 @@
     width: 240px;
 }
 
-.todo-list-button, .profile-button, .end-travelling-button {
+.feature-button {
     width: 66px;
     height: 66px;
     background-color: #00000070;
@@ -274,7 +278,7 @@
     cursor: pointer;
 }
 
-.todo-list-button:hover, .profile-button:hover, .confirmation-button:hover, .travelling:hover {
+.feature-button:hover {
     background-color: #0000009d;
     box-shadow: 0 0 15px #949494;
 }

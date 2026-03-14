@@ -17,6 +17,7 @@ import { updateCurrentStation, getCurrentStationId } from '../../api/users.js';
 import TopUI from './TopUI.jsx'
 import PopupWindow from './PopupWindow.jsx'
 import BottomUI from './BottomUI.jsx'
+import Stamps from './Stamps Page/Stamps.jsx'
 import { coordinates } from '@maptiler/sdk'
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
@@ -45,6 +46,8 @@ export default function Map() {
     const [loadingScreen, setLoadingScreen] = useState(true);
 
     const markersRef = useRef([]);
+
+    const [stampsWindow, setStampsWindow] = useState(false);
 
     useEffect(() => {
         if (!currentlyTravelling.current) {
@@ -409,6 +412,10 @@ export default function Map() {
             animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeLeft, timeAndCoords.stationId);
         }
     }
+
+    function toggleStampsWindow() {
+        setStampsWindow(prev => !prev);
+    }
     
     return (
         <>
@@ -424,7 +431,7 @@ export default function Map() {
             <div className='at-station-logo'>@station</div>
 
             {currentlyTravelling.current && 
-            <button className='end-travelling-button'
+            <button className='feature-button end-travelling-button'
                 onClick = {openPopup}>
                 <img src={exit} alt="End travelling icon" />
             </button>}
@@ -434,6 +441,7 @@ export default function Map() {
                 userStartingPoint = {userStartingPoint}
                 nextStationName = {nextStation.name}
             />
+            {stampsWindow && <Stamps />}
             {popupOpenRef.current && 
             <PopupWindow 
                 nextStation = {nextStation}
@@ -451,6 +459,7 @@ export default function Map() {
                 currentlyPaused = {currentlyPaused}
                 nextStation = {nextStation}
                 togglePauseState = {togglePauseState}
+                toggleStampsWindow = {toggleStampsWindow}
                 timerDuration = {timeAndCoords.hours*60+timeAndCoords.minutes}
             />
         </div>
