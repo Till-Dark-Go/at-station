@@ -14,6 +14,12 @@ body {
     width: 100%;
     height: 100vh;
     background: url('../../assets/images/LightRays.png') center center / cover no-repeat;
+    
+    @media (max-width: 768px) {
+        background-position: center top;
+        background-size: auto 70%;
+    }
+
     position: absolute;
     top: 0;
     left: 0;

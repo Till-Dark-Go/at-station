@@ -169,13 +169,6 @@ input:not(:placeholder-shown) + .label-line {
     font-weight: 300;
 }
 
-.proceed-to-account:hover, .google:hover, .github:hover {
-    border: 1px solid #FFC973;
-    box-shadow: 
-        0 0 15px #ffc973a8,
-        inset 0 0 15px #ffc973a8;
-}
-
 .enter-via, .account-options {
     color: #D0D0D0;
     width: 500px; 

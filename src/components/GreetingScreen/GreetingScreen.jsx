@@ -11,7 +11,7 @@ export default function GreetingScreen() {
                 <div className = 'gradient-text'>There's a long road ahead. Keep going.</div>
                 Keep reaching your goals.
             </div>
-            <div className = 'sub-title'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+            <div className = 'sub-title'>A geospatial productivity app. Pomodoro-powered focus sessions, seamless task management, and a living map of places you've worked from.</div>
 
             {/* Wrapping our BUTTON into LINK and saying to which URL it will point when clicked - this way we simply load another page on the button press */}
             <Link to = '/auth/sign-up' className='action-button'>
