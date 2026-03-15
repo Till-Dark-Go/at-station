@@ -1,10 +1,10 @@
 /* Link to go back to the previous page */
 .redirection-text {
-    width: 500px;
     color: #D0D0D0;
-    font-size: 16px;
+    font-size: 1em;
     display: flex;
     margin-bottom: 10px;
+    width: min(500px, 70%);
 }
 
 .redirection-text-button {
@@ -12,8 +12,8 @@
     color: #FFC973;
 }
 
-.inputs-holder {
-    width: 501px;
+#signup-form, #login-form {
+    width: min(500px, 70%);
 }
 
 /* Div which holds the input */
@@ -25,52 +25,41 @@
     margin-block: 10px;
 }
 
-/* Input itself */
 .entry-area input {
     width: 100%;
     position: absolute;
     box-sizing: border-box;
     outline: none;
-    font-size: 14px;
+    font-size: 1em;
     padding: 15px 0;
-    padding-left: 10px;
+    padding-left: 17px;
     border-radius: 10px;
     border: 1px solid #949494;
-    transition: 0.1s ease;
-    background: transparent;
-    z-index: 1111;
-    color: #949494;
+    transition: 0.2s ease;
+    background: #0000008e;
+    z-index: 10;
+    color: #DADADA;
     cursor: pointer;
 }
 
-/* Gray label, e.g. "password" */
 .label-line {
     position: absolute;
     font-size: 16px;
-    color: #848484;
-    background-color: #0A0A0A;
+    color: #949494;
     margin-left: 20px;
     transition: 0.2s ease;
     line-height: 50px;
+    z-index: 10;
 }
 
-/* Different styles when clicking on the input */
-.entry-area input:focus, input:not(:placeholder-shown) {
-    color: white;
-    border-color: white;
-    font-size: 14px;
+.entry-area input:focus {
+    background: #181818;
+    border-color: #b6b6b6;
+    box-shadow: 0 0 8px #949494;
 }
 
-.entry-area input:focus + .label-line,
-input:not(:placeholder-shown) + .label-line {
-    color: white;
-    height: 25px;
-    line-height: 25px;
-    padding: 0 12px;
-    transform: translate(-20px, -12px) scale(0.84);
-    z-index: 2222;
-    border: 1px solid white;
-    border-radius: 10px;
+.entry-area input:not(:placeholder-shown) + .label-line {
+    opacity: 0;
 }
 
 /* Eye icon */
@@ -87,7 +76,7 @@ input:not(:placeholder-shown) + .label-line {
     width: 20px;
     max-width: 100%;
     margin-right: 20px;
-    z-index: 4444;
+    z-index: 11;
     cursor: pointer;
 }
 
@@ -95,7 +84,7 @@ input:not(:placeholder-shown) + .label-line {
     display: flex;
     height: 20px;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: 15px;
     cursor: pointer;
 }
@@ -153,8 +142,7 @@ input:not(:placeholder-shown) + .label-line {
 /* Buttons */
 .proceed-to-account, .google, .github {
     width: 100%;
-    height: 65px;
-    line-height: 65px;
+    padding-block: 15px;
     background-color: #00000085;
     border: 1px solid #949494;
 }
@@ -164,14 +152,13 @@ input:not(:placeholder-shown) + .label-line {
 }
 
 .google, .github {
-    width: 300px;
     color: #D0D0D0;
     font-weight: 300;
 }
 
 .enter-via, .account-options {
     color: #D0D0D0;
-    width: 500px; 
+    width: min(500px, 70%); 
     margin-top: 25px;
     margin-bottom: 35px;
     display: flex;
@@ -183,24 +170,22 @@ input:not(:placeholder-shown) + .label-line {
 .account-options {
     margin-top: -10px;
     margin-bottom: 20px;
-    width: 500px;
 }
 
 .account-options button {
-    width: 45%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.account-options button img {
-    margin-right: 6px;
+    width: 47%;
+    height: 50px;
+    gap: 10px;
+    font-size: 1em;
 }
 
 /* Left gradient line near "enter via" */
 .line {
     background: linear-gradient(20deg, #454545, #FFFFFF);
-    width: 32%;
+    width: 25%;
     height: 2px;
     border-radius: 3px;
 }
@@ -212,7 +197,7 @@ input:not(:placeholder-shown) + .label-line {
 
 .go-back img {
     display: block;
-    width: 23px;
+    width: 80%;
     margin-top: 10px;
 }
 

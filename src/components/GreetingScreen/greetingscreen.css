@@ -102,7 +102,7 @@
 
 .action-button:hover {
     box-shadow: 0 0 17px #ffbd67b4;
-    border: 2px solid #ffbd67b4;
+    border-color: #ffbd67b4;
     transform: scale(1.03);
     transform-origin: center;
 }
