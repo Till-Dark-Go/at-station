@@ -87,10 +87,6 @@
     margin-top: 28px;
     text-align: center;
     pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     cursor: default;
 }
 
@@ -100,7 +96,7 @@
 }
 
 .top-curr-station-name .station-name {
-    font-size: 1.9em;
+    font-size: 1.7em;
     text-transform: uppercase;
     margin-top: 15px;
     margin-bottom: 17px;
@@ -190,7 +186,7 @@
 .main-lable {
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 1.9em;
+    font-size: 1.7em;
     font-weight: 500;
     margin-block: 10px;
     color: #fff;
@@ -221,8 +217,7 @@
 
 .description {
     width: 80%;
-    margin-top: 18px;
-    margin-bottom: 15px;
+    margin-block: 15px;
     line-height: 27px;
     text-align: center;
 }
@@ -233,18 +228,18 @@
     justify-content: space-between;
     margin-bottom: 60px;
     align-items: center;
-    height: 150px;
+    height: 135px;
     pointer-events: none;
 
     @media (max-width: 500px) {
-        height: 130px;
+        height: 125px;
     }
 }
 
 .travel-time-bar {
     width: 55%;
     position: relative;
-    padding: 8px 0;
+    padding: 6px 0;
     color: #DADADA;
     text-align: center;
     font-size: 0.9em;
@@ -270,14 +265,14 @@
 }
 
 .at-station-button, .confirmation-button {
-    width: 255px;
-    height: 80px;
+    width: 220px;
+    height: 75px;
     background-color: #00000070;
     border: 2px solid #949494; 
     border-radius: 10px;
     text-transform: uppercase;
     color: #DADADA;
-    font-size: 1.6em;
+    font-size: 1.4em;
     letter-spacing: 1px;
     backdrop-filter: blur(2px);
     pointer-events: auto;
@@ -285,20 +280,20 @@
     @media (max-width: 500px) {
         width: 190px;
         height: 70px;
-        font-size: 1.4em;
     }
 }
 
 .confirmation-button {
     width: 200px;
     height: 60px;
-    font-size: 20px;
+    font-size: 1.4em;
     transition: 0.4s ease;
     cursor: pointer;
 }
 
 .stop-travelling-button {
     width: 240px;
+    font-size: 1.3em;
 }
 
 .feature-button {
@@ -306,21 +301,15 @@
     border: 2px solid #949494; 
     border-radius: 10px;
     color: #DADADA;
-    transition: 0.4s ease;
+    transition: 0.2s ease;
     cursor: pointer;
     backdrop-filter: blur(2px);
     pointer-events: auto;
-    padding: 14px;
-
-    @media (max-width: 500px) {
-        padding: 10px;
-    }
+    padding: 10px;
 }
 
 .feature-button img {
-    @media (max-width: 500px) {
-        scale: 0.8;
-    }
+    scale: 0.8;
 }
 
 .end-travelling-button {
@@ -345,6 +334,8 @@
 .feature-button:hover {
     background-color: #0000009d;
     box-shadow: 0 0 15px #949494;
+    transform: scale(1.03);
+    transform-origin: center;
 }
 
 .confirmation-button {
