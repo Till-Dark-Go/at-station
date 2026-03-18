@@ -12,7 +12,7 @@ export default function BottomUI(props) {
             </div>}
             <div className='buttons'>
                 <button
-                    className='todo-list-button'
+                    className='feature-button todo-list-button'
                 ><img src={todo_list_logo} alt="Todo list page logo" /></button>
                 {!props.currentlyTravelling.current && 
                 <button className='at-station-button'>
@@ -25,7 +25,7 @@ export default function BottomUI(props) {
                     {props.currentlyPaused.current ? "resume" : "pause"}
                 </button>}
                 <button
-                    className='profile-button'
+                    className='feature-button profile-button'
                 ><img src={user_pf_logo} alt="User profile page logo" /></button>
             </div>
         </div>

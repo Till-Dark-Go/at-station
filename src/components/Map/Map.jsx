@@ -424,7 +424,7 @@ export default function Map() {
             <div className='at-station-logo'>@station</div>
 
             {currentlyTravelling.current && 
-            <button className='end-travelling-button'
+            <button className='feature-button end-travelling-button'
                 onClick = {openPopup}>
                 <img src={exit} alt="End travelling icon" />
             </button>}
