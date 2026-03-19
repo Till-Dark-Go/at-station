@@ -5,8 +5,8 @@ import { getStations } from '../../api/stations.js'
 import './map.css'
 
 import marker_logo from '../../assets/images/marker.svg'
-import hovered_marker_logo from '../../assets/images/hovered_marker.png'
-import user_marker_logo from '../../assets/images/black_user_marker.svg'
+import hovered_marker_logo from '../../assets/images/marker_end.svg'
+import user_marker_logo from '../../assets/images/current_station_marker.svg'
 import train_icon from '../../assets/images/train_icon.png'
 import exit from '../../assets/images/exit.svg'
 
@@ -235,17 +235,19 @@ export default function Map() {
                 };
 
                 marker_img.onmouseleave = () => {
-                    marker_img.src = marker_logo;
+                    if (!popupOpenRef.current) marker_img.src = marker_logo;
                     if (!popupOpenRef.current) {
                         setNextStation({name: 'at station', country: ''});
                         setTravelTimeLabel('Awaiting travelling...');
-                        currentlyTravelling = false;
+                        currentlyTravelling.current = false;
                     }
                 };
 
                 marker_img.onclick = () => {
+                    marker_img.src = hovered_marker_logo;
                     openPopup(hoverResults.hoursVar, hoverResults.minutesVar, 
                             hoverResults.nextLngVar, hoverResults.nextLatVar, station.id);
+                    console.log(popupWindow);
                 };
             }
         });
