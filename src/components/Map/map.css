@@ -74,12 +74,11 @@
     position: fixed;
     top: 50px;
     left: 60px;
-    font-size: 1.1em;
+    font-size: 0.9em;
 
     @media (max-width: 500px) {
         top: 30px;
         left: 30px;
-        font-size: 0.8em;
     }
 }
 
