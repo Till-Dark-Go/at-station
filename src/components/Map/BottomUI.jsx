@@ -30,9 +30,6 @@ export default function BottomUI(props) {
                     {props.currentlyPaused.current ? "resume" : "pause"}
                 </button>}
                 <button
-                    className='feature-button sound-button'
-                ></button>
-                <button
                     className='feature-button profile-button'
                 ><img src={user_pf_logo} alt="User profile page logo" /></button>
             </div>

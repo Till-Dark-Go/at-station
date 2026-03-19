@@ -8,7 +8,7 @@ export default function CountryStamp(props) {
             </div>
             <div className='names'>
                 <p className='station'>{props.name}</p>
-                <p className='country'>{props.country}</p>
+                <p className='country-stamp'>{props.country}</p>
             </div>
             <div className='info-arrow'>
                 <img src={stamps_arrow} alt="Arrow to expand the stamp" />
