@@ -2,7 +2,7 @@ import stamps_arrow from '../../../assets/images/stamps_arrow.svg'
 
 export default function CountryStamp(props) {
     return (
-        <div className='stamp-block' onClick = {props.open_stamp}>
+        <div className='stamp-block' onClick = {props.toggleStamp}>
             <div className='station-pic'>
                 <img src={props.stationPic} alt="Luxembourg picture"/>
             </div>

@@ -417,6 +417,8 @@ export default function Map() {
 
     function toggleStampsWindow() {
         setStampsWindow(prev => !prev);
+        if (stampsWindow) UI_elements_div.current.style.pointerEvents = 'none';
+        else UI_elements_div.current.style.pointerEvents = 'auto';
     }
     
     return (
