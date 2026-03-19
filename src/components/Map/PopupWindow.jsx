@@ -1,4 +1,4 @@
-import close_popup_button from '../../assets/images/authGoBackButton.svg'
+import close_popup_button from '../../assets/images/cross_button.svg'
 
 export default function PopupWindow(props) {
 
