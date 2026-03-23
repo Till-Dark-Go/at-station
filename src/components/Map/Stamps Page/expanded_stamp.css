@@ -1,0 +1,124 @@
+.expanded-stamp {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.exp-names {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.exp-names .station {
+    font-size: 1.2em;
+
+    @media (max-width: 500px) {
+        font-size: 1em;
+    }
+
+    @media (min-width: 1920px) {
+        font-size: 1.3em;
+    }
+}
+
+.exp-names .country-stamp {
+    font-size: 1em;
+
+    @media (max-width: 500px) {
+        font-size: 0.9em;
+    }
+
+    @media (min-width: 1920px) {
+        font-size: 1.1em;
+    }
+}
+
+.exp-station-pic {
+    width: 65%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+
+    @media (max-width: 500px) {
+        height: 160px;
+    }
+
+    @media (min-width: 1920px) {
+        height: 250px;
+    }
+}
+
+.exp-station-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.travel-log .title {
+    text-transform: none;
+    font-size: 1.1em;
+    letter-spacing: normal;
+    font-weight: 300;
+    width: auto;
+
+    @media (max-width: 500px) {
+        font-size: 1em;
+    }
+
+    @media (min-width: 1920px) {
+        font-size: 1.3em;
+    }
+}
+
+.travel-log {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 40px;
+
+    @media (max-width: 500px) {
+        margin-inline: 20px;
+    }
+}
+
+.entry-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* gap: 4px 20px; */
+
+    @media (max-width: 500px) {
+        gap: 4px 10px;
+    }
+
+    @media (min-width: 1920px) {
+        gap: 4px 40px;
+    }
+}
+
+.label {
+    font-size: 0.9em;
+    color: #949494;
+    margin-bottom: 10px;
+
+    @media (max-width: 500px) {
+        font-size: 0.8em;
+        margin-bottom: 10px;
+    }
+}
+
+.entry-info span:not(.label) {
+    @media (max-width: 500px) {
+        font-size: 0.9em;
+    }
+}
+
+hr {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #555555;
+}

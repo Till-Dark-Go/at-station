@@ -1,4 +1,4 @@
-import close_popup_button from '../../assets/images/authGoBackButton.svg'
+import close_popup_button from '../../assets/images/cross_button.svg'
 
 export default function PopupWindow(props) {
 
@@ -36,11 +36,11 @@ export default function PopupWindow(props) {
 
                 <div className='button'>
                     {!props.currentlyTravelling.current &&
-                        <button className='confirmation-button' onClick={props.animateMovement}>CONFIRM</button>
+                        <button className='feature-button confirmation-button' onClick={props.animateMovement}>CONFIRM</button>
                     }
 
                     {props.currentlyTravelling.current && 
-                        <button className='confirmation-button stop-travelling-button' 
+                        <button className='feature-button confirmation-button stop-travelling-button' 
                             onClick={props.stopTravelling}>STOP TRAVELLING</button>
                     }
                 </div>

@@ -21,6 +21,7 @@ import TopUI from "./TopUI.jsx";
 import PopupWindow from "./PopupWindow.jsx";
 import BottomUI from "./BottomUI.jsx";
 import { coordinates } from "@maptiler/sdk";
+import Stamps from './Stamps Page/Stamps.jsx';
 import Todo from "../ToDo/Todo.jsx";
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
@@ -32,11 +33,7 @@ export default function Map() {
 
   const train_icon_div = useRef();
 
-  const [userStartingPoint, setUserStartingPoint] = useState({
-    lng: null,
-    lat: null,
-    name: null,
-  });
+  const [userStartingPoint, setUserStartingPoint] = useState({lng: null, lat: null, name: null, id: null});
 
   const [nextStation, setNextStation] = useState({
     name: "at station",
@@ -67,6 +64,10 @@ export default function Map() {
   const [loadingScreen, setLoadingScreen] = useState(true);
 
   const markersRef = useRef([]);
+  
+  const [stampsWindow, setStampsWindow] = useState(false);
+
+    let starttime, endtime;  // For recording into the database
 
   useEffect(() => {
     if (!currentlyTravelling.current) {
@@ -100,6 +101,7 @@ export default function Map() {
         lng: station.longitude,
         lat: station.latitude,
         name: station.name,
+        id: station.id
       });
     }
 
@@ -263,14 +265,60 @@ export default function Map() {
           }
         };
 
-        marker_img.onmouseleave = () => {
-          marker_img.src = marker_logo;
-          if (!popupOpenRef.current) {
-            setNextStation({ name: "at station", country: "" });
-            setTravelTimeLabel("Awaiting travelling...");
-            currentlyTravelling = false;
-          }
-        };
+        markersRef.current.forEach(({ marker, station }) => {
+            const markerElement = marker.getElement();
+            const isUserMarker = station.longitude == userStartingPoint.lng && 
+                                station.latitude == userStartingPoint.lat;
+
+            // Remove old userMarker class from all
+            markerElement.classList.remove('userMarker');
+            
+            // Clear previous event listeners and content
+            markerElement.innerHTML = "<img>";
+            const marker_img = markerElement.children[0];
+
+            if (isUserMarker) {
+                markerElement.classList.add('userMarker');
+                marker_img.src = user_marker_logo;
+            } else {
+                marker_img.src = marker_logo;
+                let hoverResults;
+
+                marker_img.onmouseenter = () => {
+                    marker_img.src = hovered_marker_logo;
+                    setNextStation({name: station.id, country: station.country});
+
+                    hoverResults = calcStationParameters(station, userStartingPoint);
+                    if (hoverResults.hoursVar > 0) {
+                        setTravelTimeLabel(`Travel time: ${hoverResults.hoursVar} hr ${hoverResults.minutesVar} min`);
+                    } else {
+                        setTravelTimeLabel(`Travel time: ${hoverResults.minutesVar} min`);
+                    }
+                };
+
+                marker_img.onmouseleave = () => {
+                    if (!popupOpenRef.current) marker_img.src = marker_logo;
+                    if (!popupOpenRef.current) {
+                        setNextStation({name: 'at station', country: ''});
+                        setTravelTimeLabel('Awaiting travelling...');
+                        currentlyTravelling.current = false;
+                    }
+                };
+
+                marker_img.onclick = () => {
+                    marker_img.src = hovered_marker_logo;
+                    openPopup(hoverResults.hoursVar, hoverResults.minutesVar, 
+                            hoverResults.nextLngVar, hoverResults.nextLatVar, station.id);
+                    console.log(popupWindow);
+                };
+            }
+        });
+    }, [userStartingPoint]);
+
+    function openPopup(hoursVar, minutesVar, nextLngVar, nextLatVar, stationId) {
+        if (!currentlyTravelling.current) {  // Not currently travelling => open a confirmation window to travel somewhere
+            setTimeAndCoords({hours: hoursVar, minutes: minutesVar, nextLng: nextLngVar, nextLat: nextLatVar, stationId: stationId});  // Setting new values -> causes a re-render
+        }  // If we're opening the "exit travelling" window, we don't need any values calculated for it, so just open the pop-up
 
         marker_img.onclick = () => {
           openPopup(
@@ -325,6 +373,8 @@ export default function Map() {
   async function animateMapMovement(nextLng, nextLat, travelTime, stationId) {
     if (!currentlyPaused.current) {
       // We weren't UNPAUSING and calling this animation, we JUST STARTED it so fly back to the user point
+      starttime = Date.now();
+      
       setPopupWindow((prev) => !prev);
       popupOpenRef.current = false;
       UI_elements_div.current.style.pointerEvents = "auto";
@@ -414,6 +464,18 @@ export default function Map() {
 
       if (stationId) {
         try {
+          // ADD starttime and endtime to database
+                  endtime = Date.now();
+
+                  console.log("Destination:", stationId)
+                  console.log("Origin:", userStartingPoint.id)
+                  console.log("Start time:", starttime)
+                 console.log("End time:", endtime)
+
+                  // update current station
+          await updateCurrentStation(stationId);
+          console.log("Updated currentStationId: ", stationId);
+          
           // update current station
           await updateCurrentStation(stationId);
           console.log("Updated currentStationId: ", stationId);
@@ -425,6 +487,7 @@ export default function Map() {
               lng: station.longitude,
               lat: station.latitude,
               name: station.name,
+              id: station.id
             });
           }
         } catch (err) {
@@ -493,61 +556,75 @@ export default function Map() {
     }
   }
 
-  return (
-    <>
-      {loadingScreen && (
-        <div className="loading-screen">
-          <div className="loader"></div>
+    function togglePauseState() {
+        const pausePosition = {lng: mapRef.current.getCenter()[0], lat: mapRef.current.getCenter()[1]};
+
+        // Calculate travel time left in minutes based on the CURRENT CENTER OF THE MAP (pausePosition) and the final coordinates
+        const timeLeft = calculateTravelTimeInMinutes(mapRef.current.getCenter(), timeAndCoords.nextLng, timeAndCoords.nextLat);
+
+        if (!currentlyPaused.current) {  // We clicked to PAUSE the animation
+            mapRef.current.stop();
+            currentlyPaused.current = true;
+            setTravelTimeLabel('Session paused');
+        } else {  // If currentlyPaused is true, we clicked to UN-PAUSE the animation
+            setTravelTimeLabel('Travelling...');  // Added only for re-rendering the code => updating the bottom UI 
+            animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeLeft, timeAndCoords.stationId);
+        }
+    }
+
+    function toggleStampsWindow() {
+        setStampsWindow(prev => !prev);
+        if (stampsWindow) UI_elements_div.current.style.pointerEvents = 'none';
+        else UI_elements_div.current.style.pointerEvents = 'auto';
+    }
+    
+    return (
+        <>
+        {loadingScreen && <div className='loading-screen'>
+            <div className='loader'></div>
+        </div>}
+        
+        <div id = "map-wrap">
+            <div ref={mapContainerRef} id = "map-container"></div>
         </div>
-      )}
 
-      <div id="map-wrap">
-        <div ref={mapContainerRef} id="map-container"></div>
-      </div>
+        <div className='UI-elements' ref={UI_elements_div}>
+            <div className='at-station-logo'>@station</div>
 
-      <div className="UI-elements" ref={UI_elements_div}>
-        <div className="at-station-logo">@station</div>
+            {currentlyTravelling.current && 
+            <button className='feature-button end-travelling-button'
+                onClick = {openPopup}>
+                <img src={exit} alt="End travelling icon" />
+            </button>}
 
-        {currentlyTravelling.current && (
-          <button className="end-travelling-button" onClick={openPopup}>
-            <img src={exit} alt="End travelling icon" />
-          </button>
-        )}
-
-        <TopUI
-          currentlyTravelling={currentlyTravelling}
-          userStartingPoint={userStartingPoint}
-          nextStationName={nextStation.name}
-        />
-        {isTodoOpen && <Todo />}
-        {popupOpenRef.current && (
-          <PopupWindow
-            nextStation={nextStation}
-            timeAndCoords={timeAndCoords}
-            currentlyTravelling={currentlyTravelling}
-            popupOpenRef={popupOpenRef}
-            animateMovement={() =>
-              animateMapMovement(
-                timeAndCoords.nextLng,
-                timeAndCoords.nextLat,
-                timeAndCoords.hours * 60 + timeAndCoords.minutes,
-                timeAndCoords.stationId,
-              )
-            }
-            stopTravelling={stopTravelling}
-            closePopup={() => closePopup(popupOpenRef)}
-          />
-        )}
-        <BottomUI
-          openTodoList={openTodoList}
-          travelTimeLabel={travelTimeLabel}
-          currentlyTravelling={currentlyTravelling}
-          currentlyPaused={currentlyPaused}
-          nextStation={nextStation}
-          togglePauseState={togglePauseState}
-          timerDuration={timeAndCoords.hours * 60 + timeAndCoords.minutes}
-        />
-      </div>
-    </>
-  );
+            <TopUI 
+                currentlyTravelling = {currentlyTravelling}
+                userStartingPoint = {userStartingPoint}
+                nextStationName = {nextStation.name}
+            />
+            {isTodoOpen && <Todo />}
+            {stampsWindow && <Stamps />}
+            {popupOpenRef.current && 
+            <PopupWindow 
+                nextStation = {nextStation}
+                timeAndCoords = {timeAndCoords}
+                currentlyTravelling = {currentlyTravelling}
+                popupOpenRef = {popupOpenRef}
+                animateMovement = {() => 
+                            animateMapMovement(timeAndCoords.nextLng, timeAndCoords.nextLat, timeAndCoords.hours*60+timeAndCoords.minutes, timeAndCoords.stationId)}
+                stopTravelling = {stopTravelling}
+                closePopup = {() => closePopup(popupOpenRef)}
+            />}
+            <BottomUI 
+                travelTimeLabel = {travelTimeLabel}
+                currentlyTravelling = {currentlyTravelling}
+                currentlyPaused = {currentlyPaused}
+                nextStation = {nextStation}
+                togglePauseState = {togglePauseState}
+                toggleStampsWindow = {toggleStampsWindow}
+                timerDuration = {timeAndCoords.hours*60+timeAndCoords.minutes}
+            />
+        </div>
+        </>
+    )
 }
