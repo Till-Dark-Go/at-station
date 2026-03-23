@@ -1,18 +1,14 @@
 import './stamps.css'
-import lux from '../../../assets/stamps images/luxembourg.png'
-import zurich from '../../../assets/stamps images/zurich.png'
-import bern from '../../../assets/stamps images/bern.png'
-
-import close_popup_button from '../../../assets/images/cross_button.svg'
+import close_popup_button from '../../assets/images/cross_button.svg'
 
 import CountryStamp from './CountryStamp.jsx'
 import ExpandedStamp from './ExpandedStamp.jsx'
 
 // All imports needed for LAZY LOADING
-import posts from '../../../assets/utils/stamps_data.json'
+import posts from '../../assets/utils/stamps_data.json'
 import clsx from 'clsx';  // !!!!!!!!!!!!!!!! DO npm install --save clsx
-import useLazyLoad from '../../../assets/utils/useLazyLoad.js'
-import { LoadingListStamps } from './LoadingCountryStamp'
+import useLazyLoad from '../../assets/utils/useLazyLoad.js'
+import { LoadingListStamps } from './LoadingCountryStamp.jsx'
 const NUM_PER_PAGE = 3;  // Number of small stamps entries per "page" (per scroll)
 const TOTAL_PAGES = 3;
 

@@ -23,24 +23,24 @@
 
 
 #map-wrap {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 
 #map-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .mapboxgl-control-container {
-    display: none;
+  display: none;
 }
 
 .mapboxgl-marker img {
     transition: transform 0.2s ease;
-    scale: 0.9;
+    scale: 0.8;
     transform-origin: bottom;
 }
 
@@ -52,17 +52,17 @@
 /* UI Elements alongside Map div styles */
 
 .UI-elements {
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    color: #DADADA;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: #dadada;
 }
 
 .UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
@@ -148,15 +148,15 @@
 }
 
 .window-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .window-info .info {
@@ -209,7 +209,7 @@
 }
 
 .travel-time strong {
-    color: #fff;
+  color: #fff;
 }
 
 .description {
@@ -359,8 +359,8 @@
 }
 
 .travelling {
-    transition: 0.4s ease;
-    cursor: pointer;
+  transition: 0.4s ease;
+  cursor: pointer;
 }
 
 .feature-button:hover {
@@ -371,6 +371,6 @@
 }
 
 .confirmation-button {
-    margin-bottom: 40px;
-    background-color: transparent;
+  margin-bottom: 40px;
+  background-color: transparent;
 }

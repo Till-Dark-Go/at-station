@@ -1,4 +1,4 @@
-import stamps_arrow from '../../../assets/images/stamps_arrow.svg'
+import stamps_arrow from '../../assets/images/stamps_arrow.svg'
 
 export default function CountryStamp(props) {
     return (
