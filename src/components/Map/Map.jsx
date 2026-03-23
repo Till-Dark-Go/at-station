@@ -29,7 +29,7 @@ export default function Map() {
 
     const train_icon_div = useRef();
  
-    const [userStartingPoint, setUserStartingPoint] = useState({lng: null, lat: null, name: null});
+    const [userStartingPoint, setUserStartingPoint] = useState({lng: null, lat: null, name: null, id: null});
 
     const [nextStation, setNextStation] = useState({name: 'at station', country: ''});
     const [travelTimeLabel, setTravelTimeLabel] = useState('Awaiting travelling...');
@@ -48,6 +48,8 @@ export default function Map() {
     const markersRef = useRef([]);
 
     const [stampsWindow, setStampsWindow] = useState(false);
+
+    let starttime, endtime;  // For recording into the database
 
     useEffect(() => {
         if (!currentlyTravelling.current) {
@@ -76,7 +78,8 @@ export default function Map() {
             setUserStartingPoint({
                 lng: station.longitude,
                 lat: station.latitude,
-                name: station.name
+                name: station.name,
+                id: station.id
             });
         }
 
@@ -275,6 +278,9 @@ export default function Map() {
 
     async function animateMapMovement(nextLng, nextLat, travelTime, stationId) {
         if (!currentlyPaused.current) {  // We weren't UNPAUSING and calling this animation, we JUST STARTED it so fly back to the user point
+
+            starttime = Date.now();
+
             setPopupWindow(prev => !prev);
             popupOpenRef.current = false;
             UI_elements_div.current.style.pointerEvents = 'auto';
@@ -309,8 +315,8 @@ export default function Map() {
         mapRef.current.easeTo({
             center: [nextLng, nextLat],
             zoom: 11.8,
-            duration: 60000*travelTime, // 1 minute = 60 000 ms and we set duration in ms
-            // duration: 20000,
+            // duration: 60000*travelTime, // 1 minute = 60 000 ms and we set duration in ms
+            duration: 20000,
             easing: (t) => t  // Linear animation - no slowdown at the end
         });
 
@@ -356,6 +362,14 @@ export default function Map() {
 
             if (stationId) {
                 try {
+                    // ADD starttime and endtime to database
+                    endtime = Date.now();
+
+                    console.log("Destination:", stationId)
+                    console.log("Origin:", userStartingPoint.id)
+                    console.log("Start time:", starttime)
+                    console.log("End time:", endtime)
+
                     // update current station
                     await updateCurrentStation(stationId);
                     console.log("Updated currentStationId: ", stationId);
@@ -366,7 +380,8 @@ export default function Map() {
                         setUserStartingPoint({
                             lng: station.longitude,
                             lat: station.latitude,
-                            name: station.name
+                            name: station.name,
+                            id: station.id
                         });
                     }
 

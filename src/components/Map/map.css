@@ -41,6 +41,7 @@
 .mapboxgl-marker img {
     transition: transform 0.2s ease;
     scale: 0.9;
+    transform-origin: bottom;
 }
 
 .mapboxgl-marker:not(.userMarker) img:hover {

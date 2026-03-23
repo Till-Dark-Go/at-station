@@ -150,7 +150,7 @@ option:hover, option:focus {
     background: grey;
 }
 
-.stamp-block {
+.stamp-block, .loading-stamp-mini {
     margin-top: 20px;
     padding-inline: 25px;
     padding-block: 20px;
@@ -251,4 +251,38 @@ option:hover, option:focus {
     @media (min-width: 1920px) {
         font-size: 1em;
     }
+}
+
+/* Lazy Loading styles */
+
+.loading-stamp-mini {
+    height: 65px;
+    background: #535353;
+    justify-content: left;
+    gap: 20px;
+}
+
+.loading-image {
+    width: 20%;
+    background: #afafaf;
+    border-radius: 6px;
+    animation: opacityPulse 2s ease-out;
+    animation-iteration-count: infinite; 
+    opacity: 1;
+}
+
+.loading-names {
+    width: 100px;
+    height: 15px;
+    background: #afafaf;
+    margin-top: 5px;
+    animation: opacityPulse 2s ease-out;
+    animation-iteration-count: infinite; 
+    opacity: 1;
+}
+
+@keyframes opacityPulse {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.4; }
+    100% { opacity: 1; }
 }
