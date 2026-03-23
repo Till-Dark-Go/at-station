@@ -1,284 +1,309 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import './signup_and_login.css'
+import "../../assets/styles/signup_and_login.css";
 
 import authGoBackButton from "../../assets/images/authGoBackButton.svg";
-import google from "../../assets/images/google.svg"
-import github from "../../assets/images/github.svg"
-import opened_eye from "../../assets/images/opened_eye.svg"
-import closed_eye from "../../assets/images/closed_eye.svg"
+import google from "../../assets/images/google.svg";
+import github from "../../assets/images/github.svg";
+import opened_eye from "../../assets/images/opened_eye.svg";
+import closed_eye from "../../assets/images/closed_eye.svg";
 
 // Imports for creating Firestore user document in users collection
-import { auth, db } from "../../api/firebase";              
-import { updateProfile } from "firebase/auth";      
+import { auth, db } from "../../api/firebase";
+import { updateProfile } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
-import { 
-  doCreateUserWithEmailAndPassword,
-  doSignInWithGoogle,
-  doSignInWithGithub
+import {
+	doCreateUserWithEmailAndPassword,
+	doSignInWithGoogle,
+	doSignInWithGithub,
 } from "../../firebase/auth";
 
-const DEFAULT_STATION_ID = "bern"
+const DEFAULT_STATION_ID = "bern";
 
 export default function SignUp() {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const signUpEmail = useRef(null);
-  const signUpPass = useRef(null);
-  const signUpUsername = useRef(null);
+	const signUpEmail = useRef(null);
+	const signUpPass = useRef(null);
+	const signUpUsername = useRef(null);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
 
-  // Shared success handler (same philosophy as LogIn)
-  const handleSuccess = () => {
-    navigate('/auth/log-in');
-  };
+	// Shared success handler (same philosophy as LogIn)
+	const handleSuccess = () => {
+		navigate("/auth/log-in");
+	};
 
-  // EMAIL / PASSWORD SIGN UP
-  const handleSignUp = async () => {
-    const email = signUpEmail.current.value;
-    const password = signUpPass.current.value;
+	// EMAIL / PASSWORD SIGN UP
+	const handleSignUp = async () => {
+		const email = signUpEmail.current.value;
+		const password = signUpPass.current.value;
 
-    if (!email || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
+		if (!email || !password) {
+			setError("Please fill in all fields.");
+			return;
+		}
 
-    try {
-      setIsLoading(true);
-      setError("");
+		try {
+			setIsLoading(true);
+			setError("");
 
-      const forbiddenChars = /[ /\\|*]/;  // Regex expression
+			const forbiddenChars = /[ /\\|*]/; // Regex expression
 
-      if (forbiddenChars.test(password)) {  // Regex built-in function to test if forbidden chars are in the password
-        throw new Error("Password contains forbidden characters (space, /, \\, |, *)");
-      }
+			if (forbiddenChars.test(password)) {
+				// Regex built-in function to test if forbidden chars are in the password
+				throw new Error(
+					"Password contains forbidden characters (space, /, \\, |, *)",
+				);
+			}
 
-      const result = await doCreateUserWithEmailAndPassword(email, password);
-      // Get auth user and username what will allow to write to users/{uid} document after signup
-      const user = result.user || auth.currentUser;
-      const username = signUpUsername.current.value;
-      // Sets displayName inside Firebase Auth what will allow to write to users/{uid} document after signup
-      await updateProfile(user, { displayName: username });
+			const result = await doCreateUserWithEmailAndPassword(
+				email,
+				password,
+			);
+			// Get auth user and username what will allow to write to users/{uid} document after signup
+			const user = result.user || auth.currentUser;
+			const username = signUpUsername.current.value;
+			// Sets displayName inside Firebase Auth what will allow to write to users/{uid} document after signup
+			await updateProfile(user, { displayName: username });
 
-      // Create Firestore user document for users collection
-      // It is Client side document creation, with issue that 
-      // if client fails after signup (network), user may exist in Auth but not in Firestore
-      // Later we can do hybride with Cloud Function to solve it
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        displayName: username,
-        currentStationId: DEFAULT_STATION_ID, // const is defined after imports, in the future user choses or closest to geolocation
-        stampsCount: 0,
-        createdAt: serverTimestamp(),
-      });
-      handleSuccess();
-    } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        setError("This email is already in use. Please, try another one.");
-      } else if (err.code === "auth/weak-password") {
-        setError("Password should be at least 6 characters long.");
-      } else {
-        setError(err.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+			// Create Firestore user document for users collection
+			// It is Client side document creation, with issue that
+			// if client fails after signup (network), user may exist in Auth but not in Firestore
+			// Later we can do hybride with Cloud Function to solve it
+			await setDoc(doc(db, "users", user.uid), {
+				email: user.email,
+				displayName: username,
+				currentStationId: DEFAULT_STATION_ID, // const is defined after imports, in the future user choses or closest to geolocation
+				stampsCount: 0,
+				createdAt: serverTimestamp(),
+			});
+			handleSuccess();
+		} catch (err) {
+			if (err.code === "auth/email-already-in-use") {
+				setError(
+					"This email is already in use. Please, try another one.",
+				);
+			} else if (err.code === "auth/weak-password") {
+				setError("Password should be at least 6 characters long.");
+			} else {
+				setError(err.message);
+			}
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-  // GOOGLE SIGN UP
-  const handleGoogleSignUp = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
+	// GOOGLE SIGN UP
+	const handleGoogleSignUp = async () => {
+		try {
+			setIsLoading(true);
+			setError("");
 
-      const result = await doSignInWithGoogle();
-      // Get auth user what will allow to write to users/{uid} document after signup
-      // username comes from Google
-      const user = result.user || auth.currentUser;
+			const result = await doSignInWithGoogle();
+			// Get auth user what will allow to write to users/{uid} document after signup
+			// username comes from Google
+			const user = result.user || auth.currentUser;
 
-      // Create Firestore user document for users collection
-      await setDoc(doc(db, "users", user.uid),
-        {
-          email: user.email,
-          displayName: user.displayName ?? null,
-          currentStationId: DEFAULT_STATION_ID,
-          stampsCount: 0,
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-      handleSuccess();
-    } catch (err) {
-      setError("Failed to sign up with Google: " + err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+			// Create Firestore user document for users collection
+			await setDoc(
+				doc(db, "users", user.uid),
+				{
+					email: user.email,
+					displayName: user.displayName ?? null,
+					currentStationId: DEFAULT_STATION_ID,
+					stampsCount: 0,
+					createdAt: serverTimestamp(),
+				},
+				{ merge: true },
+			);
+			handleSuccess();
+		} catch (err) {
+			setError("Failed to sign up with Google: " + err.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-  // GITHUB SIGN UP
-  const handleGithubSignUp = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
+	// GITHUB SIGN UP
+	const handleGithubSignUp = async () => {
+		try {
+			setIsLoading(true);
+			setError("");
 
-      const result = await doSignInWithGithub();
-      // Get auth user what will allow to write to users/{uid} document after signup
-      // username comes from Github
-      const user = result.user || auth.currentUser;
+			const result = await doSignInWithGithub();
+			// Get auth user what will allow to write to users/{uid} document after signup
+			// username comes from Github
+			const user = result.user || auth.currentUser;
 
-      // Create Firestore user document for users collection
-      await setDoc(doc(db, "users", user.uid),
-        {
-          email: user.email,
-          displayName: user.displayName ?? null,
-          currentStationId: DEFAULT_STATION_ID,
-          stampsCount: 0,
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-      handleSuccess();
-    } catch (err) {
-      if (err.code === "auth/account-exists-with-different-credential") {
-        setError(
-          "An account already exists with the same email. Try logging in instead."
-        );
-      } else if (err.code === "auth/popup-closed-by-user") {
-        setError("Sign-in popup was closed. Please try again.");
-      } else {
-        setError("Failed to sign up with GitHub: " + err.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+			// Create Firestore user document for users collection
+			await setDoc(
+				doc(db, "users", user.uid),
+				{
+					email: user.email,
+					displayName: user.displayName ?? null,
+					currentStationId: DEFAULT_STATION_ID,
+					stampsCount: 0,
+					createdAt: serverTimestamp(),
+				},
+				{ merge: true },
+			);
+			handleSuccess();
+		} catch (err) {
+			if (err.code === "auth/account-exists-with-different-credential") {
+				setError(
+					"An account already exists with the same email. Try logging in instead.",
+				);
+			} else if (err.code === "auth/popup-closed-by-user") {
+				setError("Sign-in popup was closed. Please try again.");
+			} else {
+				setError("Failed to sign up with GitHub: " + err.message);
+			}
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-  // Toggle the password"s eye button to show/hide it
-  const [showPassword, setShowPassword] = useState(false);
+	// Toggle the password"s eye button to show/hide it
+	const [showPassword, setShowPassword] = useState(false);
 
-  return (
-    <div className="main-block">
-      <div className="title">Register for your first ride</div>
+	return (
+		<div className="main-block">
+			<div className="title">Register for your first ride</div>
 
-      <div className="redirection-text">
-        Had a ride before?
-        <Link
-          to="/auth/log-in"
-          className="redirection-text-button"
-        >
-          Log in
-        </Link>
-      </div>
+			<div className="redirection-text">
+				Had a ride before?
+				<Link to="/auth/log-in" className="redirection-text-button">
+					Log in
+				</Link>
+			</div>
 
-      {}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSignUp();
-        }}
-        id="signup-form"
-      >
-        <div className="inputs-holder">
-            <div className="entry-area">
-              <input
-                id="signup-username"
-                type="text"
-                placeholder=" "
-                ref={signUpUsername}
-                disabled={isLoading}
-                autoComplete="username"
-                required
-              />
-              <label htmlFor="signup-username" className="label-line">Username</label >
-            </div>
+			{}
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					handleSignUp();
+				}}
+				id="signup-form"
+			>
+				<div className="inputs-holder">
+					<div className="entry-area">
+						<input
+							id="signup-username"
+							type="text"
+							placeholder=" "
+							ref={signUpUsername}
+							disabled={isLoading}
+							autoComplete="username"
+							required
+						/>
+						<label htmlFor="signup-username" className="label-line">
+							Username
+						</label>
+					</div>
 
-            <div className="entry-area">
-              <input
-                id="signup-email"
-                type="email"
-                placeholder=" "
-                ref={signUpEmail}
-                disabled={isLoading}
-                autoComplete="email"
-                required
-              />
-              <label htmlFor="signup-email" className="label-line">Email</label >
-          </div>
+					<div className="entry-area">
+						<input
+							id="signup-email"
+							type="email"
+							placeholder=" "
+							ref={signUpEmail}
+							disabled={isLoading}
+							autoComplete="email"
+							required
+						/>
+						<label htmlFor="signup-email" className="label-line">
+							Email
+						</label>
+					</div>
 
-          <div className="entry-area">
-            <input
-              id="signup-password"
-              type={showPassword ? "text" : "password"}
-              placeholder=" "
-              ref={signUpPass}
-              disabled={isLoading}
-              autoComplete="new-password"
-              required
-            />
-            <label htmlFor="signup-password" className="label-line">Password</label >
-            <div className="show-hide-pass-icon">
-                <img src={showPassword ? opened_eye : closed_eye} alt={showPassword ? "Opened eye icon" : "Closed eye icon"}
-                    onClick={() => setShowPassword(!showPassword)} 
-                    role="button" 
-                    />
-            </div>
-          </div>
-        </div>
+					<div className="entry-area">
+						<input
+							id="signup-password"
+							type={showPassword ? "text" : "password"}
+							placeholder=" "
+							ref={signUpPass}
+							disabled={isLoading}
+							autoComplete="new-password"
+							required
+						/>
+						<label htmlFor="signup-password" className="label-line">
+							Password
+						</label>
+						<div className="show-hide-pass-icon">
+							<img
+								src={showPassword ? opened_eye : closed_eye}
+								alt={
+									showPassword
+										? "Opened eye icon"
+										: "Closed eye icon"
+								}
+								onClick={() => setShowPassword(!showPassword)}
+								role="button"
+							/>
+						</div>
+					</div>
+				</div>
 
-        <label className="terms-holder">
-          <input type="checkbox" aria-required="true" required />
-          <span className="check-mark" aria-hidden="true"></span>
-          <div>I agree to Terms & Conditions</div>
-        </label>
+				<label className="terms-holder">
+					<input type="checkbox" aria-required="true" required />
+					<span className="check-mark" aria-hidden="true"></span>
+					<div>I agree to Terms & Conditions</div>
+				</label>
 
-        {error && <div className="error-message" role="alert">{error}</div>}
+				{error && (
+					<div className="error-message" role="alert">
+						{error}
+					</div>
+				)}
 
-        <button
-          type="submit"
-          className="action-button proceed-to-account"
-          disabled={isLoading}
-          aria-busy={isLoading}
-        >
-          {isLoading ? "Creating an account..." : "Create an account"}
-        </button>
-      </form>
+				<button
+					type="submit"
+					className="action-button proceed-to-account"
+					disabled={isLoading}
+					aria-busy={isLoading}
+				>
+					{isLoading ? "Creating an account..." : "Create an account"}
+				</button>
+			</form>
 
-      <div className="enter-via">
-        <div className="line" aria-hidden="true"></div>
-        <div className="text">or sign up via</div>
-        <div className="line right" aria-hidden="true"></div>
-      </div>
+			<div className="enter-via">
+				<div className="line" aria-hidden="true"></div>
+				<div className="text">or sign up via</div>
+				<div className="line right" aria-hidden="true"></div>
+			</div>
 
-      <div className="account-options">
-        <button
-          type="button"
-          className="action-button google"
-          onClick={handleGoogleSignUp}
-          disabled={isLoading}
-        >
-          <img src={google} alt="Google icon" aria-hidden="true" />Google
-        </button>
+			<div className="account-options">
+				<button
+					type="button"
+					className="action-button google"
+					onClick={handleGoogleSignUp}
+					disabled={isLoading}
+				>
+					<img src={google} alt="Google icon" aria-hidden="true" />
+					Google
+				</button>
 
-        <button
-          type="button"
-          className="action-button github"
-          onClick={handleGithubSignUp}
-          disabled={isLoading}
-        >
-          <img src={github} alt="Github icon" aria-hidden="true" />GitHub
-        </button>
-      </div>
+				<button
+					type="button"
+					className="action-button github"
+					onClick={handleGithubSignUp}
+					disabled={isLoading}
+				>
+					<img src={github} alt="Github icon" aria-hidden="true" />
+					GitHub
+				</button>
+			</div>
 
-      <Link to="/auth" className="go-back">
-        <img
-          src={authGoBackButton}
-          alt="Go back to main authentication page"
-          role="button"
-        />
-      </Link>
-    </div>
-  );
+			<Link to="/auth" className="go-back">
+				<img
+					src={authGoBackButton}
+					alt="Go back to main authentication page"
+					role="button"
+				/>
+			</Link>
+		</div>
+	);
 }

@@ -7,41 +7,44 @@ import { db } from "./firebase"; // connection to firestore
  * Returns an array of objects: { id, name, latitude, longitude, country }
  */
 export async function getStations() {
-  try {
-    const snapshot = await getDocs(collection(db, "stations")); // fetch all documents from "stations" collection
-    return snapshot.docs.map(doc => ({ id: doc.id,...doc.data()})); // extract data from each document and convert to objects, return an array of objects
-  } catch (e) {
-    console.error("Error fetching stations:", e);
-    return []; // return an empty array
-  }
+	try {
+		const snapshot = await getDocs(collection(db, "stations")); // fetch all documents from "stations" collection
+		return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })); // extract data from each document and convert to objects, return an array of objects
+	} catch (e) {
+		console.error("Error fetching stations:", e);
+		return []; // return an empty array
+	}
 }
 
 /**
  * Fetch stations by country
  */
 export async function getStationsByCountry(country) {
-  try {
-    const q = query(collection(db, "stations"), where("country", "==", country));
+	try {
+		const q = query(
+			collection(db, "stations"),
+			where("country", "==", country),
+		);
 
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id,...doc.data()}));
-  } catch (e) {
-    console.error("Error fetching stations by country:", e);
-    return [];
-  }
+		const snapshot = await getDocs(q);
+		return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+	} catch (e) {
+		console.error("Error fetching stations by country:", e);
+		return [];
+	}
 }
 
 /**
  * Fetch stations ordered by name
  */
 export async function getStationsSorted() {
-  try {
-    const q = query(collection(db, "stations"), orderBy("name"));
+	try {
+		const q = query(collection(db, "stations"), orderBy("name"));
 
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id,...doc.data()}));
-  } catch (e) {
-    console.error("Error fetching sorted stations:", e);
-    return [];
-  }
+		const snapshot = await getDocs(q);
+		return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+	} catch (e) {
+		console.error("Error fetching sorted stations:", e);
+		return [];
+	}
 }

@@ -1,11 +1,11 @@
 @font-face {
-    font-family: Inter;
-    src: url(assets/fonts/Inter-VariableFont_opsz\,wght.ttf);
+	font-family: Inter;
+	src: url(assets/fonts/Inter-VariableFont_opsz\,wght.ttf);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    font-family: Inter;
-    overflow: visible;
+	margin: 0;
+	padding: 0;
+	font-family: Inter;
+	overflow: visible;
 }
