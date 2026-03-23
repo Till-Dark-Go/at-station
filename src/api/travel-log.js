@@ -13,14 +13,14 @@ const ensureUsedId = (userId) => {
 
 const getLogRef = (userId) => collection(db, "users", userId, "travel-log");
 
-export const createTravelEntry = async (userId, origin, dest, starttime, endtime) => {
+export const createTravelEntry = async (userId, originId, destinationId, startTime, endTime) => {
     ensureUsedId(userId);
     const logsRef = getLogRef(userId);
     const entryRef = await addDoc(logsRef, {
-        origin,
-        dest,
-        starttime,
-        endtime
+        originId,
+        destinationId,
+        startTime,
+        endTime
     });
     return entryRef.id;
 }

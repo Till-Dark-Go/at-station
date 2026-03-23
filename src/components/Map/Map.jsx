@@ -16,6 +16,8 @@ import {
 } from "../../assets/utils/mapFunctions.js";
 
 import { updateCurrentStation, getCurrentStationId } from "../../api/users.js";
+import { createTravelEntry } from "../../api/travel-log.js";
+import { auth } from "../../api/firebase";
 
 import TopUI from "./TopUI.jsx";
 import PopupWindow from "./PopupWindow.jsx";
@@ -60,6 +62,8 @@ export default function Map() {
     const [stampsWindow, setStampsWindow] = useState(false);
 
     let starttime, endtime;  // For recording into the database
+
+    const userId = auth.currentUser?.uid;
 
     useEffect(() => {
         if (!currentlyTravelling.current) {
@@ -345,8 +349,8 @@ export default function Map() {
         mapRef.current.easeTo({
         center: [nextLng, nextLat],
         zoom: 11.8,
-        duration: 60000 * travelTime, // 1 minute = 60 000 ms and we set duration in ms
-        // duration: 20000,
+        // duration: 60000 * travelTime, // 1 minute = 60 000 ms and we set duration in ms
+        duration: 10000,
         easing: (t) => t, // Linear animation - no slowdown at the end
         });
 
@@ -407,9 +411,12 @@ export default function Map() {
                 console.log("Start time:", starttime)
                 console.log("End time:", endtime)
 
+                await createTravelEntry(userId, userStartingPoint.id, stationId, starttime, endtime);
+
                 // update current station
                 await updateCurrentStation(stationId);
                 console.log("Updated currentStationId: ", stationId);
+                console.log(":)");
             
                 // update current station
                 await updateCurrentStation(stationId);

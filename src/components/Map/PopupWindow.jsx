@@ -1,6 +1,10 @@
 import close_popup_button from '../../assets/images/cross_button.svg'
 
+import { getStationImage } from '../../api/image-grabber';
+
 export default function PopupWindow(props) {
+
+    getStationImage('alanya');
 
     function nextStationInfo() {
         return (
@@ -9,7 +13,9 @@ export default function PopupWindow(props) {
                 <div className='main-lable'>{props.nextStation.name}</div>
                 {props.timeAndCoords.hours > 0 && <div className='travel-time'>The road will take <strong>{props.timeAndCoords.hours} hr {props.timeAndCoords.minutes} min</strong></div>}
                 {props.timeAndCoords.hours == 0 && <div className='travel-time'>The road will take <strong>{props.timeAndCoords.minutes} min</strong></div>}
-                <div className='description'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                <div className='description-picture'>
+                    <img src="" alt="" />
+                </div>
                 <div className='country'>Country: {props.nextStation.country}</div>
             </div>
         )
