@@ -77,7 +77,7 @@ export default function Todo() {
 
 	return (
 		<div className="todo-list">
-			<h2 className="todo-list-title">TO DO LIST</h2>
+			<h2 className="todo-list-title">To do list</h2>
 			<p className="todo-list-date">{today}</p>
 
 			<div className="todo-input-row">

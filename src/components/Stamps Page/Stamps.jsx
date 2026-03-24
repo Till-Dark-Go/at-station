@@ -68,8 +68,8 @@ export default function Stamps() {
 					<div className="top-info">
 						<p className="name">Stamps collection</p>
 						<div className="stats">
-							<p className="collected">collected: 23</p>
-							<p className="total">total: 105</p>
+							<p className="collected">Collected: 23</p>
+							<p className="total">Total: 105</p>
 						</div>
 					</div>
 					<div className="stamps-mini">

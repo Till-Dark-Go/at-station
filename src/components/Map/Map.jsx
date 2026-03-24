@@ -9,6 +9,8 @@ import Stamps from "../Stamps Page/Stamps.jsx";
 import Todo from "../ToDo/Todo.jsx";
 import { useMap } from "../../assets/utils/map/useMap.js";
 
+import { Activity, ViewTransition } from 'react';
+
 export default function Map() {
 	const {
 		mapContainerRef,
@@ -62,6 +64,13 @@ export default function Map() {
 					nextStationName={nextStation.name}
 				/>
 				{isTodoOpen && <Todo />}
+				{/* {isTodoOpen &&
+				<Activity mode = {isTodoOpen ? 'visible' : 'hidden'}>
+					<ViewTransition enter="auto" exit="auto" default="none"> 
+						<Todo />
+					</ViewTransition> 
+				</Activity>
+				} */}
 				{stampsWindow && <Stamps />}
 				{popupOpenRef.current && (
 					<PopupWindow
