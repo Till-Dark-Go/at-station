@@ -28,3 +28,7 @@ dist-ssr
 
 # Firebase Admin service account
 scripts/service-account-key.json
+
+# Library tracking, makes installing libraries for other coders problematic
+package-lock.json
+package.json

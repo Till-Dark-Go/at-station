@@ -1,6 +1,6 @@
 .stamps-container {
     width: clamp(380px, 28%, 600px);
-  height: clamp(200px, 70%, 900px);
+    height: clamp(200px, 68%, 900px);
     background-color: #000000a9;
     backdrop-filter: blur(3px);
     border: 1px solid #949494; 
@@ -213,7 +213,7 @@ option:hover, option:focus {
 /* Lazy Loading styles */
 
 .loading-stamp-mini {
-    height: 65px;
+    height: clamp(30px, 8vh, 90px);
     background: #535353;
     justify-content: left;
     gap: 20px;

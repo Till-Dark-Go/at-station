@@ -5,15 +5,13 @@ export default function ExpandedStamp(props) {
 		return (
 			<>
 				<div className="entry-info">
-					<span className="label">Route:</span>
+					<span className="label">To/From:</span>
 					<span className="label">Time:</span>
 					<span className="label">Date:</span>
-					<span className="label">Time taken:</span>
 
-					<span>Innsbruck – Luxembourg</span>
-					<span>13:01 – 15:09</span>
+					<span>Innsbruck<br/>Luxembourg</span>
+					<span>13:01<br/>15:09</span>
 					<span>15.02.2026</span>
-					<span>1:20</span>
 				</div>
 				<hr />
 			</>

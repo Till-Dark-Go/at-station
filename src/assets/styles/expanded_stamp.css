@@ -7,23 +7,15 @@
 }
 
 .exp-names {
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: clamp(10px, 2.5vh, 30px);
+    margin-bottom: clamp(10px, 2.5vh, 30px);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .exp-names .station {
-    font-size: 1.2em;
-
-    @media (max-width: 500px) {
-        font-size: 1em;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1.3em;
-    }
+    font-size: clamp(12px, 1.7em, 20px);
 }
 
 .exp-names .country-stamp {
@@ -61,43 +53,23 @@
 
 .travel-log .title {
     text-transform: none;
-    font-size: 1.1em;
+    font-size: clamp(14px, 1.1em, 20px);
     letter-spacing: normal;
     font-weight: 300;
     width: auto;
-
-    @media (max-width: 500px) {
-        font-size: 1em;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1.3em;
-    }
 }
 
 .travel-log {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-inline: 40px;
-
-    @media (max-width: 500px) {
-        margin-inline: 20px;
-    }
 }
 
 .entry-info {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* gap: 4px 20px; */
-
-    @media (max-width: 500px) {
-        gap: 4px 10px;
-    }
-
-    @media (min-width: 1920px) {
-        gap: 4px 40px;
-    }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px clamp(10px, 2.5vw, 40px);
+    align-items: center;
 }
 
 .label {
@@ -112,9 +84,7 @@
 }
 
 .entry-info span:not(.label) {
-    @media (max-width: 500px) {
-        font-size: 0.9em;
-    }
+    line-height: 27px;
 }
 
 hr {

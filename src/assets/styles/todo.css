@@ -1,6 +1,6 @@
 .todo-list {
   width: clamp(380px, 28%, 600px);
-  height: clamp(200px, 70%, 900px);
+  height: clamp(200px, 68%, 900px);
   padding-block: clamp(16px, 2.5vh, 28px);
   padding-inline: clamp(20px, 2.5vh, 50px);
   display: flex;
