@@ -7,6 +7,7 @@ import {
 	deleteTodo,
 } from "../../api/todo-db";
 import { auth } from "../../api/firebase";
+import plus_icon from '../../assets/images/plus_icon.svg'
 
 function TrashIcon() {
 	return (
@@ -91,7 +92,7 @@ export default function Todo() {
 					onKeyDown={handleKeyDown}
 				/>
 				<button className="todo-add-btn" onClick={handleCreate}>
-					+
+					<img src={plus_icon} alt="Add task icon" />
 				</button>
 			</div>
 
@@ -151,7 +152,7 @@ function TodoItem({ todo, onToggle, onDelete }) {
 						</svg>
 					)}
 				</span>
-				<span className="todo-task-text">{todo.title}</span>
+				<span className="todo-task-text" title = {todo.title}>{todo.title}</span>
 			</label>
 			<button
 				className="delete-btn"

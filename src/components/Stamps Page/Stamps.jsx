@@ -6,7 +6,7 @@ import ExpandedStamp from "./ExpandedStamp.jsx";
 
 // All imports needed for LAZY LOADING
 import posts from "../../assets/utils/stamps_data.json";
-import clsx from "clsx"; // !!!!!!!!!!!!!!!! DO npm install --save clsx
+import clsx from "clsx"; // !!!!!!!!!!!!!!!! DO npm install --save clsx 
 import useLazyLoad from "../../assets/utils/useLazyLoad.js";
 import { LoadingListStamps } from "./LoadingCountryStamp.jsx";
 const NUM_PER_PAGE = 3; // Number of small stamps entries per "page" (per scroll)
@@ -107,30 +107,6 @@ export default function Stamps() {
 						>
 							<LoadingListStamps />
 						</div>
-
-						{/* <LoadingListStamps /> */}
-
-						{/* <CountryStamp 
-                        toggleStamp = {() => toggle_stamp_open('Luxembourg', lux)}
-                        stationPic = {lux}
-                        name = "Luxembourg"
-                        country = "Luxembourg"
-                        date = "01.03.2026"
-                    />
-                    <CountryStamp 
-                        toggleStamp = {() => toggle_stamp_open('Zurich', zurich)}
-                        stationPic = {zurich}
-                        name = "Zurich"
-                        country = "Switzerland"
-                        date = "12.02.2026"
-                    />
-                    <CountryStamp 
-                        toggleStamp = {() => toggle_stamp_open('Bern', bern)}
-                        stationPic = {bern}
-                        name = "Bern"
-                        country = "Switzerland"
-                        date = "24.02.2026"
-                    /> */}
 					</div>
 				</>
 			)}

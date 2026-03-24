@@ -1,12 +1,12 @@
 .todo-list {
-  width: clamp(380px, 35%, 600px);
+  width: clamp(380px, 28%, 600px);
   height: clamp(200px, 70%, 900px);
   padding-block: clamp(16px, 2.5vh, 28px);
-  padding-inline: 50px;
+  padding-inline: clamp(20px, 2.5vh, 50px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: #000000a9;
   border: 1px solid #949494;
   box-shadow: 0 0px 30px #000;
@@ -43,7 +43,7 @@
 
 .todo-list-title {
   text-align: center;
-  font-size: clamp(14px, 2.3vh, 26px);
+  font-size: clamp(14px, 1.3em, 26px);
   letter-spacing: 1px;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -52,7 +52,8 @@
 
 .todo-list-date {
   color: #BDBDBD;
-  margin-bottom: 25px;
+  margin-bottom: clamp(5px, 1.2vh, 25px);
+  font-size: 0.9em;
 }
 
 .todo-input-row {
@@ -73,7 +74,7 @@
   border-radius: 8px;
   color: #DADADA;
   font-weight: 300;
-  font-size: clamp(12px, 1.4vh, 16px);
+  font-size: clamp(12px, 0.9em, 16px);
   padding: clamp(7px, 0.85vh, 12px) clamp(10px, 0.8vw, 16px);
   outline: none;
   font-style: italic;
@@ -89,21 +90,19 @@
 }
 
 .todo-add-btn {
-  width: clamp(34px, 2.8vw, 44px);
-  height: clamp(34px, 2.8vw, 44px);
-  min-width: clamp(34px, 2.8vw, 44px);
   background: #0000008e;
   border: 1px solid #555555;
-  border-radius: 10px;
+  border-radius: 8px;
   color: #fff;
-  font-size: clamp(18px, 1.6vw, 24px);
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: clamp(18px, 1.4em, 24px);
   cursor: pointer;
   transition: 0.15s;
-  padding: 0 0 2px;
+  display: flex;
+  padding: clamp(4px, 0.5vh, 13px);
+}
+
+.todo-add-btn img {
+  scale: 0.9;
 }
 
 .todo-add-btn:hover {
@@ -116,8 +115,6 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
 .todo-task {
@@ -164,10 +161,10 @@
 }
 
 .custom-checkbox {
-  width: clamp(16px, 1.4vw, 22px);
-  height: clamp(16px, 1.4vw, 22px);
-  min-width: clamp(16px, 1.4vw, 22px);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  width: clamp(16px, 1.2vw, 22px);
+  height: clamp(16px, 1.2vw, 22px);
+  min-width: clamp(16px, 1.2vw, 22px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -183,7 +180,7 @@
 }
 
 .todo-task-text {
-  font-size: clamp(12px, 1.1em, 16px);
+  font-size: clamp(12px, 0.9em, 16px);
   color: #d8d8d8;
   overflow: hidden;
   white-space: nowrap;

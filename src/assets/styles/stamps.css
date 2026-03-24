@@ -1,6 +1,6 @@
 .stamps-container {
-    width: clamp(380px, 35%, 600px);
-    height: clamp(200px, 70%, 900px);
+    width: clamp(380px, 28%, 600px);
+  height: clamp(200px, 70%, 900px);
     background-color: #000000a9;
     backdrop-filter: blur(3px);
     border: 1px solid #949494; 
@@ -40,14 +40,14 @@
 
 .name {
     text-transform: uppercase;
-    font-size: clamp(14px, 2.3vh, 26px);
+    font-size: clamp(14px, 1.3em, 26px);
     letter-spacing: 1px;
     margin-block: 10px;
     margin-top: 25px;
 
-    @media (min-width: 1920px) {
+    /* @media (min-width: 1920px) {
         font-size: 1.8em;
-    }
+    } */
 }
 
 .stats {
@@ -55,48 +55,25 @@
     justify-content: space-between;
     gap: 40px;
     color: #BDBDBD;
-    margin-bottom: 25px;
-
-    @media (min-width: 1920px) {
-        gap: 60px;
-        font-size: 1.1em;
-    }
+    margin-bottom: clamp(10px, 2vh, 25px);
+    font-size: clamp(12px, 0.9em, 16px);
 }
 
 .stamps-mini {
-    margin-inline: 40px;
+    margin-inline: clamp(20px, 2vw, 70px);
     margin-bottom: 20px;
-
-    @media (max-width: 500px) {
-        margin-inline: 20px;
-    }
-
-    @media (min-width: 1920px) {
-        margin-inline: 70px;
-    }
 }
 
 .sorting label {
     margin-right: 9px;
-
-    @media (min-width: 1920px) {
-        font-size: 1.1em;
-    }
+    font-size: clamp(12px, 0.9em, 16px);
 }
 
 .sorting select {
-    font-size: 1em;
+    font-size: clamp(12px, 0.9em, 16px);
     background-color: black;
     color: white;
-    width: 180px;
-
-    @media (max-width: 500px) {
-        width: 150px;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1.1em;
-    }
+    width: clamp(100px, 11vw, 180px);
 }
 
 #sorting-options {
@@ -152,9 +129,8 @@ option:hover, option:focus {
 }
 
 .stamp-block, .loading-stamp-mini {
-    margin-top: 20px;
-    padding-inline: 25px;
-    padding-block: 20px;
+    margin-top: clamp(5px, 1.6vh, 20px);
+    padding: clamp(10px, 1.9vh, 25px);
     border: 1px solid #555555;
     background: #0000008e;
     border-radius: 8px;
@@ -162,11 +138,6 @@ option:hover, option:focus {
     justify-content: space-between;
     cursor: pointer;
     transition: 0.2s ease;
-
-    @media (max-width: 500px) {
-        padding-inline: 15px;
-        padding-block: 15px;
-    }
 }
 
 .stamp-block:hover {
@@ -194,7 +165,7 @@ option:hover, option:focus {
 }
 
 .names {
-    padding-left: 15px;
+    padding-left: clamp(10px, 1vh, 15px);
     flex: 2;
 }
 
@@ -224,15 +195,9 @@ option:hover, option:focus {
 }
 
 .last-visited {
-    font-size: 0.9em;
-
-    @media (max-width: 500px) {
-        display: none;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1em;
-    }
+    font-size: clamp(13px, 1.7vh, 16px);
+    width: clamp(80px, 30%, 110px);
+    text-align: right;
 }
 
 .info-arrow img {
@@ -242,16 +207,7 @@ option:hover, option:focus {
 }
 
 .date {
-    padding-top: 5px;
-    font-size: 0.9em;
-
-    @media (max-width: 500px) {
-        padding-top: 20px;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1em;
-    }
+    padding-top: clamp(5px, 0.7vh, 20px);
 }
 
 /* Lazy Loading styles */
