@@ -40,14 +40,10 @@
 
 .name {
     text-transform: uppercase;
-    font-size: clamp(14px, 1.3em, 26px);
+    font-size: clamp(14px, 0.5vw + 1rem, 30px);
     letter-spacing: 1px;
     margin-block: 10px;
     margin-top: 25px;
-
-    /* @media (min-width: 1920px) {
-        font-size: 1.8em;
-    } */
 }
 
 .stats {
@@ -56,7 +52,7 @@
     gap: 40px;
     color: #BDBDBD;
     margin-bottom: clamp(10px, 2vh, 25px);
-    font-size: clamp(12px, 0.9em, 16px);
+    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
 }
 
 .stamps-mini {
@@ -66,11 +62,11 @@
 
 .sorting label {
     margin-right: 9px;
-    font-size: clamp(12px, 0.9em, 16px);
+    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
 }
 
 .sorting select {
-    font-size: clamp(12px, 0.9em, 16px);
+    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
     background-color: black;
     color: white;
     width: clamp(100px, 11vw, 180px);
@@ -195,8 +191,8 @@ option:hover, option:focus {
 }
 
 .last-visited {
-    font-size: clamp(13px, 1.7vh, 16px);
-    width: clamp(80px, 30%, 110px);
+    font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
+    width: clamp(80px, 80%, 110px);
     text-align: right;
 }
 

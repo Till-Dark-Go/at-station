@@ -12,9 +12,9 @@ export default function CountryStamp(props) {
 			</div>
 			<div className="info-arrow">
 				<img src={stamps_arrow} alt="Arrow to expand the stamp" />
-				<p className="last-visited">Last visited:
+				<div className="last-visited">Last visited:
 					<p className="date">{props.date}</p>
-				</p>
+				</div>
 			</div>
 		</div>
 	);

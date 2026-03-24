@@ -43,7 +43,7 @@
 
 .todo-list-title {
   text-align: center;
-  font-size: clamp(14px, 1.3em, 26px);
+  font-size: clamp(14px, 0.5vw + 1rem, 30px);
   letter-spacing: 1px;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -52,7 +52,7 @@
 
 .todo-list-date {
   color: #BDBDBD;
-  margin-bottom: clamp(5px, 1.2vh, 25px);
+  margin-bottom: clamp(5px, 1.7vh, 25px);
   font-size: 0.9em;
 }
 
@@ -74,7 +74,7 @@
   border-radius: 8px;
   color: #DADADA;
   font-weight: 300;
-  font-size: clamp(12px, 0.9em, 16px);
+  font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
   padding: clamp(7px, 0.85vh, 12px) clamp(10px, 0.8vw, 16px);
   outline: none;
   font-style: italic;
@@ -94,7 +94,7 @@
   border: 1px solid #555555;
   border-radius: 8px;
   color: #fff;
-  font-size: clamp(18px, 1.4em, 24px);
+  font-size: clamp(18px, 1.4vw + 1rem, 24px);
   cursor: pointer;
   transition: 0.15s;
   display: flex;
@@ -180,7 +180,7 @@
 }
 
 .todo-task-text {
-  font-size: clamp(12px, 0.9em, 16px);
+  font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
   color: #d8d8d8;
   overflow: hidden;
   white-space: nowrap;
