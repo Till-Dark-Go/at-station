@@ -226,4 +226,6 @@ input:not(:placeholder-shown) + .label-line {
 .error-message {
     margin-top: 10px;
     color: rgb(255, 93, 93);
+    width: 500px;
+    text-align: center;
 }
