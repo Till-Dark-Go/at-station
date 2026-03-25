@@ -9,17 +9,11 @@ import opened_eye from "../../assets/images/opened_eye.svg"
 import closed_eye from "../../assets/images/closed_eye.svg"
 
 // Imports for creating Firestore user document in users collection
-import { auth, db } from "../../api/firebase";              
-import { updateProfile } from "firebase/auth";      
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { auth } from "../../api/firebase";              
+import { updateProfile, signOut } from "firebase/auth";      
 
-import { 
-  doCreateUserWithEmailAndPassword,
-  doSignInWithGoogle,
-  doSignInWithGithub
-} from "../../firebase/auth";
-
-const DEFAULT_STATION_ID = "bern"
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from "../../firebase/auth";
+import { ensureUserDocument } from "../../firebase/oAuth";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -31,10 +25,19 @@ export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Shared success handler (same philosophy as LogIn)
-  const handleSuccess = () => {
+  // On sucessfull email/password signup
+  const handleEmailPasswordSuccess = async () => {
+    // Logout after signup, so no forced acess to / (map)
+    await signOut(auth);
+    // Move to login screen to properly login
     navigate('/auth/log-in');
   };
+
+  // On sucessfull OAuth (Google/Github) signup
+  const handleOAuthSuccess = () => {
+    navigate('/'); // Stay logged in, go straight to map
+  };
+
 
   // EMAIL / PASSWORD SIGN UP
   const handleSignUp = async () => {
@@ -63,18 +66,10 @@ export default function SignUp() {
       // Sets displayName inside Firebase Auth what will allow to write to users/{uid} document after signup
       await updateProfile(user, { displayName: username });
 
-      // Create Firestore user document for users collection
-      // It is Client side document creation, with issue that 
-      // if client fails after signup (network), user may exist in Auth but not in Firestore
-      // Later we can do hybride with Cloud Function to solve it
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        displayName: username,
-        currentStationId: DEFAULT_STATION_ID, // const is defined after imports, in the future user choses or closest to geolocation
-        stampsCount: 0,
-        createdAt: serverTimestamp(),
-      });
-      handleSuccess();
+      // Ensure Firestore user exists
+      await ensureUserDocument(user);
+
+      handleEmailPasswordSuccess();  // log out + go to login
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError("This email is already in use. Please, try another one.");
@@ -88,68 +83,26 @@ export default function SignUp() {
     }
   };
 
-  // GOOGLE SIGN UP
-  const handleGoogleSignUp = async () => {
+  // oAuth (Google or Github signup)
+  const handleOAuthSignUp = async (providerFn, providerName) => {
     try {
       setIsLoading(true);
-      setError("");
+      setError('');
 
-      const result = await doSignInWithGoogle();
+      const result = await providerFn();
       // Get auth user what will allow to write to users/{uid} document after signup
-      // username comes from Google
       const user = result.user || auth.currentUser;
 
-      // Create Firestore user document for users collection
-      await setDoc(doc(db, "users", user.uid),
-        {
-          email: user.email,
-          displayName: user.displayName ?? null,
-          currentStationId: DEFAULT_STATION_ID,
-          stampsCount: 0,
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-      handleSuccess();
+      await ensureUserDocument(user);
+
+      handleOAuthSuccess(); // stay logged in + go to map
     } catch (err) {
-      setError("Failed to sign up with Google: " + err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // GITHUB SIGN UP
-  const handleGithubSignUp = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
-
-      const result = await doSignInWithGithub();
-      // Get auth user what will allow to write to users/{uid} document after signup
-      // username comes from Github
-      const user = result.user || auth.currentUser;
-
-      // Create Firestore user document for users collection
-      await setDoc(doc(db, "users", user.uid),
-        {
-          email: user.email,
-          displayName: user.displayName ?? null,
-          currentStationId: DEFAULT_STATION_ID,
-          stampsCount: 0,
-          createdAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
-      handleSuccess();
-    } catch (err) {
-      if (err.code === "auth/account-exists-with-different-credential") {
-        setError(
-          "An account already exists with the same email. Try logging in instead."
-        );
-      } else if (err.code === "auth/popup-closed-by-user") {
-        setError("Sign-in popup was closed. Please try again.");
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        setError(`An account already exists with this email using a different login method. Try logging in with the original provider.`);
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign-in popup was closed. Please try again.');
       } else {
-        setError("Failed to sign up with GitHub: " + err.message);
+        setError('Failed to sign up with ' + providerName + ': ' + err.message);
       }
     } finally {
       setIsLoading(false);
@@ -256,7 +209,7 @@ export default function SignUp() {
         <button
           type="button"
           className="action-button google"
-          onClick={handleGoogleSignUp}
+          onClick={() => handleOAuthSignUp(doSignInWithGoogle, 'Google')}
           disabled={isLoading}
         >
           <img src={google} alt="Google icon" aria-hidden="true" />Google
@@ -265,7 +218,7 @@ export default function SignUp() {
         <button
           type="button"
           className="action-button github"
-          onClick={handleGithubSignUp}
+          onClick={() => handleOAuthSignUp(doSignInWithGithub, 'GitHub')}
           disabled={isLoading}
         >
           <img src={github} alt="Github icon" aria-hidden="true" />GitHub

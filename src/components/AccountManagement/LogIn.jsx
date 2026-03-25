@@ -8,12 +8,9 @@ import './signup_and_login.css'
 
 import { useRef, useState } from 'react';
 
-import {
-  doSignInWithEmailAndPassword,
-  doSignInWithGoogle,
-  doSignInWithGithub,
-} from '../../firebase/auth';
+import { doSignInWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from '../../firebase/auth';
 
+import { ensureUserDocument } from "../../firebase/oAuth";
 
 export default function LogIn() {
     const navigate = useNavigate();
@@ -48,53 +45,43 @@ export default function LogIn() {
         await doSignInWithEmailAndPassword(email, password);
         handleSuccess();
         } catch (err) {
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+            if (err.code === 'auth/invalid-credential') {
                 setError('Invalid email or password.');
-        } else {
+            } else if (err.code === 'auth/user-not-found') {
+                setError('User does not exist. You need to signup first.');
+            } else {
                 setError('Failed to log in: ' + err.message);
-        }
+            }
         } finally {
                 setIsLoading(false);
         }
     };
 
-    // GOOGLE LOGIN
-    const handleGoogleLogIn = async () => {
+    const handleOAuthLogin = async (providerFn) => {
         try {
             setIsLoading(true);
             setError('');
 
-            await doSignInWithGoogle();
+            const result = await providerFn();
+            const user = result.user || auth.currentUser;
+
+            await ensureUserDocument(user);
+
             handleSuccess();
         } catch (err) {
-            setError('Failed to sign in with Google: ' + err.message);
+            if (err.code === 'auth/account-exists-with-different-credential') {
+                setError('An account already exists with this email using a different login method.\nTry logging in with the original provider.');
+            } else if (err.code === 'auth/popup-closed-by-user') {
+                setError('Sign-in popup was closed. Please try again.');
+            } else {
+                setError('Failed to log in: ' + err.message);
+            }
         } finally {
             setIsLoading(false);
         }
     };
 
-    // GITHUB LOG IN
-    const handleGithubLogIn = async () => {
-        try {
-            setIsLoading(true);
-            setError('');
-            
-            await doSignInWithGithub();
-            handleSuccess();
-            
-        } catch (err) {
-            // Handle specific GitHub errors
-            if (err.code === 'auth/account-exists-with-different-credential') {
-                setError('An account already exists with the same email. Try signing in with a different method.');
-            } else if (err.code === 'auth/popup-closed-by-user') {
-                setError('Sign-in popup was closed. Please try again.');
-            } else {
-                setError('Failed to sign in with GitHub: ' + err.message);
-            }
-            } finally {
-                setIsLoading(false);
-            }
-    };
+
     
     // Toggle the password's eye button to show/hide it
     const [showPassword, setShowPassword] = useState(false);
@@ -176,18 +163,7 @@ export default function LogIn() {
                 <button
                 type="button"
                 className="action-button google"
-                onClick={async () => {
-                    setIsLoading(true);
-                    setError('');
-                    try {
-                    await doSignInWithGoogle();
-                    handleSuccess();
-                    } catch (err) {
-                    setError(err.message);
-                    } finally {
-                    setIsLoading(false);
-                    }
-                }}
+                onClick={() => handleOAuthLogin(doSignInWithGoogle)}
                 disabled={isLoading}
                 >
                     <img src={google} alt="Google icon" aria-hidden="true" />Google
@@ -196,18 +172,7 @@ export default function LogIn() {
                 <button
                 type="button"
                 className="action-button github"
-                onClick={async () => {
-                    setIsLoading(true);
-                    setError('');
-                    try {
-                    await doSignInWithGithub();
-                    handleSuccess();
-                    } catch (err) {
-                    setError(err.message);
-                    } finally {
-                    setIsLoading(false);
-                    }
-                }}
+                onClick={() => handleOAuthLogin(doSignInWithGithub)}
                 disabled={isLoading}
                 >
                     <img src={github} alt="Github icon" aria-hidden="true" />GitHub
