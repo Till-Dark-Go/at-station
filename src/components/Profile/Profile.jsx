@@ -66,9 +66,9 @@ export default function Profile() {
 
       const name = await getDisplayName();
       const mail = await getEmail();
-
-      setUsername(name || "");
-      setEmail(mail || "");
+      
+      setUsername(name || currentUser.displayName || "");
+      setEmail(mail || currentUser.email || "");
     }
 
     loadUserData();
@@ -91,7 +91,20 @@ export default function Profile() {
       setIsLoading(true); // loading functionality prevents double clicking
 
       if (popupType === "username") {
+        if (providerId !== "password") {
+          setError("Cannot update email: account managed by " + providerId);
+          return;
+        }
+
         await doReauthenticate(data.password);
+        await doUpdateProfileUsername(data.newUsername);  
+        await updateDisplayName(data.newUsername);
+        setUsername(data.newUsername); 
+        setSuccess("Username updated.");
+      }
+
+      if (popupType === "username-provider") {
+        // ask for current username???
         await doUpdateProfileUsername(data.newUsername);  
         await updateDisplayName(data.newUsername);
         setUsername(data.newUsername); 
@@ -114,6 +127,10 @@ export default function Profile() {
       }
 
       if (popupType === "password") {
+        if (providerId !== "password") {
+          setError("Cannot update password: account managed by " + providerId);
+          return;
+        }
         await doReauthenticate(data.password);
         await doUpdatePassword(data.newPassword);
         setSuccess("Password changed.");
@@ -131,6 +148,11 @@ export default function Profile() {
 
       if (popupType === "delete") {
         await doReauthenticate(data.password);
+        await deleteUserDocument();
+        await doDeleteAuthAccount();
+      }
+
+      if (popupType === "delete-provider") {
         await deleteUserDocument();
         await doDeleteAuthAccount();
       }
@@ -168,7 +190,11 @@ export default function Profile() {
             <label className="label-line">Username</label>
           </div>
           <div className="show-hide-edit-icon">
-            <img src={editIcon} alt="Edit username" onClick={() => openPopup("username")} role="button" />
+            {providerId === "password" ? (
+              <img src={editIcon} alt="Edit username" onClick={() => openPopup("username")} role="button" />
+            ) : (
+              <img src={editIcon} alt="Edit username" onClick={() => openPopup("username-provider")} role="button" />
+            )}
           </div>
 
           {/* Email Field */}
@@ -185,11 +211,13 @@ export default function Profile() {
             {providerId === "password" ? (
                 <img src={editIcon} alt="Edit email" onClick={() => openPopup("email")} role="button" />
             ) : (
-              <span className="oauth-info">Managed by {providerId}</span>
+              <></>
             )}
-            </div>
+          </div>
 
           {/* Password Field */}
+          {providerId === "password" ? (
+          <>
           <div className="entry-area">
              <input
               type="password"
@@ -200,13 +228,12 @@ export default function Profile() {
             <label className="label-line">Password</label>
           </div>
           <div className="show-hide-edit-icon">
-              {providerId === "password" ? (
-                  <img src={editIcon} alt="Edit password" onClick={() => openPopup("password")} role="button" />
-              ) : (
-                <span className="oauth-info">Managed by {providerId}</span>
-              )}
-            </div>
-        </div>
+            <img src={editIcon} alt="Edit password" onClick={() => openPopup("password")} role="button" />
+          </div>
+          </>) : (
+            <span className="oauth-info">Signed in using {providerId}</span>
+            )}
+        </div >
       </form>
 
       <div className="buttons-holder">
@@ -222,7 +249,7 @@ export default function Profile() {
 
      <div className="buttons-holder">
         <button className="action-button" onClick={() => openPopup("reset")} disabled={isLoading}>{isLoading ? "Processing" : "Reset"}</button>
-        <button className="action-button" onClick={() => openPopup("delete")} disabled={isLoading}>{isLoading ? "Processing" : "Delete"}</button>
+        <button className="action-button" onClick={() => openPopup(providerId === "password" ? "delete" : "delete-provider")} disabled={isLoading}>{isLoading ? "Processing" : "Delete"}</button>
       </div>
 
       {showPopup && (
@@ -233,10 +260,5 @@ export default function Profile() {
         />
       )}
     </div>
-
-    // <div className="profile_div" onClick={toggleConfirmation}>
-    //   {confirmation && <ConfirmationPopup />}
-    //     <button>Change password</button>
-    // </div>
   )
 }

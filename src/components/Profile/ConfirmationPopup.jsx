@@ -22,14 +22,14 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
     // Determine if password is needed
     const needsPassword = type === "username" || type === "email" || type === "password" || type === "delete";
     // Determine if new input field is needed for this action
-    const needsNewValue = type === "username" || type === "email" || type === "password";
+    const needsNewValue = type === "username" || type === "email" || type === "password" || type === "username-provider";
 
     // Handle confirm click
     const handleConfirmClick = () => {
         const data = {
             password, // always reauthentication
             newPassword: type === "password" ? newValue : undefined,
-            newUsername: type === "username" ? newValue : undefined,
+            newUsername: type === "username" || type === "username-provider" ? newValue : undefined,
             newEmail: type === "email" ? newValue : undefined,
         };
         onConfirm(data); // calls Profile.jsx function
@@ -48,9 +48,10 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
     return (
         <div className="confirmation-popup">
             <h3>
-                {type === "delete" ? "Are you sure you want to delete your account? This is permanent." :
+                {type === "delete" || type === "delete-provider" ? "Are you sure you want to delete your account? This is permanent." :
                  type === "reset" ? "Are you sure you want to reset your data? This is permanent." :
                  type === "logout" ? "Are you sure you want to log out?" : 
+                 type === "username-provider" ? "Change your username" :
                  "Confirm your changes."}
             </h3>
 
@@ -74,6 +75,7 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
             {needsNewValue && (
                 <div className="input-group">
                     <label>{type === "username" ? "Enter new username" :
+                            type === "username-provider" ? "Enter new username" :
                             type === "email" ? "Enter new email" :
                             type === "password" ? "Enter new password" :
                             ""}
@@ -83,7 +85,7 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
                         type={type === "password" ? (showNewPassword ? "text" : "password") : "text"}
                         value={newValue}
                         onChange={(e) => setNewValue(e.target.value)}
-                        placeholder={type === "username" ? "Enter new username" :
+                        placeholder={type === "username" || type === "username-provider" ? "Enter new username" :
                                     type === "email" ? "Enter new email" :
                                     type === "password" ? "Enter new password" :
                                     ""}
