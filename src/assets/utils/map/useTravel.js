@@ -4,6 +4,8 @@ import { createTravelEntry } from "../../../api/travel-log.js";
 import { auth } from "../../../api/firebase";
 import { calculateTravelTimeInMinutes } from "./mapCalculations.js";
 import { arrayOfStations } from "./useStations.js";
+import { updateStamp } from "../../../api/stamps.js";
+import { Timestamp } from "firebase/firestore";
 
 export function useTravel({
 	mapRef,
@@ -48,7 +50,7 @@ export function useTravel({
 	async function animateMapMovement(nextLng, nextLat, travelTime, stationId) {
 		if (!currentlyPaused.current) {
 			// We weren't UNPAUSING and calling this animation, we JUST STARTED it so fly back to the user point
-			startTimeRef.current = Date.now();
+			startTimeRef.current = Timestamp.fromMillis(Date.now());
 
 			setPopupWindow((prev) => !prev);
 			popupOpenRef.current = false;
@@ -148,7 +150,7 @@ export function useTravel({
 			if (stationId) {
 				try {
 					// ADD starttime and endtime to database
-					endTimeRef.current = Date.now();
+					endTimeRef.current = Timestamp.fromMillis(Date.now());
 
 					console.log("Destination:", stationId);
 					console.log("Origin:", userStartingPoint.id);
@@ -162,6 +164,8 @@ export function useTravel({
 						startTimeRef.current,
 						endTimeRef.current,
 					);
+					// await zhopa(userId, stationId);
+					await updateStamp(userId, stationId, endTimeRef.current);
 
 					// update current station
 					await updateCurrentStation(stationId).then(() => {
