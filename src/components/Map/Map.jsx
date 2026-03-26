@@ -63,7 +63,7 @@ export default function Map() {
 					userStartingPoint={userStartingPoint}
 					nextStationName={nextStation.name}
 				/>
-				{isTodoOpen && <Todo />}
+
 				{/* {isTodoOpen &&
 				<Activity mode = {isTodoOpen ? 'visible' : 'hidden'}>
 					<ViewTransition enter="auto" exit="auto" default="none"> 
@@ -71,7 +71,10 @@ export default function Map() {
 					</ViewTransition> 
 				</Activity>
 				} */}
+				
+				{isTodoOpen && <Todo />}
 				{stampsWindow && <Stamps />}
+				
 				{popupOpenRef.current && (
 					<PopupWindow
 						nextStation={nextStation}

@@ -18,6 +18,8 @@ export default function Stamps() {
 	// Everything needed for LAZY LOADING
 	const stampsInfo = posts["data"];
 	const triggerRef = useRef(null);
+
+
 	const onGrabData = (currentPage) => {
 		// This would be where you'll call your API --------------- connect to database?
 		return new Promise((resolve) => {
@@ -33,7 +35,6 @@ export default function Stamps() {
 	};
 
 	const { data, loading } = useLazyLoad({ triggerRef, onGrabData });
-
 	// ------- Everything below is without the lazy loading, what we had before
 	const [expandedOpen, setExpandedOpen] = useState([false, "", ""]);
 

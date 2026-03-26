@@ -76,7 +76,7 @@
     left: 60px;
     font-size: 0.9em;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         top: 30px;
         left: 30px;
         font-size: 0.8em;
@@ -100,20 +100,12 @@
 }
 
 .top-curr-station-name .station-name {
-    font-size: 1.5em;
+    font-size: clamp(1.2em, 3.4vh, 1.7em);
     text-transform: uppercase;
     margin-block: 10px;
     letter-spacing: 2px;
     pointer-events: auto;
     color: #fff;
-
-    @media (max-width: 500px) {
-        font-size: 1.6em;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1.7em;
-    }
 }
 
 .top-curr-station-name .line {
@@ -123,13 +115,17 @@
 
 .popup-window {
     width: clamp(380px, 40%, 700px);
-    height: 50%;
+    height: clamp(200px, 50%, 500px);
     background-color: #00000070;
     border: 1px solid #949494; 
     border-radius: 10px;
     backdrop-filter: blur(2px);
     font-weight: 300;
     position: relative;
+
+    @media (max-width: 480px) {
+        width: 90%;
+    }
 }
 
 .popup-close-button {
@@ -142,8 +138,10 @@
     top: 20px;
     right: 20px;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         scale: 0.6;
+        top: 10px;
+        right: 10px;
     }
 }
 
@@ -152,11 +150,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
+  font-size: clamp(0.7em, 2vh, 0.9em);
+
+    @media (max-width: 480px) {
+        justify-content: center;
+    }
+
+    @media (min-width: 1920px) {
+        font-size: 1em;
+    }
 }
 
 .window-info .info {
@@ -166,42 +169,26 @@
     margin-top: 45px;
     color: #D0D0D0;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         margin-top: 0;
-        margin-block: 25px;
-    }
-}
-
-.window-info {
-    @media (max-width: 500px) {
-        justify-content: center;
-    }
-
-    font-size: 0.9em;
-
-    @media (min-width: 1920px) {
-        font-size: 1em;
+        margin-block: 10px;
     }
 }
 
 .main-lable {
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 1.7em;
+    font-size: clamp(1.4em, 2.8vh, 1.8em);
     font-weight: 500;
     margin-block: 10px;
     color: #fff;
-
-    @media (max-width: 500px) {
-        font-size: 1.6em;
-    }
 }
 
 .progress-lost {
     font-size: 1.7em;
     margin-block: 15px;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         font-size: 1.3em;
         width: 280px;
         text-align: center;
@@ -214,9 +201,26 @@
 
 .description {
     width: 80%;
-    margin-block: 15px;
+    margin-block: clamp(8px, 1vh, 15px);
     line-height: 27px;
     text-align: center;
+}
+
+.description-picture {
+    margin-block: 15px;
+    width: clamp(200px, 45%, 270px);
+    border-radius: 8px;
+    overflow: hidden;
+
+    @media (max-width: 480px) {
+        width: 40%;
+        margin-block: 8px;
+    }
+}
+
+.description-picture img {
+    width: 100%;
+    object-fit: cover;
 }
 
 .bottom-UI {
@@ -224,12 +228,10 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 145px;
     pointer-events: none;
 
-    @media (max-width: 500px) {
-        height: 170px;
-        margin-bottom: 40px;
+    @media (max-width: 480px) {
+        /* height: 100px; */
     }
 }
 
@@ -247,9 +249,11 @@
     border: 1px solid #949494; 
     border-radius: 50px;
     backdrop-filter: blur(2px);
+    margin-bottom: 20px;
 
-    @media (max-width: 500px) {
-        font-size: 0.8em;
+    @media (max-width: 480px) {
+        font-size: 0.7em;
+        margin-bottom: -10px;
     }
 }
 
@@ -262,17 +266,18 @@
     margin-bottom: 25px;
     padding-right: 75px;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         flex-wrap: wrap;
         justify-content: center;
         padding-right: 0;
+        gap: 10px;
     }
 }
 
 .at-station-button {
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         order: -1;
-        margin-inline: 90px;
+        margin-inline: 22vw;
         margin-top: 20px;
     }
 }
@@ -290,20 +295,15 @@
     backdrop-filter: blur(2px);
     pointer-events: auto;
 
-    @media (max-width: 500px) {
-        width: 200px;
-        height: 70px;
+    @media (max-width: 480px) {
+        width: 190px;
+        height: 60px;
     }
 
     @media (min-width: 1920px) {
         width: 220px;
         height: 75px;
     }
-}
-
-.stop-travelling-button {
-    width: 240px;
-    font-size: 1.3em;
 }
 
 .feature-button {
@@ -325,10 +325,9 @@
 }
 
 .confirmation-button {
-    width: 200px;
-    height: 60px;
+    width: clamp(140px, 49%, 200px);
     font-size: 1.4em;
-    transition: 0.4s ease;
+    transition: 0.2s ease;
     cursor: pointer;
 }
 
@@ -351,7 +350,7 @@
     width: 70px;
     scale: 0.9;
 
-    @media (max-width: 500px) {
+    @media (max-width: 480px) {
         width: 60px;
         top: 40px;
         right: 30px;
@@ -359,7 +358,7 @@
 }
 
 .travelling {
-  transition: 0.4s ease;
+  transition: 0.2s ease;
   cursor: pointer;
 }
 
@@ -373,4 +372,13 @@
 .confirmation-button {
   margin-bottom: 40px;
   background-color: transparent;
+
+  @media (max-width: 480px) {
+    margin-bottom: 0;
+  }
+}
+
+.stop-travelling-button {
+    width: clamp(160px, 60%, 250px);
+    font-size: 1.3em;
 }
