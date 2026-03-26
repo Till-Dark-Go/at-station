@@ -1,5 +1,5 @@
 .todo-list {
-  width: clamp(450px, 28%, 600px);
+  width: clamp(380px, 28%, 600px);
   height: clamp(200px, 68%, 900px);
   padding-block: clamp(16px, 2.5vh, 28px);
   padding-inline: clamp(20px, 2.5vh, 50px);
@@ -216,10 +216,10 @@
 /* ── Tablet (≤ 1024px) ── */
 @media only screen and (max-width: 1024px) {
   .todo-list {
-    width: clamp(200px, 80%, 500px);
-    left: 50%;
-    top: 13vh;
-    transform: translateX(-50%);
+    width: clamp(260px, 38vw, 420px);
+    left: 5vw;
+    top: 12vh;
+    bottom: clamp(140px, 22vh, 230px);
   }
 }
 
@@ -227,10 +227,12 @@
 @media only screen and (max-width: 768px) {
   .todo-list {
     position: fixed;
-    width: clamp(200px, 80%, 500px);
-    height: clamp(200px, 55%, 900px);
+    width: calc(100vw - 32px);
+    max-width: 420px;
     left: 50%;
-    top: 19vh;
+    top: 12vh;
+    bottom: clamp(130px, 24vh, 220px);
+    height: auto;
     transform: translateX(-50%);
   }
 }
@@ -249,8 +251,10 @@
 /* ── Mobile portrait (≤ 480px) ── */
 @media only screen and (max-width: 480px) {
   .todo-list {
-    width: clamp(200px, 80%, 500px);
-    top: 16vh;
+    width: calc(100vw - 24px);
+    top: 10vh;
+    bottom: clamp(120px, 22vh, 200px);
+    height: auto;
     border-radius: 16px;
     padding: 18px 14px;
   }

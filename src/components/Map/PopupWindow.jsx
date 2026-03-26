@@ -66,23 +66,25 @@ export default function PopupWindow(props) {
 				)}
 				{props.currentlyTravelling.current && <StopTravellingInfo />}
 
-				{!props.currentlyTravelling.current && (
-					<button
-						className="feature-button confirmation-button"
-						onClick={props.animateMovement}
-					>
-						CONFIRM
-					</button>
-				)}
+				<div className="button">
+					{!props.currentlyTravelling.current && (
+						<button
+							className="feature-button confirmation-button"
+							onClick={props.animateMovement}
+						>
+							CONFIRM
+						</button>
+					)}
 
-				{props.currentlyTravelling.current && (
-					<button
-						className="feature-button confirmation-button stop-travelling-button"
-						onClick={props.stopTravelling}
-					>
-						STOP TRAVELLING
-					</button>
-				)}
+					{props.currentlyTravelling.current && (
+						<button
+							className="feature-button confirmation-button stop-travelling-button"
+							onClick={props.stopTravelling}
+						>
+							STOP TRAVELLING
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);
