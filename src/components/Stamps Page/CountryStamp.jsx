@@ -4,7 +4,10 @@ export default function CountryStamp(props) {
 	return (
 		<div className="stamp-block" onClick={props.toggleStamp}>
 			<div className="station-pic">
-				<img src={props.stationPic} alt="Luxembourg picture" />
+				<img
+					src={props.stationPic ?? "/placeholder.jpg"}
+					alt={`${props.name} picture`}
+				/>
 			</div>
 			<div className="names">
 				<p className="station">{props.name}</p>
@@ -12,7 +15,8 @@ export default function CountryStamp(props) {
 			</div>
 			<div className="info-arrow">
 				<img src={stamps_arrow} alt="Arrow to expand the stamp" />
-				<div className="last-visited">Last visited:
+				<div className="last-visited">
+					Last visited:
 					<p className="date">{props.date}</p>
 				</div>
 			</div>
