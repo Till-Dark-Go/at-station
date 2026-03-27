@@ -25,15 +25,15 @@
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: 300;
-	font-size: clamp(1.3em, 3.4vh, 1.8em);
-	margin-block: clamp(10px, 4vh, 50px);
+	font-size: clamp(1.2em, 3.3vh, 1.6em);
+	margin-block: clamp(10px, 3.5vh, 50px);
 	display: flex;
 	align-items: center;
 }
 
 .profile-title img {
 	margin-left: 5px;
-	scale: 0.85;
+	scale: 0.8;
 }
 
 #profile-form span {
@@ -42,6 +42,7 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	margin-top: clamp(5px, 1vh, 10px);
 }
 
 .full-field {
@@ -49,13 +50,13 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: clamp(20px, 8vw, 200px);
-	margin-bottom: 20px;
 	border: 1px solid transparent;
-	padding-block: 15px;
-	padding-inline: 20px;
+	padding-block: clamp(5px, 1vw, 15px);
+	padding-inline: clamp(9px, 2vw, 20px);
 	border-radius: 8px;
 	transition: 0.2s ease;
 	cursor: pointer;
+	width: clamp(100px, 27vw, 400px);
 }
 
 .full-field:hover {
@@ -70,62 +71,67 @@
 }
 
 .input-field label {
-	font-size: 1.1em;
+	font-size: clamp(1em, 1.1vw, 1.2em);
 }
 
 .input-field div {
-	background-color: transparent;
-	border: none;
 	color: #949494;
-	font-size: 1.2em;
+	font-size: clamp(1em, 1.1vw, 1.2em);
+}
+
+.edit-icon {
+	scale: 0.8;
 }
 
 .profile-logout-btn {
-	margin-top: 20px;
+	margin-top: clamp(5px, 2.3vh, 20px);
 }
 
 .profile-logout-btn button,
-.permanent-buttons button {
+.permanent-buttons button,
+.popup-buttons button {
 	color: #bdbdbd;
 	background: #00000079;
 	border: 1px solid #8f8f8f;
-	font-size: 1.1em;
-	padding-block: 10px;
-	padding-inline: 50px;
+	font-size: clamp(0.9em, 2vh, 1.1em);
+	padding-block: clamp(5px, 1vh, 10px);
+	padding-inline: clamp(30px, 3.2vw, 60px);
 	border-radius: 8px;
 	cursor: pointer;
 	transition: 0.2s ease;
 }
 
-.profile-logout-btn button:hover {
+.profile-logout-btn button:hover,
+.popup-buttons .confirm-button:hover {
 	border-color: #dadada;
 	background: #3939399f;
 	color: #fff;
 }
 
 hr {
-	width: 50%;
+	width: clamp(100px, 45%, 600px);
 	border-color: #7b7b7b;
 	border-radius: 8px;
 	margin-block: 30px;
 }
 
 .pf-bottom-description {
-	width: 45%;
+	width: clamp(100px, 40%, 600px);
 	color: #949494;
 }
 
 .desc-title {
-	font-size: clamp(1em, 2.5vh, 1.4em);
+	font-size: clamp(1em, 2.2vh, 1.4em);
 	letter-spacing: 1px;
 	font-weight: 300;
 	color: #fff;
-	margin-bottom: 15px;
+	margin-bottom: clamp(8px, 1.5vh, 20px);
 }
 
 .desc-text {
 	margin-block: 10px;
 	line-height: 25px;
+	font-size: clamp(0.8em, 1vw, 1.1em);
 }
 
 .pf-bottom-description bold {
@@ -135,16 +141,84 @@ hr {
 .permanent-buttons {
 	display: flex;
 	justify-content: space-between;
-	gap: 50px;
+	gap: clamp(20px, 2vw, 50px);
 	margin-top: 15px;
 }
 
-.permanent-buttons button {
-	padding-inline: 30px;
+.permanent-buttons button,
+.popup-buttons .cancel-button {
+	padding-inline: clamp(20px, 1.6vw, 30px);
 	color: #df4545;
 	border-color: #df4545;
 }
 
-.permanent-buttons button:hover {
+.permanent-buttons button:hover,
+.popup-buttons .cancel-button:hover {
 	background: #351010c0;
+}
+
+.confirmation-popup,
+.profile-operation-message {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.main-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: clamp(10px, 3vh, 40px);
+	align-items: center;
+	height: clamp(200px, 35vh, 500px);
+	width: clamp(400px, 25vw, 600px);
+	border: 1px solid #949494;
+	background-color: #080808;
+	border-radius: 8px;
+}
+
+.conf-title {
+	font-weight: 300;
+	font-size: clamp(1.1em, 2.3vh, 1.3em);
+	width: 90%;
+	text-align: center;
+}
+
+.popup-buttons {
+	display: flex;
+	justify-content: center;
+	gap: clamp(10px, 2.5vw, 40px);
+	margin-top: clamp(10px, 3vh, 30px);
+}
+
+.popup-buttons .confirm-button {
+	padding-inline: clamp(20px, 1.6vw, 30px);
+}
+
+.confirmation-popup .inputs-holder {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.confirmation-popup .entry-area {
+	margin: 0;
+	padding: 0;
+	width: 300px;
+}
+
+.confirmation-popup .entry-area input {
+	padding-left: 13px;
+}
+
+.confirmation-popup .entry-area .label-line {
+	margin-left: 13px;
+}
+
+.profile-operation-message .main-container {
+	position: relative;
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { auth } from "../../api/firebase";
+import clsx from "clsx";
 
 // Custom functions to communicate with users collection and Authentication
 import {
@@ -20,11 +21,9 @@ import {
 } from "../../api/users";
 import { useAuth } from "../../firebase/AuthContext";
 
-// import cancel_cross from "../../assets/images/cancel_cross.svg";
-// import editIcon from "../../assets/images/edit.svg";
-
 // Popup page
 import ConfirmationPopup from "./ConfirmationPopup";
+import ErrorSuccessPopup from "./ErrorSucessPopup";
 import user_pf_logo from "../../assets/images/user_profile.svg";
 import edit_icon from "../../assets/images/edit_icon.svg";
 import close_popup_button from "../../assets/images/cross_button.svg";
@@ -55,17 +54,6 @@ export default function ProfilePage(props) {
 
 	// Detect provider type (eg. "password", "google.com", "github.com"), we can chnge password and email only with "password"
 	const providerId = currentUser?.providerData[0]?.providerId || "";
-
-	// Clears success/error messages after 5 sec
-	useEffect(() => {
-		if (!error && !success) return;
-
-		const timer = setTimeout(() => {
-			clearMessages();
-		}, 3000); // 3 seconds
-
-		return () => clearTimeout(timer); // cleanup on re-render
-	}, [error, success]);
 
 	// Load current user info from users to display in profile
 	// users doesn't store password, so it should be dispalyed as "********", nobody should have access to password
@@ -190,28 +178,6 @@ export default function ProfilePage(props) {
 						role="button"
 					/>
 				</button>
-				{error && (
-					<div role="alert" className="profile-message error">
-						{error}
-						<img
-							// src={cancel_cross}
-							alt="Cancel Message"
-							onClick={() => clearMessages()}
-							role="button"
-						/>
-					</div>
-				)}
-				{success && (
-					<div role="alert" className="profile-message success">
-						{success}
-						<img
-							// src={cancel_cross}
-							alt="Cancel Message"
-							onClick={() => clearMessages()}
-							role="button"
-						/>
-					</div>
-				)}
 
 				<div className="profile-title">
 					<div>Your profile</div>
@@ -231,10 +197,12 @@ export default function ProfilePage(props) {
 					>
 						<div className="input-field pf-username">
 							<label>Username</label>
-							<div>{username}</div>
+							<div>
+								{username === "" ? <i>Loading...</i> : username}
+							</div>
 						</div>
 
-						<div className="icon">
+						<div className="edit-icon">
 							<img src={edit_icon} alt="Edit username" />
 						</div>
 					</div>
@@ -251,10 +219,12 @@ export default function ProfilePage(props) {
 					>
 						<div className="input-field pf-email">
 							<label>Email</label>
-							<div>{email}</div>
+							<div>
+								{email === "" ? <i>Loading...</i> : email}
+							</div>
 						</div>
 
-						<div className="icon">
+						<div className="edit-icon">
 							{providerId === "password" ? (
 								<img src={edit_icon} alt="Edit email" />
 							) : (
@@ -272,9 +242,15 @@ export default function ProfilePage(props) {
 						>
 							<div className="input-field pf-password">
 								<label>Password</label>
-								<div>******</div>
+								<div>
+									{username === "" ? (
+										<i>Loading...</i>
+									) : (
+										"*******"
+									)}
+								</div>
 							</div>
-							<div className="icon">
+							<div className="edit-icon">
 								<img src={edit_icon} alt="Edit password" />
 							</div>
 						</div>
@@ -298,11 +274,11 @@ export default function ProfilePage(props) {
 					<div className="desc-title">Account Reset & Removal</div>
 					<div className="desc-text">
 						<p>
-							<bold>Resetting</bold> data will remove all your
-							recorded progress and collected stamps.
+							<u>Resetting</u> data will remove all your recorded
+							progress and collected stamps.
 						</p>
 						<p>
-							<bold>Deleting</bold> the account will delete it
+							<u>Deleting</u> the account will delete it
 							permanently.
 						</p>
 					</div>
@@ -334,6 +310,19 @@ export default function ProfilePage(props) {
 						type={popupType}
 						onConfirm={handlePopupConfirm}
 						onCancel={() => setShowPopup(false)}
+					/>
+				)}
+
+				{error && (
+					<ErrorSuccessPopup
+						message={error}
+						clearMessages={clearMessages}
+					/>
+				)}
+				{success && (
+					<ErrorSuccessPopup
+						message={success}
+						clearMessages={clearMessages}
 					/>
 				)}
 			</div>
