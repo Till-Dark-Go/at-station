@@ -95,7 +95,7 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
 									for="password_input"
 									className="label-line"
 								>
-									Confirm current password
+									Current password
 								</label>
 								<div className="show-hide-pass-icon">
 									<img
@@ -145,13 +145,13 @@ export default function ConfirmationPopup({ type, onConfirm, onCancel }) {
 									className="label-line"
 								>
 									{type === "username"
-										? "Enter new username"
+										? "New username"
 										: type === "username-provider"
-											? "Enter new username"
+											? "New username"
 											: type === "email"
-												? "Enter new email"
+												? "New email"
 												: type === "password"
-													? "Enter new password"
+													? "New password"
 													: ""}
 								</label>
 								<div className="show-hide-pass-icon">

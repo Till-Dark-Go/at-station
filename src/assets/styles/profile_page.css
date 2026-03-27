@@ -13,20 +13,21 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: clamp(200px, 70%, 1000px);
+	width: clamp(200px, 80%, 1000px);
 	height: clamp(300px, 82%, 800px);
 	background: #000000a6;
 	border-radius: 10px;
 	backdrop-filter: blur(3px);
 	color: #fff;
+	overflow-y: auto;
 }
 
 .profile-title {
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: 300;
-	font-size: clamp(1.2em, 3.3vh, 1.6em);
-	margin-block: clamp(10px, 3.5vh, 50px);
+	font-size: clamp(1em, 3.3vw, 1.6em);
+	margin-block: clamp(10px, 3.5vw, 30px);
 	display: flex;
 	align-items: center;
 }
@@ -56,7 +57,7 @@
 	border-radius: 8px;
 	transition: 0.2s ease;
 	cursor: pointer;
-	width: clamp(100px, 27vw, 400px);
+	width: clamp(100px, 30vw, 400px);
 }
 
 .full-field:hover {
@@ -71,12 +72,16 @@
 }
 
 .input-field label {
-	font-size: clamp(1em, 1.1vw, 1.2em);
+	font-size: clamp(0.9em, 1.1vw, 1.2em);
 }
 
 .input-field div {
 	color: #949494;
-	font-size: clamp(1em, 1.1vw, 1.2em);
+	font-size: clamp(0.9em, 1.1vw, 1.2em);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: clamp(30px, 20vw, 200px);
 }
 
 .edit-icon {
@@ -183,7 +188,7 @@ hr {
 
 .conf-title {
 	font-weight: 300;
-	font-size: clamp(1.1em, 2.3vh, 1.3em);
+	font-size: clamp(0.9em, 2.3vh, 1.3em);
 	width: 90%;
 	text-align: center;
 }
@@ -191,8 +196,8 @@ hr {
 .popup-buttons {
 	display: flex;
 	justify-content: center;
-	gap: clamp(10px, 2.5vw, 40px);
-	margin-top: clamp(10px, 3vh, 30px);
+	gap: clamp(5px, 2.5vw, 40px);
+	margin-top: clamp(5px, 3vh, 30px);
 }
 
 .popup-buttons .confirm-button {
@@ -221,4 +226,59 @@ hr {
 
 .profile-operation-message .main-container {
 	position: relative;
+}
+
+.profile-operation-message .message {
+	text-align: center;
+}
+
+/* ── Mobile landscape / small tablet (≤ 768px) ── */
+@media only screen and (max-width: 768px) {
+	.full-field {
+		width: clamp(100px, 45vw, 300px);
+	}
+
+	.profile-logout-btn {
+		margin-top: clamp(5px, 1vh, 10px);
+	}
+
+	hr {
+		width: clamp(100px, 65%, 400px);
+	}
+
+	.pf-bottom-description {
+		width: clamp(100px, 60%, 400px);
+	}
+}
+
+/* ── Mobile portrait (≤ 480px) ── */
+@media only screen and (max-width: 480px) {
+	.profile-logout-btn {
+		scale: 0.9;
+	}
+
+	.permanent-buttons {
+		flex-direction: column;
+		gap: 10px;
+		margin-top: 0;
+		scale: 0.9;
+	}
+
+	.confirmation-popup .main-container,
+	.profile-operation-message .main-container {
+		width: 250px;
+	}
+
+	.confirmation-popup .entry-area {
+		width: 220px;
+	}
+
+	.confirmation-popup .entry-area input {
+		font-size: 0.9em;
+	}
+
+	.confirmation-popup .entry-area .label-line {
+		margin-left: 13px;
+		font-size: 0.9em;
+	}
 }
