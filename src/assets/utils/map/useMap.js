@@ -46,6 +46,7 @@ export function useMap() {
 	const [isTodoOpen, setIsTodoOpen] = useState(false);
 	const [loadingScreen, setLoadingScreen] = useState(true);
 	const [stampsWindow, setStampsWindow] = useState(false);
+	const [isProfileOpen, setIsProfileOpen] = useState(false);
 
 	// Load current station from database
 	useEffect(() => {
@@ -122,6 +123,13 @@ export function useMap() {
 			: "auto";
 	}
 
+	function toggleProfilePageWindow() {
+		setIsProfileOpen((prev) => !prev);
+		UI_elements_div.current.style.pointerEvents = isProfileOpen
+			? "none"
+			: "auto";
+	}
+
 	return {
 		mapContainerRef,
 		UI_elements_div,
@@ -132,6 +140,7 @@ export function useMap() {
 		popupWindow,
 		isTodoOpen,
 		stampsWindow,
+		isProfileOpen,
 		nextStation,
 		travelTimeLabel,
 		timeAndCoords,
@@ -141,6 +150,7 @@ export function useMap() {
 		stopTravelling,
 		togglePauseState,
 		toggleStampsWindow,
+		toggleProfilePageWindow,
 		openTodoList,
 		animateMapMovement,
 	};

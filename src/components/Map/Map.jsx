@@ -7,9 +7,11 @@ import PopupWindow from "./PopupWindow.jsx";
 import BottomUI from "./BottomUI.jsx";
 import Stamps from "../Stamps Page/Stamps.jsx";
 import Todo from "../ToDo/Todo.jsx";
+import ProfilePage from "../Profile Page/ProfilePage.jsx";
+
 import { useMap } from "../../assets/utils/map/useMap.js";
 
-import { Activity, ViewTransition } from 'react';
+import { Activity, ViewTransition } from "react";
 
 export default function Map() {
 	const {
@@ -22,6 +24,7 @@ export default function Map() {
 		popupWindow,
 		isTodoOpen,
 		stampsWindow,
+		isProfileOpen,
 		nextStation,
 		travelTimeLabel,
 		timeAndCoords,
@@ -31,6 +34,7 @@ export default function Map() {
 		stopTravelling,
 		togglePauseState,
 		toggleStampsWindow,
+		toggleProfilePageWindow,
 		openTodoList,
 		animateMapMovement,
 	} = useMap();
@@ -63,7 +67,7 @@ export default function Map() {
 					userStartingPoint={userStartingPoint}
 					nextStationName={nextStation.name}
 				/>
-				{isTodoOpen && <Todo />}
+
 				{/* {isTodoOpen &&
 				<Activity mode = {isTodoOpen ? 'visible' : 'hidden'}>
 					<ViewTransition enter="auto" exit="auto" default="none"> 
@@ -71,7 +75,11 @@ export default function Map() {
 					</ViewTransition> 
 				</Activity>
 				} */}
+
 				{stampsWindow && <Stamps />}
+				{isTodoOpen && <Todo />}
+				{isProfileOpen && <ProfilePage />}
+
 				{popupOpenRef.current && (
 					<PopupWindow
 						nextStation={nextStation}
@@ -102,6 +110,7 @@ export default function Map() {
 					timerDuration={
 						timeAndCoords.hours * 60 + timeAndCoords.minutes
 					}
+					toggleProfilePageWindow={toggleProfilePageWindow}
 				/>
 			</div>
 		</>

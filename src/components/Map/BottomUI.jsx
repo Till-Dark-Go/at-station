@@ -48,7 +48,10 @@ export default function BottomUI(props) {
 					</button>
 				)}
 
-				<button className="feature-button profile-button">
+				<button
+					className="feature-button profile-button"
+					onClick={props.toggleProfilePageWindow}
+				>
 					<img src={user_pf_logo} alt="User profile page logo" />
 				</button>
 			</div>

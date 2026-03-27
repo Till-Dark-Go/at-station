@@ -1,0 +1,150 @@
+.profile-container {
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 12;
+}
+
+.profile-window {
+	border: 1px solid #949494;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: clamp(200px, 70%, 1000px);
+	height: clamp(300px, 82%, 800px);
+	background: #000000a6;
+	border-radius: 10px;
+	backdrop-filter: blur(3px);
+	color: #fff;
+}
+
+.profile-title {
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 300;
+	font-size: clamp(1.3em, 3.4vh, 1.8em);
+	margin-block: clamp(10px, 4vh, 50px);
+	display: flex;
+	align-items: center;
+}
+
+.profile-title img {
+	margin-left: 5px;
+	scale: 0.85;
+}
+
+#profile-form span {
+	font-size: 0.9em;
+	color: #949494;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.full-field {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: clamp(20px, 8vw, 200px);
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	padding-block: 15px;
+	padding-inline: 20px;
+	border-radius: 8px;
+	transition: 0.2s ease;
+	cursor: pointer;
+}
+
+.full-field:hover {
+	background: #00000079;
+	border: 1px solid #555555;
+}
+
+.input-field {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(10px, 1.3vh, 20px);
+}
+
+.input-field label {
+	font-size: 1.1em;
+}
+
+.input-field div {
+	background-color: transparent;
+	border: none;
+	color: #949494;
+	font-size: 1.2em;
+}
+
+.profile-logout-btn {
+	margin-top: 20px;
+}
+
+.profile-logout-btn button,
+.permanent-buttons button {
+	color: #bdbdbd;
+	background: #00000079;
+	border: 1px solid #8f8f8f;
+	font-size: 1.1em;
+	padding-block: 10px;
+	padding-inline: 50px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: 0.2s ease;
+}
+
+.profile-logout-btn button:hover {
+	border-color: #dadada;
+	background: #3939399f;
+	color: #fff;
+}
+
+hr {
+	width: 50%;
+	border-color: #7b7b7b;
+	border-radius: 8px;
+	margin-block: 30px;
+}
+
+.pf-bottom-description {
+	width: 45%;
+	color: #949494;
+}
+
+.desc-title {
+	font-size: clamp(1em, 2.5vh, 1.4em);
+	letter-spacing: 1px;
+	font-weight: 300;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+.desc-text {
+	margin-block: 10px;
+	line-height: 25px;
+}
+
+.pf-bottom-description bold {
+	font-weight: 600;
+}
+
+.permanent-buttons {
+	display: flex;
+	justify-content: space-between;
+	gap: 50px;
+	margin-top: 15px;
+}
+
+.permanent-buttons button {
+	padding-inline: 30px;
+	color: #df4545;
+	border-color: #df4545;
+}
+
+.permanent-buttons button:hover {
+	background: #351010c0;
+}
