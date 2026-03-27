@@ -1,89 +1,101 @@
 .expanded-stamp {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .exp-names {
-    margin-top: clamp(10px, 2.5vh, 30px);
-    margin-bottom: clamp(10px, 2.5vh, 30px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	margin-top: clamp(10px, 2.5vh, 30px);
+	margin-bottom: clamp(10px, 2.5vh, 30px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .exp-names .station {
-    font-size: clamp(12px, 1vw + 0.3rem, 26px);
+	font-size: clamp(12px, 1vw + 0.5rem, 26px);
+
+	@media (max-width: 768px) {
+		font-size: clamp(12px, 1vw + 0.7rem, 26px);
+	}
 }
 
 .exp-names .country-stamp {
-    font-size: clamp(12px, 0.7vw + 0.3rem, 22px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 22px);
+
+	@media (max-width: 768px) {
+		font-size: clamp(12px, 0.7vw + 0.7rem, 22px);
+	}
 }
 
 .exp-station-pic {
-    width: 65%;
-    height: 200px;
-    overflow: hidden;
-    border-radius: 8px;
+	width: 65%;
+	height: 200px;
+	overflow: hidden;
+	border-radius: 8px;
 
-    @media (max-width: 500px) {
-        height: 160px;
-    }
+	@media (max-width: 768px) {
+		height: 160px;
+	}
 
-    @media (min-width: 1920px) {
-        height: 250px;
-    }
+	@media (min-width: 1920px) {
+		height: 250px;
+	}
 }
 
 .exp-station-pic img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .travel-log .title {
-    text-transform: none;
-    font-size: clamp(14px, 0.7vw + 0.5rem, 20px);
-    letter-spacing: normal;
-    font-weight: 300;
-    width: auto;
+	text-transform: none;
+	font-size: clamp(14px, 0.7vw + 0.5rem, 20px);
+	letter-spacing: normal;
+	font-weight: 300;
+	width: auto;
 }
 
 .travel-log {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .entry-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px clamp(10px, 1.7vw, 40px);
-    align-items: center;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 14px clamp(10px, 1.7vw, 40px);
+	align-items: center;
 }
 
 .entry-info span:nth-child(3n-1) {
-    text-align: center;
+	text-align: center;
 }
 
 .entry-info span:nth-child(3n) {
-    text-align: right;
+	text-align: right;
 }
 
 .label {
-    font-size: clamp(12px, 0.7vw + 0.3rem, 18px);
-    color: #949494;
+	font-size: clamp(12px, 0.7vw + 0.3rem, 18px);
+	color: #949494;
 }
 
 .entry-info span:not(.label) {
-    line-height: clamp(27px, 2.8vh, 40px);
-    font-size: clamp(12px, 0.5vw + 0.5rem, 20px);
+	line-height: clamp(27px, 2.8vh, 40px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 20px);
+
+	@media (max-width: 768px) {
+		font-size: clamp(12px, 0.7vw + 0.7rem, 20px);
+	}
 }
 
 hr {
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid #555555;
+	width: 100%;
+	margin-top: 20px;
+	border: 1px solid #555555;
 }

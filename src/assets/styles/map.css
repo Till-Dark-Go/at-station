@@ -1,376 +1,389 @@
 .loading-screen {
-    width: 100%;
-    height: 100vh;
-    background: #1A1A1A;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 12;
+	width: 100%;
+	height: 100vh;
+	background: #1a1a1a;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 12;
 }
 
 .loader {
-  font-size: 1.2em;
-  animation: l1 1s linear infinite alternate;
+	font-size: 1.2em;
+	animation: l1 1s linear infinite alternate;
 }
 .loader:before {
-  content:"Preparing the map..."
+	content: "Preparing the map...";
 }
-@keyframes l1 {to{opacity: 0}}
-
+@keyframes l1 {
+	to {
+		opacity: 0;
+	}
+}
 
 #map-wrap {
-  position: relative;
-  width: 100%;
-  height: 100vh;
+	position: relative;
+	width: 100%;
+	height: 100vh;
 }
 
 #map-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 
 .mapboxgl-control-container {
-  display: none;
+	display: none;
 }
 
 .mapboxgl-marker img {
-    transition: transform 0.2s ease;
-    scale: 0.8;
-    transform-origin: bottom;
+	transition: transform 0.2s ease;
+	scale: 0.8;
+	transform-origin: bottom;
 }
 
 .mapboxgl-marker:not(.userMarker) img:hover {
-    transform: scale(1.3);
-    /* transform-origin: bottom; */
+	transform: scale(1.3);
+	/* transform-origin: bottom; */
 }
 
 /* UI Elements alongside Map div styles */
 
 .UI-elements {
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  color: #dadada;
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	color: #dadada;
 }
 
-.UI-elements > * {    /* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
-    pointer-events: auto;
-    z-index: 10;
+.UI-elements > * {
+	/* Re-enable the clickability of the children elements like buttons and text but keep the full element itself "transparent" */
+	pointer-events: auto;
+	z-index: 10;
 }
 
 .at-station-logo {
-    position: fixed;
-    top: 50px;
-    left: 60px;
-    font-size: 0.9em;
+	position: fixed;
+	top: 50px;
+	left: 60px;
+	font-size: 0.9em;
 
-    @media (max-width: 500px) {
-        top: 30px;
-        left: 30px;
-        font-size: 0.8em;
-    }
+	@media (max-width: 480px) {
+		top: 30px;
+		left: 30px;
+		font-size: 0.8em;
+	}
 
-    @media (min-width: 1920px) {
-        font-size: 1em;
-    }
+	@media (min-width: 1920px) {
+		font-size: 1em;
+	}
 }
 
 .top-curr-station-name {
-    margin-top: 28px;
-    text-align: center;
-    pointer-events: none;
-    cursor: default;
+	margin-top: 28px;
+	text-align: center;
+	pointer-events: none;
+	cursor: default;
 }
 
 .top-curr-station-name .lable {
-    font-size: 0.9em;
-    pointer-events: auto;
+	font-size: 0.9em;
+	pointer-events: auto;
 }
 
 .top-curr-station-name .station-name {
-    font-size: 1.5em;
-    text-transform: uppercase;
-    margin-block: 10px;
-    letter-spacing: 2px;
-    pointer-events: auto;
-    color: #fff;
-
-    @media (max-width: 500px) {
-        font-size: 1.6em;
-    }
-
-    @media (min-width: 1920px) {
-        font-size: 1.7em;
-    }
+	font-size: clamp(1.2em, 3.4vh, 1.7em);
+	text-transform: uppercase;
+	margin-block: 10px;
+	letter-spacing: 2px;
+	pointer-events: auto;
+	color: #fff;
 }
 
 .top-curr-station-name .line {
-    width: 100%;
-    background: white;
+	width: 100%;
+	background: white;
 }
 
 .popup-window {
-    width: clamp(380px, 40%, 700px);
-    height: 50%;
-    background-color: #00000070;
-    border: 1px solid #949494; 
-    border-radius: 10px;
-    backdrop-filter: blur(2px);
-    font-weight: 300;
-    position: relative;
+	width: clamp(380px, 40%, 700px);
+	height: clamp(200px, 50%, 500px);
+	background-color: #00000070;
+	border: 1px solid #949494;
+	border-radius: 10px;
+	backdrop-filter: blur(2px);
+	font-weight: 300;
+	position: relative;
+
+	@media (max-width: 480px) {
+		width: 90%;
+	}
 }
 
 .popup-close-button {
-    scale: 0.8;
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    z-index: 11;
-    top: 20px;
-    right: 20px;
+	scale: 0.8;
+	background: none;
+	border: none;
+	cursor: pointer;
+	position: absolute;
+	z-index: 11;
+	top: 20px;
+	right: 20px;
 
-    @media (max-width: 500px) {
-        scale: 0.6;
-    }
+	@media (max-width: 480px) {
+		scale: 0.6;
+		top: 10px;
+		right: 10px;
+	}
 }
 
 .window-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	font-size: clamp(0.7em, 2vh, 0.9em);
+
+	@media (max-width: 480px) {
+		justify-content: center;
+	}
+
+	@media (min-width: 1920px) {
+		font-size: 1em;
+	}
 }
 
 .window-info .info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 45px;
-    color: #D0D0D0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 45px;
+	color: #d0d0d0;
 
-    @media (max-width: 500px) {
-        margin-top: 0;
-        margin-block: 25px;
-    }
-}
-
-.window-info {
-    @media (max-width: 500px) {
-        justify-content: center;
-    }
-
-    font-size: 0.9em;
-
-    @media (min-width: 1920px) {
-        font-size: 1em;
-    }
+	@media (max-width: 480px) {
+		margin-top: 0;
+		margin-block: 10px;
+	}
 }
 
 .main-lable {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 1.7em;
-    font-weight: 500;
-    margin-block: 10px;
-    color: #fff;
-
-    @media (max-width: 500px) {
-        font-size: 1.6em;
-    }
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: clamp(1.4em, 2.8vh, 1.8em);
+	font-weight: 500;
+	margin-block: 10px;
+	color: #fff;
 }
 
 .progress-lost {
-    font-size: 1.7em;
-    margin-block: 15px;
+	font-size: 1.7em;
+	margin-block: 15px;
 
-    @media (max-width: 500px) {
-        font-size: 1.3em;
-        width: 280px;
-        text-align: center;
-    }
+	@media (max-width: 480px) {
+		font-size: 1.3em;
+		width: 280px;
+		text-align: center;
+	}
 }
 
 .travel-time strong {
-  color: #fff;
+	color: #fff;
 }
 
 .description {
-    width: 80%;
-    margin-block: 15px;
-    line-height: 27px;
-    text-align: center;
+	width: 80%;
+	margin-block: clamp(8px, 1vh, 15px);
+	line-height: 27px;
+	text-align: center;
+}
+
+.description-picture {
+	margin-block: 15px;
+	width: clamp(200px, 45%, 270px);
+	border-radius: 8px;
+	overflow: hidden;
+
+	@media (max-width: 480px) {
+		width: 40%;
+		margin-block: 8px;
+	}
+}
+
+.description-picture img {
+	width: 100%;
+	object-fit: cover;
 }
 
 .bottom-UI {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 145px;
-    pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	pointer-events: none;
 
-    @media (max-width: 500px) {
-        height: 170px;
-        margin-bottom: 40px;
-    }
+	@media (max-width: 480px) {
+		/* height: 100px; */
+	}
 }
 
 .travel-time-bar {
-    width: 50%;
-    position: relative;
-    padding: 4px 0;
-    color: #DADADA;
-    text-align: center;
-    font-size: 0.9em;
-    letter-spacing: 1px;
-    pointer-events: auto;
-    cursor: default;
-    background-color: #00000070;
-    border: 1px solid #949494; 
-    border-radius: 50px;
-    backdrop-filter: blur(2px);
+	width: 50%;
+	position: relative;
+	padding: 4px 0;
+	color: #dadada;
+	text-align: center;
+	font-size: 0.9em;
+	letter-spacing: 1px;
+	pointer-events: auto;
+	cursor: default;
+	background-color: #00000070;
+	border: 1px solid #949494;
+	border-radius: 50px;
+	backdrop-filter: blur(2px);
+	margin-bottom: 20px;
 
-    @media (max-width: 500px) {
-        font-size: 0.8em;
-    }
+	@media (max-width: 480px) {
+		font-size: 0.7em;
+		margin-bottom: -10px;
+	}
 }
 
 .bottom-UI .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-    padding-right: 75px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	margin-bottom: 25px;
+	padding-right: 75px;
 
-    @media (max-width: 500px) {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding-right: 0;
-    }
+	@media (max-width: 480px) {
+		flex-wrap: wrap;
+		justify-content: center;
+		padding-right: 0;
+		gap: 10px;
+	}
 }
 
 .at-station-button {
-    @media (max-width: 500px) {
-        order: -1;
-        margin-inline: 90px;
-        margin-top: 20px;
-    }
+	@media (max-width: 480px) {
+		order: -1;
+		margin-inline: 22vw;
+		margin-top: 20px;
+	}
 }
 
-.at-station-button, .confirmation-button {
-    width: 200px;
-    height: 70px;
-    background-color: #00000070;
-    border: 1px solid #949494; 
-    border-radius: 10px;
-    text-transform: uppercase;
-    color: #DADADA;
-    font-size: 1.4em;
-    letter-spacing: 1px;
-    backdrop-filter: blur(2px);
-    pointer-events: auto;
+.at-station-button,
+.confirmation-button {
+	width: 200px;
+	height: 70px;
+	background-color: #00000070;
+	border: 1px solid #949494;
+	border-radius: 10px;
+	text-transform: uppercase;
+	color: #dadada;
+	font-size: 1.4em;
+	letter-spacing: 1px;
+	backdrop-filter: blur(2px);
+	pointer-events: auto;
 
-    @media (max-width: 500px) {
-        width: 200px;
-        height: 70px;
-    }
+	@media (max-width: 480px) {
+		width: 190px;
+		height: 60px;
+	}
 
-    @media (min-width: 1920px) {
-        width: 220px;
-        height: 75px;
-    }
-}
-
-.stop-travelling-button {
-    width: 240px;
-    font-size: 1.3em;
+	@media (min-width: 1920px) {
+		width: 220px;
+		height: 75px;
+	}
 }
 
 .feature-button {
-    background-color: #00000070;
-    border: 1px solid #949494; 
-    border-radius: 10px;
-    color: #DADADA;
-    transition: 0.2s ease;
-    cursor: pointer;
-    backdrop-filter: blur(2px);
-    pointer-events: auto;
-    width: 55px;
-    height: 55px;
+	background-color: #00000070;
+	border: 1px solid #949494;
+	border-radius: 10px;
+	color: #dadada;
+	transition: 0.2s ease;
+	cursor: pointer;
+	backdrop-filter: blur(2px);
+	pointer-events: auto;
+	width: 55px;
+	height: 55px;
 
-    @media (min-width: 1920px) {
-        width: 60px;
-        height: 60px;
-    }
+	@media (min-width: 1920px) {
+		width: 60px;
+		height: 60px;
+	}
 }
 
 .confirmation-button {
-    width: 200px;
-    height: 60px;
-    font-size: 1.4em;
-    transition: 0.4s ease;
-    cursor: pointer;
+	width: clamp(140px, 49%, 200px);
+	font-size: 1.4em;
+	transition: 0.2s ease;
+	cursor: pointer;
 }
 
 .feature-button img {
-    scale: 0.7;
+	scale: 0.7;
 
-    @media (min-width: 1920px) {
-        scale: 0.8;
-    }
+	@media (min-width: 1920px) {
+		scale: 0.8;
+	}
 }
 
 .stamps-button img {
-    scale: 0.66;
+	scale: 0.66;
 }
 
 .end-travelling-button {
-    position: fixed;
-    top: 40px;
-    right: 40px;
-    width: 70px;
-    scale: 0.9;
+	position: fixed;
+	top: 40px;
+	right: 40px;
+	width: 70px;
+	scale: 0.9;
 
-    @media (max-width: 500px) {
-        width: 60px;
-        top: 40px;
-        right: 30px;
-    }
+	@media (max-width: 480px) {
+		width: 60px;
+		top: 40px;
+		right: 30px;
+	}
 }
 
 .travelling {
-  transition: 0.4s ease;
-  cursor: pointer;
+	transition: 0.2s ease;
+	cursor: pointer;
 }
 
 .feature-button:hover {
-    background-color: #0000009d;
-    box-shadow: 0 0 17px #8686868a;
-    transform: scale(1.03);
-    transform-origin: center;
+	background-color: #0000009d;
+	box-shadow: 0 0 17px #8686868a;
+	transform: scale(1.03);
+	transform-origin: center;
 }
 
 .confirmation-button {
-  margin-bottom: 40px;
-  background-color: transparent;
+	margin-bottom: 40px;
+	background-color: transparent;
+
+	@media (max-width: 480px) {
+		margin-bottom: 0;
+	}
+}
+
+.stop-travelling-button {
+	width: clamp(160px, 60%, 250px);
+	font-size: 1.3em;
 }
