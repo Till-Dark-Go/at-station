@@ -27,9 +27,10 @@ import { useAuth } from "../../firebase/AuthContext";
 import ConfirmationPopup from "./ConfirmationPopup";
 import user_pf_logo from "../../assets/images/user_profile.svg";
 import edit_icon from "../../assets/images/edit_icon.svg";
+import close_popup_button from "../../assets/images/cross_button.svg";
 import "../../assets/styles/profile_page.css";
 
-export default function ProfilePage() {
+export default function ProfilePage(props) {
 	const { currentUser } = useAuth(); // Provides current logged-in user from AuthContext
 
 	// Cleans messages when new popup is opened
@@ -179,6 +180,16 @@ export default function ProfilePage() {
 	return (
 		<div className="profile-container">
 			<div className="profile-window">
+				<button
+					className="popup-close-button"
+					onClick={props.toggleProfilePageWindow}
+				>
+					<img
+						src={close_popup_button}
+						alt="Close profile icon"
+						role="button"
+					/>
+				</button>
 				{error && (
 					<div role="alert" className="profile-message error">
 						{error}

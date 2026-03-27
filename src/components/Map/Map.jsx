@@ -78,7 +78,11 @@ export default function Map() {
 
 				{stampsWindow && <Stamps />}
 				{isTodoOpen && <Todo />}
-				{isProfileOpen && <ProfilePage />}
+				{isProfileOpen && (
+					<ProfilePage
+						toggleProfilePageWindow={toggleProfilePageWindow}
+					/>
+				)}
 
 				{popupOpenRef.current && (
 					<PopupWindow
