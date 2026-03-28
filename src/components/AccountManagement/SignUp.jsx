@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState} from "react";
 import '../../assets/styles/signup_and_login.css'
 
 import authGoBackButton from "../../assets/images/authGoBackButton.svg";
@@ -15,6 +15,8 @@ import { updateProfile, signOut } from "firebase/auth";
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from "../../firebase/auth";
 import { ensureUserDocument } from "../../firebase/oAuth.js";
 
+
+
 export default function SignUp() {
   const navigate = useNavigate();
 
@@ -24,20 +26,6 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  // On sucessfull email/password signup
-  const handleEmailPasswordSuccess = async () => {
-    // Logout after signup, so no forced acess to / (map)
-    await signOut(auth);
-    // Move to login screen to properly login
-    navigate('/auth/log-in');
-  };
-
-  // On sucessfull OAuth (Google/Github) signup
-  const handleOAuthSuccess = () => {
-    navigate('/'); // Stay logged in, go straight to map
-  };
-
 
   // EMAIL / PASSWORD SIGN UP
   const handleSignUp = async () => {
@@ -69,7 +57,22 @@ export default function SignUp() {
       // Ensure Firestore user exists
       await ensureUserDocument(user);
 
-      handleEmailPasswordSuccess();  // log out + go to login
+      //navigate("/home/log-in", { replace: true });
+      //await signOut(auth)
+      //redirectAfterSignOut(() => navigate("/home/log-in"));
+      //navigate("/home/log-in")
+      // On sucessfull email/password signup
+      
+      //await signOut(auth); // Logout after signup, so no forced acess to / (map)
+      //setTimeout(() => navigate("/home/log-in"), 10); // Move to login screen to properly login
+
+      //navigate("/");      // go to map
+      //setTimeout(() => window.location.reload(), 10);
+
+      await signOut(auth); 
+      navigate("/home/log-in", { state: { redirectTo: "/home/log-in" } });
+
+
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError("This email is already in use. Please, try another one.");
@@ -95,7 +98,9 @@ export default function SignUp() {
 
       await ensureUserDocument(user);
 
-      handleOAuthSuccess(); // stay logged in + go to map
+      // On sucessfull OAuth (Google/Github) signup stay logged in and go to map
+      navigate('/'); 
+
     } catch (err) {
       if (err.code === 'auth/account-exists-with-different-credential') {
         setError(`An account already exists with this email using a different login method. Try logging in with the original provider.`);
@@ -119,7 +124,7 @@ export default function SignUp() {
       <div className="redirection-text">
         Had a ride before?
         <Link
-          to="/auth/log-in"
+          to="/home/log-in"
           className="redirection-text-button"
         >
           Log in
@@ -225,7 +230,7 @@ export default function SignUp() {
         </button>
       </div>
 
-      <Link to="/auth" className="go-back">
+      <Link to="/home" className="go-back">
         <img
           src={authGoBackButton}
           alt="Go back to main authentication page"

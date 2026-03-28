@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom"; // Outlet is used for the NESTED rout
 import "../../assets/styles/authpage.css";
 
 export default function AuthPage() {
+
 	return (
 		<div className="authMainPage">
 			<div className="topBar">

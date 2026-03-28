@@ -49,6 +49,8 @@ export default function LogIn() {
                 setError('Invalid email or password.');
             } else if (err.code === 'auth/user-not-found') {
                 setError('User does not exist. You need to signup first.');
+            } else if (err.code === 'auth/account-exists-with-different-credential') {
+                setError('An account already exists with this email using a different login method. Try logging in with the original provider.');
             } else {
                 setError('Failed to log in: ' + err.message);
             }
@@ -70,7 +72,7 @@ export default function LogIn() {
             handleSuccess();
         } catch (err) {
             if (err.code === 'auth/account-exists-with-different-credential') {
-                setError('An account already exists with this email using a different login method.\nTry logging in with the original provider.');
+                setError('An account already exists with this email using a different login method. Try logging in with the original provider.');
             } else if (err.code === 'auth/popup-closed-by-user') {
                 setError('Sign-in popup was closed. Please try again.');
             } else {
@@ -93,7 +95,7 @@ export default function LogIn() {
             <div className="redirection-text">
                 Don&apos;t have an account?
                 <Link
-                to="/auth/sign-up"
+                to="/home/sign-up"
                 className="redirection-text-button"
                 >
                 Sign up
@@ -179,7 +181,7 @@ export default function LogIn() {
                 </button>
             </div>
 
-            <Link to="/auth/sign-up" className="go-back">
+            <Link to="/home/sign-up" className="go-back">
                 <img src={authGoBackButton} alt="Go back to sign up" 
                     role="button" />
             </Link>
