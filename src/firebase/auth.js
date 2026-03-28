@@ -5,7 +5,7 @@ import {
 	signInWithPopup,
 	GoogleAuthProvider,
 	GithubAuthProvider,
-	signOut,
+	signOut
 } from "firebase/auth";
 import { auth } from "../api/firebase";
 

@@ -9,8 +9,9 @@ import opened_eye from "../../assets/images/opened_eye.svg"
 import closed_eye from "../../assets/images/closed_eye.svg"
 
 // Imports for creating Firestore user document in users collection
-import { auth } from "../../api/firebase";              
-import { updateProfile, signOut } from "firebase/auth";      
+import { auth } from "../../api/firebase";      
+import { updateProfile, signOut, fetchSignInMethodsForEmail } from "firebase/auth";
+//import { updateProfile, signOut } from "firebase/auth";      
 
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from "../../firebase/auth";
 import { ensureUserDocument } from "../../firebase/oAuth.js";
@@ -26,6 +27,11 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const providerMap = {
+  Google: "google.com",
+  GitHub: "github.com",
+  };
 
   // EMAIL / PASSWORD SIGN UP
   const handleSignUp = async () => {
@@ -47,6 +53,11 @@ export default function SignUp() {
         throw new Error("Password contains forbidden characters (space, /, \\, |, *)");
       }
 
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.length > 0 && !methods.includes("password")) {
+        throw new Error("This email is already registered with Google or GitHub.");
+      }
+
       const result = await doCreateUserWithEmailAndPassword(email, password);
       // Get auth user and username what will allow to write to users/{uid} document after signup
       const user = result.user || auth.currentUser;
@@ -56,18 +67,6 @@ export default function SignUp() {
 
       // Ensure Firestore user exists
       await ensureUserDocument(user);
-
-      //navigate("/home/log-in", { replace: true });
-      //await signOut(auth)
-      //redirectAfterSignOut(() => navigate("/home/log-in"));
-      //navigate("/home/log-in")
-      // On sucessfull email/password signup
-      
-      //await signOut(auth); // Logout after signup, so no forced acess to / (map)
-      //setTimeout(() => navigate("/home/log-in"), 10); // Move to login screen to properly login
-
-      //navigate("/");      // go to map
-      //setTimeout(() => window.location.reload(), 10);
 
       await signOut(auth); 
       navigate("/home/log-in", { state: { redirectTo: "/home/log-in" } });
@@ -92,10 +91,27 @@ export default function SignUp() {
       setIsLoading(true);
       setError('');
 
+      // Trigger the OAuth popup for Google/GitHub
       const result = await providerFn();
       // Get auth user what will allow to write to users/{uid} document after signup
       const user = result.user || auth.currentUser;
 
+      // Retrieve the email and all sign-in methods associated with it
+      const email = user.email;
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      const currentProvider = providerMap[providerName]; // "google.com" or "github.com"
+
+      if (methods.length > 0 && !methods.includes(currentProvider)) {
+        // This email exists with a different sign-in method (github sigup doesn't override password/email and other way around)
+        // However, doesn't work for google:
+        // Certain email domains have a trusted provider. Example: Google is the trusted provider for @gmail.com.
+        // If the user first registers a Gmail via another provider (e.g., email/password or github),
+        // a later Google sign-in will overrule the first registration.
+        await signOut(auth); // log out the partially signed-in session
+        throw new Error("This email is already registered with a different sign-in method.");
+      }
+
+      // Ensure Firestore user document exists
       await ensureUserDocument(user);
 
       // On sucessfull OAuth (Google/Github) signup stay logged in and go to map

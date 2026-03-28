@@ -51,6 +51,8 @@ export default function LogIn() {
                 setError('User does not exist. You need to signup first.');
             } else if (err.code === 'auth/account-exists-with-different-credential') {
                 setError('An account already exists with this email using a different login method. Try logging in with the original provider.');
+            } else if (err.code === 'auth/wrong-password') {
+                setError('Invalid password.')
             } else {
                 setError('Failed to log in: ' + err.message);
             }
