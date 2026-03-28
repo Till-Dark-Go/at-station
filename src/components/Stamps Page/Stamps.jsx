@@ -3,16 +3,17 @@ import close_popup_button from "../../assets/images/cross_button.svg";
 
 import CountryStamp from "./CountryStamp.jsx";
 import ExpandedStamp from "./ExpandedStamp.jsx";
-import { LoadingListStamps } from "./LoadingCountryStamp.jsx";
+import { LoadingStamp } from "./LoadingStamp.jsx";
 
 import clsx from "clsx";
 import useLazyLoad from "../../assets/utils/useLazyLoad.js";
 import { getStampsPage } from "../../api/stamps.js";
 import { auth } from "../../api/firebase";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 const NUM_PER_PAGE = 3;
+const loadPlaceholders = [1, 2, 3];
 
 export default function Stamps() {
 	const userId = auth.currentUser?.uid;
@@ -21,7 +22,8 @@ export default function Stamps() {
 	const lastDocRef = useRef(null);
 	const hasMoreRef = useRef(true);
 
-	const triggerRef = useRef(null);
+	const triggerRef = useRef(null); // This is the SENSOR the browser is constantly looking for, i.e. the grey boxes that are on the screen at the moment
+	// Only when the browsers finds the triggerRef div, it executes useLazyLoad hook
 
 	const onGrabData = useCallback(async () => {
 		// Stop querying once Firestore returns a short page (end of collection)
@@ -34,7 +36,7 @@ export default function Stamps() {
 		);
 
 		lastDocRef.current = lastDoc;
-		if (stamps.length < NUM_PER_PAGE) hasMoreRef.current = false;
+		if (!stamps || stamps.length < NUM_PER_PAGE) hasMoreRef.current = false;
 
 		return stamps;
 	}, [userId]);
@@ -69,8 +71,10 @@ export default function Stamps() {
 					/>
 				</>
 			)}
+
 			{!expandedOpen[0] && (
 				<>
+					{/* Header for the stamps page */}
 					<div className="top-info">
 						<p className="name">Stamps collection</p>
 						<div className="stats">
@@ -91,6 +95,7 @@ export default function Stamps() {
 							</select>
 						</p>
 
+						{/* Actual stamps */}
 						{data.map((stamp) => (
 							<CountryStamp
 								key={stamp.id}
@@ -109,12 +114,25 @@ export default function Stamps() {
 							/>
 						))}
 
-						<div
-							ref={triggerRef}
-							className={clsx("trigger", { visible: loading })}
-						>
-							<LoadingListStamps />
-						</div>
+						{hasMoreRef.current && (
+							<div
+								ref={triggerRef}
+								className="loading-trigger"
+								style={{ minHeight: "50px" }}
+							>
+								{/* It doesn't matter how many grey stamps we display here, once fetched, we will still load 3 because that's 
+								what we wrote in NUM_PER_PAGE and it's how many we're telling the API to load */}
+
+								{/* loading is needed to remove the grey stamps when we have nothing else to load */}
+								{loading && (
+									<>
+										{loadPlaceholders.map((num) => (
+											<LoadingStamp key={num} />
+										))}
+									</>
+								)}
+							</div>
+						)}
 					</div>
 				</>
 			)}

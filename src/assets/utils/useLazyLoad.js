@@ -74,11 +74,12 @@ const useLazyLoad = ({ triggerRef, onGrabData, options }) => {
 	);
 
 	useEffect(() => {
-		if (!triggerRef.current) return;
+		const el = triggerRef.current;
+		if (!el) return;
 		const observer = new IntersectionObserver(onIntersect, options);
-		observer.observe(triggerRef.current);
+		observer.observe(el);
 		return () => observer.disconnect();
-	}, [triggerRef, onIntersect, options]);
+	}, [onIntersect, options, state.currentPage]);
 
 	return state;
 };
