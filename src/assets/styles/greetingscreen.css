@@ -1,113 +1,115 @@
 .authMainPage {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 /* The styles block below applies to Greeting Screen, Sign Up and Log In pages: */
 .topBar {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    z-index: 1111;
+	position: absolute;
+	top: 5%;
+	left: 10%;
+	z-index: 1111;
+	font-size: clamp(0.7em, 0.5vh, 1.1em);
 }
 
 /* The styles block below applies to Greeting Screen, Sign Up and Log In pages: */
 .main-block {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+	width: 100%;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
 }
 
 .catch-phrase {
-    position: relative;
-    background: transparent;
-    padding: 8px 0;
-    width: 350px;
-    color: #D0D0D0;
-    font-size: 0.8em;
-    text-align: center;
-    font-weight: 300;
+	position: relative;
+	background: transparent;
+	padding: 6px 0;
+	width: clamp(200px, 75vw, 350px);
+	color: #d0d0d0;
+	font-size: clamp(0.7em, 1vh, 0.9em);
+	text-align: center;
+	font-weight: 300;
 }
 
-.catch-phrase::before {  /* ::before creates a pseudo element*/
-    content: '';  /* Required for pseudo-element to render */
-    position: absolute;
-    inset: 0;
-    border-radius: 50px;
-    padding: 1px;
-    background: linear-gradient(20deg, #3B3B3B, #BDBDBD);
+.catch-phrase::before {
+	/* ::before creates a pseudo element*/
+	content: ""; /* Required for pseudo-element to render */
+	position: absolute;
+	inset: 0;
+	border-radius: 50px;
+	padding: 1px;
+	background: linear-gradient(20deg, #3b3b3b, #bdbdbd);
 
-    /* This compositing mode subtracts the first mask from the second */
-    /* Result: only the 2px padding area (the "border") remains visible */
-    mask: 
-        linear-gradient(#fff 0 0) content-box,  /* Mask out the content area */ 
-        linear-gradient(#fff 0 0);  /* Keep the entire element */
-    mask-composite: exclude;
+	/* This compositing mode subtracts the first mask from the second */
+	/* Result: only the 2px padding area (the "border") remains visible */
+	mask:
+		linear-gradient(#fff 0 0) content-box,
+		/* Mask out the content area */ linear-gradient(#fff 0 0); /* Keep the entire element */
+	mask-composite: exclude;
 
-    pointer-events: none; /* Allows clicks to pass through to text */
+	pointer-events: none; /* Allows clicks to pass through to text */
 }
 
 /* The styles block below applies to Greeting Screen, Sign Up and Log In pages: */
 .title {
-    font-size: clamp(1.6em, 1.6em, 3em);
-    color: white;
-    text-transform: uppercase;
-    text-align: center;
-    margin-top: 35px;
-    margin-bottom: 20px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    width: max(400px, 60%);
+	font-size: clamp(1.2em, 2.7vh, 3em);
+	color: white;
+	text-transform: uppercase;
+	text-align: center;
+	margin-top: 35px;
+	margin-bottom: 20px;
+	font-weight: 400;
+	letter-spacing: 2px;
+	width: clamp(200px, 80vw, 600px);
 }
 
 .gradient-text {
-    background: -webkit-linear-gradient(20deg, #454545, #FFFFFF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 8px;
+	background: -webkit-linear-gradient(20deg, #454545, #ffffff);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	margin-bottom: 8px;
 }
 
 .sub-title {
-    color: #D0D0D0;
-    width: min(550px, 80%);
-    line-height: 26px;
-    text-align: center;
-    font-size: 0.9em;
-    margin-bottom: 50px;
-    background: #000;
-    backdrop-filter: blur(1px);
-    box-shadow: 0px 0px 40px 15px #000;
-    font-weight: 300;
+	color: #d0d0d0;
+	width: clamp(250px, 50vw, 500px);
+	line-height: 26px;
+	text-align: center;
+	font-size: 0.9em;
+	margin-bottom: clamp(20px, 3.4vh, 50px);
+	background: #000;
+	backdrop-filter: blur(1px);
+	box-shadow: 0px 0px 40px 15px #000;
+	font-weight: 300;
 }
 
 /* The styles bellow apply to .authButton, .createAccount, .googleSignUp, .githubSignUp, .logIntoAccount, .googleLogIn, .githubLogIn : */
 .action-button {
-    width: clamp(240px, 30%, 300px);
-    padding-block: 20px;
-    text-decoration: none;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1.1em;
-    background: #0000007e;
-    border: 1px solid #555555;
-    border-radius: 8px;
-    color: #DADADA;
-    cursor: pointer;
-    transition: 0.2s ease;
-    font-weight: 400;
+	width: clamp(210px, 25%, 300px);
+	padding-block: clamp(10px, 2.5vh, 20px);
+	text-decoration: none;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: clamp(0.9em, 1.8vh, 1.1em);
+	background: #0000007e;
+	border: 1px solid #555555;
+	border-radius: 8px;
+	color: #dadada;
+	cursor: pointer;
+	transition: 0.2s ease;
+	font-weight: 400;
 }
 
 .action-button:hover {
-    box-shadow: 0 0 17px #ffbd67b4;
-    border-color: #ffbd67b4;
-    transform: scale(1.03);
-    transform-origin: center;
+	box-shadow: 0 0 17px #ffbd67b4;
+	border-color: #ffbd67b4;
+	transform: scale(1.03);
+	transform-origin: center;
 }
 
 .action-button:active {
-    transform: scale(0.98);
-    background: #c48b41b4;
+	transform: scale(0.98);
+	background: #c48b41b4;
 }
