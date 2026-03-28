@@ -113,17 +113,18 @@ export function useMap() {
 	});
 
 	function openTodoList() {
+		setStampsWindow(false);
 		setIsTodoOpen((prev) => !prev);
 	}
 
 	function toggleStampsWindow() {
+		setIsTodoOpen(false);
 		setStampsWindow((prev) => !prev);
-		UI_elements_div.current.style.pointerEvents = stampsWindow
-			? "none"
-			: "auto";
 	}
 
 	function toggleProfilePageWindow() {
+		setStampsWindow(false);
+		setIsTodoOpen(false);
 		setIsProfileOpen((prev) => !prev);
 		UI_elements_div.current.style.pointerEvents = isProfileOpen
 			? "none"
