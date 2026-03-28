@@ -82,6 +82,8 @@ export function useMap() {
 		UI_elements_div,
 		setPopupWindow,
 		setTimeAndCoords,
+		setStampsWindow,
+		setIsTodoOpen,
 	});
 
 	useMarkers({

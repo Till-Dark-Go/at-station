@@ -4,6 +4,8 @@ export function usePopup({
 	UI_elements_div,
 	setPopupWindow,
 	setTimeAndCoords,
+	setStampsWindow,
+	setIsTodoOpen,
 }) {
 	function openPopup(
 		hoursVar,
@@ -23,6 +25,8 @@ export function usePopup({
 			}); // Setting new values -> causes a re-render
 		} // If we're opening the "exit travelling" window, we don't need any values calculated for it, so just open the pop-up
 
+		setIsTodoOpen(false);
+		setStampsWindow(false);
 		setPopupWindow((prev) => !prev);
 		popupOpenRef.current = true;
 		UI_elements_div.current.style.pointerEvents = "auto";
