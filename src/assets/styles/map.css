@@ -224,6 +224,24 @@
 	object-fit: cover;
 }
 
+.image-placeholder {
+	width: 100%;
+	aspect-ratio: 16 / 9; /* match your image dimensions */
+	background-color: #808080;
+	border-radius: 8px;
+	animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
 .bottom-UI {
 	display: flex;
 	flex-direction: column;
@@ -396,5 +414,5 @@
 }
 
 .fade-in {
-	animation: fadeIn 0.3s ease-in;
+	animation: fadeIn 0.2s ease-in;
 }
