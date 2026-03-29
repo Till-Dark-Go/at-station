@@ -248,3 +248,12 @@ option:focus {
 		opacity: 1;
 	}
 }
+
+.no-stations,
+.no-tasks {
+	font-size: 0.9em;
+	color: #949494;
+	font-style: italic;
+	padding-top: clamp(10px, 2.3vh, 25px);
+	text-align: center;
+}

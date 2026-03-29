@@ -51,7 +51,7 @@ function EntryInfo({ entry }) {
 				<span className="label">Time:</span>
 				<span className="label">Date:</span>
 
-				<span>
+				<span title={entry.destination + " - " + entry.origin}>
 					{entry.destination}
 					<br />
 					{entry.origin}

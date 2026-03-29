@@ -42,6 +42,7 @@ export default function Stamps() {
 	}, [userId]);
 
 	const { data, loading } = useLazyLoad({ triggerRef, onGrabData });
+	console.log(data.length);
 
 	const [expandedOpen, setExpandedOpen] = useState([false, "", "", "", ""]);
 
@@ -95,6 +96,14 @@ export default function Stamps() {
 							</select>
 						</p>
 
+						{data.length == 0 && !loading && (
+							<>
+								<div className="no-stations">
+									You haven't visited any stations yet.
+								</div>
+							</>
+						)}
+
 						{/* Actual stamps */}
 						{data.map((stamp) => (
 							<CountryStamp
@@ -114,25 +123,23 @@ export default function Stamps() {
 							/>
 						))}
 
-						{hasMoreRef.current && (
-							<div
-								ref={triggerRef}
-								className="loading-trigger"
-								style={{ minHeight: "50px" }}
-							>
-								{/* It doesn't matter how many grey stamps we display here, once fetched, we will still load 3 because that's 
+						<div
+							ref={triggerRef}
+							className="loading-trigger"
+							style={{ minHeight: "50px" }}
+						>
+							{/* It doesn't matter how many grey stamps we display here, once fetched, we will still load 3 because that's 
 								what we wrote in NUM_PER_PAGE and it's how many we're telling the API to load */}
 
-								{/* loading is needed to remove the grey stamps when we have nothing else to load */}
-								{loading && (
-									<>
-										{loadPlaceholders.map((num) => (
-											<LoadingStamp key={num} />
-										))}
-									</>
-								)}
-							</div>
-						)}
+							{/* loading is needed to remove the grey stamps when we have nothing else to load */}
+							{loading && (
+								<>
+									{loadPlaceholders.map((num) => (
+										<LoadingStamp key={num} />
+									))}
+								</>
+							)}
+						</div>
 					</div>
 				</>
 			)}
