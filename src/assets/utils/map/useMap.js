@@ -5,7 +5,6 @@ import { useMapSetup } from "./useMapSetup.js";
 import { useMarkers } from "./useMarkers.js";
 import { usePopup } from "./usePopup.js";
 import { useTravel } from "./useTravel.js";
-import { useFinalMessagePopup } from "./useFinalMessagePopup.js";
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 
