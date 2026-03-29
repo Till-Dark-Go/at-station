@@ -27,7 +27,7 @@ export function usePopup({
 
 		setIsTodoOpen(false);
 		setStampsWindow(false);
-		setPopupWindow((prev) => !prev);
+		setPopupWindow(true);
 		popupOpenRef.current = true;
 		UI_elements_div.current.style.pointerEvents = "auto";
 	}
@@ -43,7 +43,7 @@ export function usePopup({
 			});
 		}
 
-		setPopupWindow((prev) => !prev);
+		setPopupWindow(false);
 		popupOpenRef.current = false;
 		UI_elements_div.current.style.pointerEvents = "none";
 	}

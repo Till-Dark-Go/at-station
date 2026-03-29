@@ -166,7 +166,7 @@ export default function ProfilePage(props) {
 	};
 
 	return (
-		<div className="profile-container">
+		<div className="profile-container fade-in">
 			<div className="profile-window">
 				<button
 					className="popup-close-button"

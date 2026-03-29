@@ -6,7 +6,7 @@ import ExpandedStamp from "./ExpandedStamp.jsx";
 
 // All imports needed for LAZY LOADING
 import posts from "../../assets/utils/stamps_data.json";
-import clsx from "clsx"; // !!!!!!!!!!!!!!!! DO npm install --save clsx 
+import clsx from "clsx"; // !!!!!!!!!!!!!!!! DO npm install --save clsx
 import useLazyLoad from "../../assets/utils/useLazyLoad.js";
 import { LoadingListStamps } from "./LoadingCountryStamp.jsx";
 const NUM_PER_PAGE = 3; // Number of small stamps entries per "page" (per scroll)
@@ -45,7 +45,7 @@ export default function Stamps() {
 	}
 
 	return (
-		<div className="stamps-container">
+		<div className="stamps-container fade-in">
 			{expandedOpen[0] && (
 				<>
 					<button

@@ -12,6 +12,7 @@ import ProfilePage from "../Profile Page/ProfilePage.jsx";
 import { useMap } from "../../assets/utils/map/useMap.js";
 
 import { Activity, ViewTransition } from "react";
+import FinishedTravellingMessage from "./FinishedTravellingMessage.jsx";
 
 export default function Map() {
 	const {
@@ -37,6 +38,8 @@ export default function Map() {
 		toggleProfilePageWindow,
 		openTodoList,
 		animateMapMovement,
+		toggleFinalMessage,
+		isFinalMessageOpen,
 	} = useMap();
 	return (
 		<>
@@ -84,12 +87,17 @@ export default function Map() {
 					/>
 				)}
 
+				{isFinalMessageOpen && (
+					<FinishedTravellingMessage
+						toggleFinalMessage={toggleFinalMessage}
+					/>
+				)}
+
 				{popupOpenRef.current && (
 					<PopupWindow
 						nextStation={nextStation}
 						timeAndCoords={timeAndCoords}
 						currentlyTravelling={currentlyTravelling}
-						popupOpenRef={popupOpenRef}
 						animateMovement={() =>
 							animateMapMovement(
 								timeAndCoords.nextLng,

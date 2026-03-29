@@ -5,6 +5,7 @@ import { useMapSetup } from "./useMapSetup.js";
 import { useMarkers } from "./useMarkers.js";
 import { usePopup } from "./usePopup.js";
 import { useTravel } from "./useTravel.js";
+import { useFinalMessagePopup } from "./useFinalMessagePopup.js";
 
 // Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
 
@@ -47,6 +48,7 @@ export function useMap() {
 	const [loadingScreen, setLoadingScreen] = useState(true);
 	const [stampsWindow, setStampsWindow] = useState(false);
 	const [isProfileOpen, setIsProfileOpen] = useState(false);
+	const [isFinalMessageOpen, setIsFinalMessageOpen] = useState(false);
 
 	// Load current station from database
 	useEffect(() => {
@@ -112,6 +114,7 @@ export function useMap() {
 		setPopupWindow,
 		setNextStation,
 		setTravelTimeLabel,
+		toggleFinalMessage,
 	});
 
 	function openTodoList() {
@@ -129,6 +132,17 @@ export function useMap() {
 		setIsTodoOpen(false);
 		setIsProfileOpen((prev) => !prev);
 		UI_elements_div.current.style.pointerEvents = isProfileOpen
+			? "none"
+			: "auto";
+	}
+
+	function toggleFinalMessage() {
+		setStampsWindow(false);
+		setIsTodoOpen(false);
+		setIsProfileOpen(false);
+		closePopup(popupOpenRef);
+		setIsFinalMessageOpen((prev) => !prev);
+		UI_elements_div.current.style.pointerEvents = isFinalMessageOpen
 			? "none"
 			: "auto";
 	}
@@ -156,5 +170,7 @@ export function useMap() {
 		toggleProfilePageWindow,
 		openTodoList,
 		animateMapMovement,
+		toggleFinalMessage,
+		isFinalMessageOpen,
 	};
 }

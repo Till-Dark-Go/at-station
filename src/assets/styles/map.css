@@ -385,3 +385,16 @@
 	width: clamp(160px, 60%, 250px);
 	font-size: 1.3em;
 }
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.fade-in {
+	animation: fadeIn 0.3s ease-in;
+}
