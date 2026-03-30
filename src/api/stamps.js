@@ -48,20 +48,22 @@ export const updateStamp = async (userId, stationId, timestamp) => {
 };
 
 export const getStampsPage = async (userId, pageSize, lastDoc = null) => {
+	// Check if the user is logged in
 	ensureUsedId(userId);
 	const stampsRef = getStampsCollection(userId);
 
+	// Construct the initial query, sorting by most recently visited, limiting the result to 3 stamps
 	let q = query(stampsRef, orderBy("last-visited", "desc"), limit(pageSize));
-	if (lastDoc) q = query(q, startAfter(lastDoc));
+	if (lastDoc) q = query(q, startAfter(lastDoc)); // If we were already fetching before and have the lastDoc, start fetching after it
 
-	const snapshot = await getDocs(q);
+	const snapshot = await getDocs(q); // Snapshot gets the actual information out of the reference (contains metadata)
 
 	const stamps = await Promise.all(
 		snapshot.docs.map(async (d) => {
-			const data = d.data();
+			const data = d.data(); // Extract the document feilds from the snapshot
 			const [imageUrl, meta] = await Promise.all([
-				getStationImageUrl(d.id),
-				getStationMeta(d.id),
+				getStationImageUrl(d.id), // Fetch the images from the external storage
+				getStationMeta(d.id), // and the supplementary station info
 			]);
 			return {
 				id: d.id,
@@ -81,7 +83,8 @@ export const getStampsPage = async (userId, pageSize, lastDoc = null) => {
 
 	return {
 		stamps,
-		lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null,
+		// Return the last document object as a cursor for the next paginated request
+		lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null, // To know if we have any more documents or not
 	};
 };
 

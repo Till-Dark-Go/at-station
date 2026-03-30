@@ -24,11 +24,13 @@ export function useTravel({
 	setTravelTimeLabel,
 	toggleFinalMessage,
 }) {
-	const userId = auth.currentUser?.uid;
+	const userId = auth.currentUser?.uid; // Getting the ID of the user
 
+	// Helper function for animations - removes the nested loops by waiting for the previous event to finish and only then proceed to the next one
 	const waitForEvent = (map, event) =>
-		new Promise((resolve) => map.once(event, resolve)); // Helper function for animations - removes the nested loops by waiting for the previous event to finish and only then proceed to the next one
+		new Promise((resolve) => map.once(event, resolve));
 
+	// A useEffect to ask for confirmation when reloading the page in case any changes are in progress
 	useEffect(() => {
 		if (!currentlyTravelling.current) {
 			return;
@@ -41,6 +43,8 @@ export function useTravel({
 		window.addEventListener("beforeunload", handleOnBeforeUnload, {
 			capture: true,
 		});
+
+		// Clean-up function
 		return () => {
 			window.removeEventListener("beforeunload", handleOnBeforeUnload, {
 				capture: true,
@@ -48,10 +52,11 @@ export function useTravel({
 		};
 	}, [currentlyTravelling.current]);
 
+	// The animation of the map when you start travelling
 	async function animateMapMovement(nextLng, nextLat, travelTime, stationId) {
+		// In case the animation was NOT paused:
 		if (!currentlyPaused.current) {
-			// We weren't UNPAUSING and calling this animation, we JUST STARTED it so fly back to the user point
-			startTimeRef.current = Timestamp.fromMillis(Date.now());
+			startTimeRef.current = Timestamp.fromMillis(Date.now()); // Take the time when we started travelling
 
 			setPopupWindow((prev) => !prev);
 			popupOpenRef.current = false;
@@ -59,6 +64,7 @@ export function useTravel({
 			currentlyTravelling.current = true;
 			currentlyPaused.current = false;
 
+			// Fly to the user's position on the map
 			mapRef.current.flyTo({
 				center: [userStartingPoint.lng, userStartingPoint.lat],
 				zoom: 7,
@@ -68,15 +74,16 @@ export function useTravel({
 					return t;
 				},
 			});
-			await waitForEvent(mapRef.current, "moveend");
-			if (!currentlyTravelling.current || currentlyPaused.current) return; // If NOT travelling or IS PAUSED - don't animate
+			await waitForEvent(mapRef.current, "moveend"); // Wait for one animation to end, then start a new one - avoids crashes
+			if (!currentlyTravelling.current || currentlyPaused.current) return;
 
 			mapRef.current.setMaxZoom(11.8);
 			mapRef.current.zoomTo(11.8, { duration: 3200 });
 			await waitForEvent(mapRef.current, "zoomend");
 			if (!currentlyTravelling.current || currentlyPaused.current) return;
-		} else {
-			// Otherwise, currentlyPaused was TRUE so change it to FALSE and start moving from the point we stopped on
+		}
+		// Otherwise, currentlyPaused was TRUE so change it to FALSE and start moving from the point we stopped on
+		else {
 			currentlyPaused.current = false;
 		}
 
@@ -135,8 +142,8 @@ export function useTravel({
 		await waitForEvent(mapRef.current, "zoomend");
 		if (!currentlyTravelling.current || currentlyPaused.current) return;
 
+		// Check this in case the user used stopTravelling() function but the code still reached this part - don't update any info if we interrupted the journey
 		if (currentlyTravelling.current || !currentlyPaused.current) {
-			// Check this in case the user used stopTravelling() function but the code still reached this part - don't update any info if we interrupted the journey
 			mapRef.current.setMaxZoom(7);
 			setTimeAndCoords({
 				hours: null,
@@ -148,16 +155,17 @@ export function useTravel({
 			UI_elements_div.current.style.pointerEvents = "none";
 			currentlyTravelling.current = false;
 
+			// In case the trip was finished successfully and we reached the final station:
 			if (stationId) {
 				try {
-					// ADD starttime and endtime to database
-					endTimeRef.current = Timestamp.fromMillis(Date.now());
+					endTimeRef.current = Timestamp.fromMillis(Date.now()); // Record the time we finished travelling at
 
 					console.log("Destination:", stationId);
 					console.log("Origin:", userStartingPoint.id);
 					console.log("Start time:", startTimeRef.current);
 					console.log("End time:", endTimeRef.current);
 
+					// Open the final message popup
 					toggleFinalMessage(
 						stationId,
 						userStartingPoint.id,
@@ -165,6 +173,7 @@ export function useTravel({
 						endTimeRef.current,
 					);
 
+					// Record the data into database
 					await createTravelEntry(
 						userId,
 						userStartingPoint.id,
@@ -172,10 +181,10 @@ export function useTravel({
 						startTimeRef.current,
 						endTimeRef.current,
 					);
-					// await zhopa(userId, stationId);
-					await updateStamp(userId, stationId, endTimeRef.current);
 
-					// update current station
+					await updateStamp(userId, stationId, endTimeRef.current); // Record the new stamp into database as well
+
+					// Update current station
 					await updateCurrentStation(stationId).then(() => {
 						console.log("Updated currentStationId: ", stationId);
 					});
@@ -200,7 +209,7 @@ export function useTravel({
 	}
 
 	async function stopTravelling() {
-		setPopupWindow((prev) => !prev); // This re-render is triggered ONLY after the previous line
+		setPopupWindow((prev) => !prev); // Close the popup which warned us about stopping the trip
 		popupOpenRef.current = false;
 		currentlyTravelling.current = false;
 
@@ -233,11 +242,6 @@ export function useTravel({
 	}
 
 	function togglePauseState() {
-		const pausePosition = {
-			lng: mapRef.current.getCenter()[0],
-			lat: mapRef.current.getCenter()[1],
-		};
-
 		// Calculate travel time left in minutes based on the CURRENT CENTER OF THE MAP (pausePosition) and the final coordinates
 		const timeLeft = calculateTravelTimeInMinutes(
 			mapRef.current.getCenter(),

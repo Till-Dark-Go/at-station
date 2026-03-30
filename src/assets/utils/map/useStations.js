@@ -1,3 +1,3 @@
 import { getStations } from "../../../api/stations.js";
 
-export const arrayOfStations = await getStations(); // because ASYNC function getStations()
+export const arrayOfStations = await getStations();

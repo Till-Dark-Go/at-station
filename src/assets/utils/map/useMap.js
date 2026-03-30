@@ -6,8 +6,6 @@ import { useMarkers } from "./useMarkers.js";
 import { usePopup } from "./usePopup.js";
 import { useTravel } from "./useTravel.js";
 
-// Writing this at the top outisde the function bc await only allowed here or in async - export default function Map() is NOT async, so writing here at the top
-
 export function useMap() {
 	const mapRef = useRef();
 	const mapContainerRef = useRef();
@@ -18,8 +16,9 @@ export function useMap() {
 	const currentlyPaused = useRef(false);
 	const popupOpenRef = useRef(false);
 	const startTimeRef = useRef(null);
-	const endTimeRef = useRef(null); // For recording into the database
+	const endTimeRef = useRef(null);
 
+	// useState for all the values that we need to keep between renders
 	const [userStartingPoint, setUserStartingPoint] = useState({
 		lng: null,
 		lat: null,
@@ -40,8 +39,9 @@ export function useMap() {
 		nextLng: null,
 		nextLat: null,
 		stationId: null,
-	}); // These need to be kept between renders => use useState for this
+	});
 
+	// All the popups and their useStates:
 	const [popupWindow, setPopupWindow] = useState(false);
 	const [isTodoOpen, setIsTodoOpen] = useState(false);
 	const [loadingScreen, setLoadingScreen] = useState(true);
@@ -61,9 +61,10 @@ export function useMap() {
 			const stationId = await getCurrentStationId();
 			if (!stationId) return;
 
-			const station = arrayOfStations.find((s) => s.id === stationId);
+			const station = arrayOfStations.find((s) => s.id === stationId); // Searching by the id
 			if (!station) return;
 
+			// Resetting the useState of the user => triggers a rerender of the Map component and shows the updates instantly
 			setUserStartingPoint({
 				lng: station.longitude,
 				lat: station.latitude,
@@ -75,6 +76,7 @@ export function useMap() {
 		loadUserStation();
 	}, []);
 
+	// Setting up the map:
 	useMapSetup({
 		mapRef,
 		mapContainerRef,
@@ -83,6 +85,7 @@ export function useMap() {
 		setLoadingScreen,
 	});
 
+	// Two functions: open and close the station popup (the one before started travelling)
 	const { openPopup, closePopup } = usePopup({
 		currentlyTravelling,
 		popupOpenRef,
@@ -93,6 +96,7 @@ export function useMap() {
 		setIsTodoOpen,
 	});
 
+	// Setting up the custom markers: their onClicks/onHovers, custom svg etc
 	useMarkers({
 		mapRef,
 		markersRef,
@@ -104,6 +108,7 @@ export function useMap() {
 		setTravelTimeLabel,
 	});
 
+	// Map movement animation, pausing and exiting travelling logic
 	const { animateMapMovement, stopTravelling, togglePauseState } = useTravel({
 		mapRef,
 		userStartingPoint,
@@ -122,6 +127,7 @@ export function useMap() {
 		toggleFinalMessage,
 	});
 
+	// Functions to toggle popup windows:
 	function openTodoList() {
 		setStampsWindow(false);
 		setIsTodoOpen((prev) => !prev);

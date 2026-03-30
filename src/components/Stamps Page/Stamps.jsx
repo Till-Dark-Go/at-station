@@ -25,18 +25,20 @@ export default function Stamps() {
 	const triggerRef = useRef(null); // This is the SENSOR the browser is constantly looking for, i.e. the grey boxes that are on the screen at the moment
 	// Only when the browsers finds the triggerRef div, it executes useLazyLoad hook
 
+	// A custom function for fetching stamps:
 	const onGrabData = useCallback(async () => {
 		// Stop querying once Firestore returns a short page (end of collection)
 		if (!hasMoreRef.current) return [];
 
+		// Get the 3 stamps:
 		const { stamps, lastDoc } = await getStampsPage(
 			userId,
 			NUM_PER_PAGE,
 			lastDocRef.current,
 		);
 
-		lastDocRef.current = lastDoc;
-		if (!stamps || stamps.length < NUM_PER_PAGE) hasMoreRef.current = false;
+		lastDocRef.current = lastDoc; // Record the cursor for the next pagination
+		if (!stamps || stamps.length < NUM_PER_PAGE) hasMoreRef.current = false; // Stop fetching if we have extracted all the stamps
 
 		return stamps;
 	}, [userId]);

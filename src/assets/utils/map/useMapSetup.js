@@ -23,7 +23,7 @@ export function useMapSetup({
 			zoom: 7,
 			minZoom: 5,
 			maxZoom: 7,
-			pitchWithRotate: false, // Do disable the tilting ability
+			pitchWithRotate: false, // To disable the tilting ability
 		});
 
 		// This fires up after all the tiles of the map were fully loaded - then we remove the loading "screen"
@@ -82,6 +82,7 @@ export function useMapSetup({
 
 				mapRef.current.addImage("moving-icon", image);
 
+				// Train marker which goes as a separate layer to ensure it's on the right coordinates as it's moving
 				mapRef.current.addSource("moving-marker", {
 					type: "geojson",
 					data: {

@@ -53,6 +53,7 @@ export function useMarkers({
 				marker_img.src = marker_logo;
 				let hoverResults;
 
+				// On hover:
 				marker_img.onmouseenter = () => {
 					marker_img.src = hovered_marker_logo;
 					setNextStation({
@@ -60,6 +61,7 @@ export function useMarkers({
 						country: station.country,
 					});
 
+					// A custom function to calculate the time needed to travel to the station:
 					hoverResults = calcStationParameters(
 						station,
 						userStartingPoint,
@@ -75,10 +77,11 @@ export function useMarkers({
 					}
 				};
 
+				// On leaving:
 				marker_img.onmouseleave = () => {
 					if (!popupOpenRef.current) marker_img.src = marker_logo;
 					if (!popupOpenRef.current) {
-						setNextStation({ name: "at station", country: "" });
+						setNextStation({ name: "at station", country: "" }); // Resetting the values, trigerring a rerender
 						setTravelTimeLabel("Awaiting travelling...");
 						currentlyTravelling.current = false;
 					}
@@ -93,7 +96,6 @@ export function useMarkers({
 						hoverResults.nextLatVar,
 						station.id,
 					);
-					// console.log(popupWindow);
 				};
 			}
 		});
