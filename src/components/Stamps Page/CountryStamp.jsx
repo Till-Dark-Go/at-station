@@ -4,7 +4,10 @@ export default function CountryStamp(props) {
 	return (
 		<div className="stamp-block" onClick={props.toggleStamp}>
 			<div className="station-pic">
-				<img src={props.stationPic} alt="Luxembourg picture" />
+				<img
+					src={props.stationPic ?? "/placeholder.jpg"}
+					alt={`${props.name} picture`}
+				/>
 			</div>
 			<div className="names">
 				<p className="station">{props.name}</p>

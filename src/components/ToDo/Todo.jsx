@@ -76,6 +76,8 @@ export default function Todo() {
 	const incomplete = todos.filter((t) => !t.completed);
 	const completed = todos.filter((t) => t.completed);
 
+	console.log(completed.length, incomplete.length);
+
 	return (
 		<div className="todo-list fade-in">
 			<h2 className="todo-list-title">To do list</h2>
@@ -97,6 +99,10 @@ export default function Todo() {
 			</div>
 
 			<div className="todo-tasks">
+				{incomplete.length == 0 && completed.length == 0 && (
+					<div className="no-tasks">Nothing planned yet.</div>
+				)}
+
 				{incomplete.map((todo) => (
 					<TodoItem
 						key={todo.id}
