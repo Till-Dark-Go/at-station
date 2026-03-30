@@ -14,7 +14,6 @@ import {
 import {
 	getDisplayName,
 	getEmail,
-	resetUserData,
 	deleteUserDocument,
 	updateDisplayName,
 	updateEmail,
@@ -143,11 +142,6 @@ export default function ProfilePage(props) {
 				setSuccess("Signed out.");
 			}
 
-			if (popupType === "reset") {
-				await resetUserData();
-				setSuccess("Account data reset.");
-			}
-
 			if (popupType === "delete") {
 				await doReauthenticate(data.password);
 				await deleteUserDocument();
@@ -268,29 +262,16 @@ export default function ProfilePage(props) {
 					</button>
 				</div>
 
-				<hr className=".profile-hr" />
+				<hr className="profile-hr" />
 
 				<div className="pf-bottom-description">
-					<div className="desc-title">Account Reset & Removal</div>
+					<div className="desc-title">Account Removal</div>
 					<div className="desc-text">
-						<p>
-							<u>Resetting</u> data will remove all your recorded
-							progress and collected stamps.
-						</p>
-						<p>
-							<u>Deleting</u> the account will delete it
-							permanently.
-						</p>
+						<u>Deleting</u> the account will delete it permanently.
 					</div>
 				</div>
 
 				<div className="permanent-buttons">
-					<button
-						onClick={() => openPopup("reset")}
-						disabled={isLoading}
-					>
-						{isLoading ? "Processing" : "Reset account"}
-					</button>
 					<button
 						onClick={() =>
 							openPopup(

@@ -24,24 +24,6 @@ export async function deleteUserDocument() {
 	}
 }
 
-// Reset user data including stamps and current station
-export async function resetUserData() {
-	const user = auth.currentUser;
-	if (!user) throw new Error("Not signed in");
-
-	try {
-		const userRef = doc(db, "users", user.uid);
-		await updateDoc(userRef, {
-			stampsCount: 0,
-			currentStationId: "bern",
-		});
-		return true;
-	} catch (err) {
-		console.error("Failed to reset user data:", err);
-		throw err;
-	}
-}
-
 // Get the full user document
 export async function getUserDoc() {
 	const user = auth.currentUser;

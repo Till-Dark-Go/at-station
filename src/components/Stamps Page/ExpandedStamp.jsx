@@ -65,7 +65,7 @@ function EntryInfo({ entry }) {
 					{formatDate(entry.startTime)}
 				</span>
 			</div>
-			<hr />
+			<hr className="stamp-hr" />
 		</>
 	);
 }
