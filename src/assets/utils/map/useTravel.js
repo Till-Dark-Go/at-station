@@ -158,7 +158,12 @@ export function useTravel({
 					console.log("Start time:", startTimeRef.current);
 					console.log("End time:", endTimeRef.current);
 
-					toggleFinalMessage();
+					toggleFinalMessage(
+						stationId,
+						userStartingPoint.id,
+						startTimeRef.current,
+						endTimeRef.current,
+					);
 
 					await createTravelEntry(
 						userId,

@@ -13,6 +13,7 @@ import { useMap } from "../../assets/utils/map/useMap.js";
 
 import { Activity, ViewTransition } from "react";
 import FinishedTravellingMessage from "./FinishedTravellingMessage.jsx";
+import { isDate } from "lodash";
 
 export default function Map() {
 	const {
@@ -71,14 +72,6 @@ export default function Map() {
 					nextStationName={nextStation.name}
 				/>
 
-				{/* {isTodoOpen &&
-				<Activity mode = {isTodoOpen ? 'visible' : 'hidden'}>
-					<ViewTransition enter="auto" exit="auto" default="none"> 
-						<Todo />
-					</ViewTransition> 
-				</Activity>
-				} */}
-
 				{stampsWindow && <Stamps />}
 				{isTodoOpen && <Todo />}
 				{isProfileOpen && (
@@ -87,9 +80,13 @@ export default function Map() {
 					/>
 				)}
 
-				{isFinalMessageOpen && (
+				{isFinalMessageOpen.state && (
 					<FinishedTravellingMessage
 						toggleFinalMessage={toggleFinalMessage}
+						dest={isFinalMessageOpen.dest}
+						origin={isFinalMessageOpen.origin}
+						timeStart={isFinalMessageOpen.timeStart}
+						timeEnd={isFinalMessageOpen.timeEnd}
 					/>
 				)}
 

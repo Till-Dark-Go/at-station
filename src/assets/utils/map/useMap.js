@@ -47,7 +47,13 @@ export function useMap() {
 	const [loadingScreen, setLoadingScreen] = useState(true);
 	const [stampsWindow, setStampsWindow] = useState(false);
 	const [isProfileOpen, setIsProfileOpen] = useState(false);
-	const [isFinalMessageOpen, setIsFinalMessageOpen] = useState(false);
+	const [isFinalMessageOpen, setIsFinalMessageOpen] = useState({
+		state: false,
+		dest: null,
+		origin: null,
+		timeStart: null,
+		timeEnd: null,
+	});
 
 	// Load current station from database
 	useEffect(() => {
@@ -135,13 +141,34 @@ export function useMap() {
 			: "auto";
 	}
 
-	function toggleFinalMessage() {
-		setStampsWindow(false);
-		setIsTodoOpen(false);
-		setIsProfileOpen(false);
-		closePopup(popupOpenRef);
-		setIsFinalMessageOpen((prev) => !prev);
-		UI_elements_div.current.style.pointerEvents = isFinalMessageOpen
+	function toggleFinalMessage(
+		dest = null,
+		origin = null,
+		timeStart = null,
+		timeEnd = null,
+	) {
+		if (!isFinalMessageOpen.state) {
+			setStampsWindow(false);
+			setIsTodoOpen(false);
+			setIsProfileOpen(false);
+			closePopup(popupOpenRef);
+			setIsFinalMessageOpen({
+				state: true,
+				dest: dest,
+				origin: origin,
+				timeStart: timeStart,
+				timeEnd: timeEnd,
+			});
+		} else {
+			setIsFinalMessageOpen({
+				state: false,
+				dest: null,
+				origin: null,
+				timeStart: null,
+				timeEnd: null,
+			});
+		}
+		UI_elements_div.current.style.pointerEvents = isFinalMessageOpen.state
 			? "none"
 			: "auto";
 	}

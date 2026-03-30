@@ -1,5 +1,27 @@
 import "../../assets/styles/map.css";
 
+function formatLocation(location) {
+	return location
+		.split("-")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+}
+
+function formatTime(seconds) {
+	const date = new Date(seconds * 1000);
+	const hours = date.getHours().toString().padStart(2, "0");
+	const minutes = date.getMinutes().toString().padStart(2, "0");
+	return `${hours}:${minutes}`;
+}
+
+function formatDate(seconds) {
+	const date = new Date(seconds * 1000);
+	const day = date.getDate().toString().padStart(2, "0");
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const year = date.getFullYear();
+	return `${day}/${month}/${year}`;
+}
+
 export default function FinishedTravellingMessage(props) {
 	return (
 		<div className="popup-window fade-in">
@@ -15,21 +37,29 @@ export default function FinishedTravellingMessage(props) {
 						Your route was the following:
 					</div>
 					<div className="entry-info final-message-entry">
-						<span className="label">To/From:</span>
+						<span className="label">From/To:</span>
 						<span className="label">Time:</span>
 						<span className="label">Date:</span>
 
-						<span>
-							Destination
+						<span
+							title={
+								formatLocation(props.origin) +
+								" - " +
+								formatLocation(props.dest)
+							}
+						>
+							{formatLocation(props.origin)}
 							<br />
-							Origin
+							{formatLocation(props.dest)}
 						</span>
 						<span>
-							13:01
+							{formatTime(props.timeStart.seconds)}
 							<br />
-							15:09
+							{formatTime(props.timeEnd.seconds)}
 						</span>
-						<span>15.02.2026</span>
+						<span title={formatDate(props.timeStart.seconds)}>
+							{formatDate(props.timeStart.seconds)}
+						</span>
 					</div>
 					<div className="description">
 						It's now added to your travel log.
