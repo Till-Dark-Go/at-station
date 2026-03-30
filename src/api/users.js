@@ -6,39 +6,40 @@ import {
 	serverTimestamp,
 	increment,
 	runTransaction,
+	deleteDoc,
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
 
 // Delete user
 export async function deleteUserDocument() {
-  const user = auth.currentUser;
-  if (!user) throw new Error("Not signed in");
+	const user = auth.currentUser;
+	if (!user) throw new Error("Not signed in");
 
-  try {
-    const userRef = doc(db, "users", user.uid);
-    await deleteDoc(userRef);
-  } catch (err) {
-    console.error("Failed to delete Firestore user document:", err);
-    throw err;
-  }
+	try {
+		const userRef = doc(db, "users", user.uid);
+		await deleteDoc(userRef);
+	} catch (err) {
+		console.error("Failed to delete Firestore user document:", err);
+		throw err;
+	}
 }
 
 // Reset user data including stamps and current station
 export async function resetUserData() {
-  const user = auth.currentUser;
-  if (!user) throw new Error("Not signed in");
+	const user = auth.currentUser;
+	if (!user) throw new Error("Not signed in");
 
-  try {
-    const userRef = doc(db, "users", user.uid);
-    await updateDoc(userRef, {
-      stampsCount: 0,
-      currentStationId: "bern"
-    });
-    return true;
-  } catch (err) {
-    console.error("Failed to reset user data:", err);
-    throw err;
-  }
+	try {
+		const userRef = doc(db, "users", user.uid);
+		await updateDoc(userRef, {
+			stampsCount: 0,
+			currentStationId: "bern",
+		});
+		return true;
+	} catch (err) {
+		console.error("Failed to reset user data:", err);
+		throw err;
+	}
 }
 
 // Get the full user document
