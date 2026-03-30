@@ -281,3 +281,11 @@
 		margin-bottom: 8px;
 	}
 }
+
+.no-tasks {
+	color: #949494;
+	font-size: 0.9em;
+	font-style: italic;
+	text-align: center;
+	padding-top: clamp(5px, 1vh, 20px);
+}

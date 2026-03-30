@@ -274,3 +274,11 @@ option:focus {
 		opacity: 1;
 	}
 }
+
+.no-stations {
+	color: #949494;
+	font-size: 0.9em;
+	font-style: italic;
+	text-align: center;
+	margin-top: clamp(10px, 2vh, 25px);
+}
