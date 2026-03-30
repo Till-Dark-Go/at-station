@@ -1,8 +1,14 @@
 import close_popup_button from "../../assets/images/cross_button.svg";
-import { useRef, useEffect } from "react";
-import { setStationImage } from "../../api/image-grabber";
+import { useRef, useEffect, useState } from "react";
+import { getStationImageUrl } from "../../api/image-grabber";
 
-function NextStationInfo({ nextStation, timeAndCoords, imageRef }) {
+function NextStationInfo({
+	nextStation,
+	timeAndCoords,
+	imageSrc,
+	isImageLoading,
+	onImageLoad,
+}) {
 	return (
 		<div className="info">
 			<div className="small-lable">Your next station is</div>
@@ -16,7 +22,13 @@ function NextStationInfo({ nextStation, timeAndCoords, imageRef }) {
 				</strong>
 			</div>
 			<div className="description-picture">
-				<img alt="Station picture" ref={imageRef} />
+				{isImageLoading && <div className="image-placeholder"></div>}
+				<img
+					alt="Station picture"
+					src={imageSrc}
+					onLoad={onImageLoad}
+					style={{ display: isImageLoading ? "none" : "block" }}
+				/>
 			</div>
 			<div className="country">Country: {nextStation.country}</div>
 		</div>
@@ -43,16 +55,19 @@ function StopTravellingInfo() {
 }
 
 export default function PopupWindow(props) {
-	//   console.log(props.nextStation.name);
+	const [imageSrc, setImageSrc] = useState(null);
+	const [isImageLoading, setIsImageLoading] = useState(true);
 
-	const imageRef = useRef();
-
-	useEffect(() => {
-		setStationImage(props.nextStation.name, imageRef);
+	useState(() => {
+		setImageSrc(null);
+		setIsImageLoading(true);
+		getStationImageUrl(props.nextStation.name)
+			.then((url) => setImageSrc(url))
+			.catch(console.error);
 	}, [props.nextStation.name]);
 
 	return (
-		<div className="popup-window">
+		<div className="popup-window fade-in">
 			<button className="popup-close-button" onClick={props.closePopup}>
 				<img src={close_popup_button} alt="Close popup button" />
 			</button>
@@ -61,30 +76,30 @@ export default function PopupWindow(props) {
 					<NextStationInfo
 						nextStation={props.nextStation}
 						timeAndCoords={props.timeAndCoords}
-						imageRef={imageRef}
+						imageSrc={imageSrc}
+						isImageLoading={isImageLoading}
+						onImageLoad={() => setIsImageLoading(false)}
 					/>
 				)}
 				{props.currentlyTravelling.current && <StopTravellingInfo />}
 
-				<div className="button">
-					{!props.currentlyTravelling.current && (
-						<button
-							className="feature-button confirmation-button"
-							onClick={props.animateMovement}
-						>
-							CONFIRM
-						</button>
-					)}
+				{!props.currentlyTravelling.current && (
+					<button
+						className="feature-button confirmation-button"
+						onClick={props.animateMovement}
+					>
+						CONFIRM
+					</button>
+				)}
 
-					{props.currentlyTravelling.current && (
-						<button
-							className="feature-button confirmation-button stop-travelling-button"
-							onClick={props.stopTravelling}
-						>
-							STOP TRAVELLING
-						</button>
-					)}
-				</div>
+				{props.currentlyTravelling.current && (
+					<button
+						className="feature-button confirmation-button stop-travelling-button"
+						onClick={props.stopTravelling}
+					>
+						STOP TRAVELLING
+					</button>
+				)}
 			</div>
 		</div>
 	);

@@ -79,7 +79,7 @@ export default function Todo() {
 	console.log(completed.length, incomplete.length);
 
 	return (
-		<div className="todo-list">
+		<div className="todo-list fade-in">
 			<h2 className="todo-list-title">To do list</h2>
 			<p className="todo-list-date">{today}</p>
 
@@ -158,7 +158,6 @@ function TodoItem({ todo, onToggle, onDelete }) {
 						</svg>
 					)}
 				</span>
-
 				<span className="todo-task-text" title={todo.title}>
 					{todo.title}
 				</span>

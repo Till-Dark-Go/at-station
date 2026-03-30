@@ -22,6 +22,7 @@ export function useTravel({
 	setPopupWindow,
 	setNextStation,
 	setTravelTimeLabel,
+	toggleFinalMessage,
 }) {
 	const userId = auth.currentUser?.uid;
 
@@ -157,6 +158,8 @@ export function useTravel({
 					console.log("Start time:", startTimeRef.current);
 					console.log("End time:", endTimeRef.current);
 
+					toggleFinalMessage();
+
 					await createTravelEntry(
 						userId,
 						userStartingPoint.id,
@@ -171,8 +174,6 @@ export function useTravel({
 					await updateCurrentStation(stationId).then(() => {
 						console.log("Updated currentStationId: ", stationId);
 					});
-
-					console.log(":)");
 
 					// Update local state so app does not reset
 					const station = arrayOfStations.find(

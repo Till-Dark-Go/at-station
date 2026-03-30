@@ -1,5 +1,5 @@
 .stamps-container {
-	width: clamp(380px, 28%, 600px);
+	width: clamp(450px, 28%, 600px);
 	height: clamp(200px, 68%, 900px);
 	background-color: #000000a9;
 	backdrop-filter: blur(3px);
@@ -10,6 +10,17 @@
 	overflow-y: auto;
 	align-self: flex-end;
 	margin-right: 70px;
+
+	@media (max-width: 1024px) {
+		align-self: center;
+		margin-right: 0;
+		width: clamp(200px, 55%, 500px);
+	}
+
+	@media (max-width: 768px) {
+		width: clamp(200px, 80%, 500px);
+		height: clamp(200px, 55%, 900px);
+	}
 }
 
 .stamps-container::-webkit-scrollbar {
@@ -52,7 +63,7 @@
 	gap: 40px;
 	color: #bdbdbd;
 	margin-bottom: clamp(10px, 2vh, 25px);
-	font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
 }
 
 .stamps-mini {
@@ -62,14 +73,14 @@
 
 .sorting label {
 	margin-right: 9px;
-	font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
 }
 
 .sorting select {
-	font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
 	background-color: black;
 	color: white;
-	width: clamp(100px, 11vw, 180px);
+	width: clamp(130px, 16vw, 180px);
 }
 
 #sorting-options {
@@ -151,7 +162,7 @@ option:focus {
 
 .station-pic {
 	flex: 1;
-	height: 73px;
+	height: clamp(40px, 5vh, 73px);
 	overflow: hidden;
 	border-radius: 8px;
 }
@@ -194,14 +205,26 @@ option:focus {
 
 .last-visited {
 	font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
-	width: clamp(80px, 80%, 110px);
+	width: clamp(100px, 90%, 110px);
 	text-align: right;
+}
+
+.last-visited .label {
+	font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
+
+	@media (max-width: 1024px) {
+		display: none;
+	}
 }
 
 .info-arrow img {
 	width: 20px;
 	margin-bottom: 10px;
 	scale: 0.9;
+
+	@media (max-width: 1024px) {
+		scale: 0.8;
+	}
 }
 
 .date {
@@ -211,16 +234,19 @@ option:focus {
 /* Lazy Loading styles */
 
 .loading-stamp-mini {
-	background: #5c5c5c9c;
+	height: clamp(30px, 6vh, 90px);
+	background: #535353;
 	justify-content: left;
 	gap: 20px;
-	border: 1px solid #969696e5;
+
+	@media (max-width: 1024px) {
+		height: clamp(20px, 5vh, 60px);
+	}
 }
 
 .loading-image {
-	height: 73px;
-	width: 25%;
-	background: #8f8f8f;
+	width: 20%;
+	background: #afafaf;
 	border-radius: 6px;
 	animation: opacityPulse 2s ease-out;
 	animation-iteration-count: infinite;
@@ -230,7 +256,7 @@ option:focus {
 .loading-names {
 	width: 100px;
 	height: 15px;
-	background: #8f8f8f;
+	background: #afafaf;
 	margin-top: 5px;
 	animation: opacityPulse 2s ease-out;
 	animation-iteration-count: infinite;
@@ -247,13 +273,4 @@ option:focus {
 	100% {
 		opacity: 1;
 	}
-}
-
-.no-stations,
-.no-tasks {
-	font-size: 0.9em;
-	color: #949494;
-	font-style: italic;
-	padding-top: clamp(10px, 2.3vh, 25px);
-	text-align: center;
 }

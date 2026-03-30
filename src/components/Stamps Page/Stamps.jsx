@@ -52,7 +52,7 @@ export default function Stamps() {
 	}
 
 	return (
-		<div className="stamps-container">
+		<div className="stamps-container fade-in">
 			{expandedOpen[0] && (
 				<>
 					<button
