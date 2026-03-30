@@ -268,7 +268,7 @@ export default function ProfilePage(props) {
 					</button>
 				</div>
 
-				<hr />
+				<hr className=".profile-hr" />
 
 				<div className="pf-bottom-description">
 					<div className="desc-title">Account Reset & Removal</div>

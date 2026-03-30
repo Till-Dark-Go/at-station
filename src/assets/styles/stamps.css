@@ -162,7 +162,7 @@ option:focus {
 
 .station-pic {
 	flex: 1;
-	height: clamp(40px, 5vh, 73px);
+	height: clamp(30px, 8vh, 60px);
 	overflow: hidden;
 	border-radius: 8px;
 }

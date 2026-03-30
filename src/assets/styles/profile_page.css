@@ -113,7 +113,7 @@
 	color: #fff;
 }
 
-hr {
+.profile-hr {
 	width: clamp(100px, 45%, 600px);
 	border-color: #7b7b7b;
 	border-radius: 8px;
@@ -242,7 +242,7 @@ hr {
 		margin-top: clamp(5px, 1vh, 10px);
 	}
 
-	hr {
+	.profile-hr {
 		width: clamp(100px, 65%, 400px);
 	}
 

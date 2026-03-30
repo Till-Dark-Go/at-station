@@ -61,7 +61,9 @@ function EntryInfo({ entry }) {
 					<br />
 					{formatTime(entry.endTime)}
 				</span>
-				<span>{formatDate(entry.startTime)}</span>
+				<span title={formatDate(entry.startTime)}>
+					{formatDate(entry.startTime)}
+				</span>
 			</div>
 			<hr />
 		</>
