@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useRef, useState} from "react";
 import '../../assets/styles/signup_and_login.css'
 
 import authGoBackButton from "../../assets/images/authGoBackButton.svg";
@@ -9,11 +9,14 @@ import opened_eye from "../../assets/images/opened_eye.svg"
 import closed_eye from "../../assets/images/closed_eye.svg"
 
 // Imports for creating Firestore user document in users collection
-import { auth } from "../../api/firebase";              
-import { updateProfile, signOut } from "firebase/auth";      
+import { auth } from "../../api/firebase";      
+import { updateProfile, signOut, fetchSignInMethodsForEmail } from "firebase/auth";
+//import { updateProfile, signOut } from "firebase/auth";      
 
 import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSignInWithGithub } from "../../firebase/auth";
 import { ensureUserDocument } from "../../firebase/oAuth.js";
+
+
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -25,19 +28,10 @@ export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // On sucessfull email/password signup
-  const handleEmailPasswordSuccess = async () => {
-    // Logout after signup, so no forced acess to / (map)
-    await signOut(auth);
-    // Move to login screen to properly login
-    navigate('/auth/log-in');
+  const providerMap = {
+  Google: "google.com",
+  GitHub: "github.com",
   };
-
-  // On sucessfull OAuth (Google/Github) signup
-  const handleOAuthSuccess = () => {
-    navigate('/'); // Stay logged in, go straight to map
-  };
-
 
   // EMAIL / PASSWORD SIGN UP
   const handleSignUp = async () => {
@@ -59,6 +53,11 @@ export default function SignUp() {
         throw new Error("Password contains forbidden characters (space, /, \\, |, *)");
       }
 
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.length > 0 && !methods.includes("password")) {
+        throw new Error("This email is already registered with Google or GitHub.");
+      }
+
       const result = await doCreateUserWithEmailAndPassword(email, password);
       // Get auth user and username what will allow to write to users/{uid} document after signup
       const user = result.user || auth.currentUser;
@@ -69,7 +68,10 @@ export default function SignUp() {
       // Ensure Firestore user exists
       await ensureUserDocument(user);
 
-      handleEmailPasswordSuccess();  // log out + go to login
+      await signOut(auth); 
+      navigate("/home/log-in", { state: { redirectTo: "/home/log-in" } });
+
+
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError("This email is already in use. Please, try another one.");
@@ -89,13 +91,32 @@ export default function SignUp() {
       setIsLoading(true);
       setError('');
 
+      // Trigger the OAuth popup for Google/GitHub
       const result = await providerFn();
       // Get auth user what will allow to write to users/{uid} document after signup
       const user = result.user || auth.currentUser;
 
+      // Retrieve the email and all sign-in methods associated with it
+      const email = user.email;
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      const currentProvider = providerMap[providerName]; // "google.com" or "github.com"
+
+      if (methods.length > 0 && !methods.includes(currentProvider)) {
+        // This email exists with a different sign-in method (github sigup doesn't override password/email and other way around)
+        // However, doesn't work for google:
+        // Certain email domains have a trusted provider. Example: Google is the trusted provider for @gmail.com.
+        // If the user first registers a Gmail via another provider (e.g., email/password or github),
+        // a later Google sign-in will overrule the first registration.
+        await signOut(auth); // log out the partially signed-in session
+        throw new Error("This email is already registered with a different sign-in method.");
+      }
+
+      // Ensure Firestore user document exists
       await ensureUserDocument(user);
 
-      handleOAuthSuccess(); // stay logged in + go to map
+      // On sucessfull OAuth (Google/Github) signup stay logged in and go to map
+      navigate('/'); 
+
     } catch (err) {
       if (err.code === 'auth/account-exists-with-different-credential') {
         setError(`An account already exists with this email using a different login method. Try logging in with the original provider.`);
@@ -119,7 +140,7 @@ export default function SignUp() {
       <div className="redirection-text">
         Had a ride before?
         <Link
-          to="/auth/log-in"
+          to="/home/log-in"
           className="redirection-text-button"
         >
           Log in
@@ -225,7 +246,7 @@ export default function SignUp() {
         </button>
       </div>
 
-      <Link to="/auth" className="go-back">
+      <Link to="/home" className="go-back">
         <img
           src={authGoBackButton}
           alt="Go back to main authentication page"
