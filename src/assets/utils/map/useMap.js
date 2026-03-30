@@ -46,6 +46,8 @@ export function useMap() {
 	const [isTodoOpen, setIsTodoOpen] = useState(false);
 	const [loadingScreen, setLoadingScreen] = useState(true);
 	const [stampsWindow, setStampsWindow] = useState(false);
+	const [isProfileOpen, setIsProfileOpen] = useState(false);
+	const [isFinalMessageOpen, setIsFinalMessageOpen] = useState(false);
 
 	// Load current station from database
 	useEffect(() => {
@@ -81,6 +83,8 @@ export function useMap() {
 		UI_elements_div,
 		setPopupWindow,
 		setTimeAndCoords,
+		setStampsWindow,
+		setIsTodoOpen,
 	});
 
 	useMarkers({
@@ -109,15 +113,35 @@ export function useMap() {
 		setPopupWindow,
 		setNextStation,
 		setTravelTimeLabel,
+		toggleFinalMessage,
 	});
 
 	function openTodoList() {
+		setStampsWindow(false);
 		setIsTodoOpen((prev) => !prev);
 	}
 
 	function toggleStampsWindow() {
+		setIsTodoOpen(false);
 		setStampsWindow((prev) => !prev);
-		UI_elements_div.current.style.pointerEvents = stampsWindow
+	}
+
+	function toggleProfilePageWindow() {
+		setStampsWindow(false);
+		setIsTodoOpen(false);
+		setIsProfileOpen((prev) => !prev);
+		UI_elements_div.current.style.pointerEvents = isProfileOpen
+			? "none"
+			: "auto";
+	}
+
+	function toggleFinalMessage() {
+		setStampsWindow(false);
+		setIsTodoOpen(false);
+		setIsProfileOpen(false);
+		closePopup(popupOpenRef);
+		setIsFinalMessageOpen((prev) => !prev);
+		UI_elements_div.current.style.pointerEvents = isFinalMessageOpen
 			? "none"
 			: "auto";
 	}
@@ -132,6 +156,7 @@ export function useMap() {
 		popupWindow,
 		isTodoOpen,
 		stampsWindow,
+		isProfileOpen,
 		nextStation,
 		travelTimeLabel,
 		timeAndCoords,
@@ -141,7 +166,10 @@ export function useMap() {
 		stopTravelling,
 		togglePauseState,
 		toggleStampsWindow,
+		toggleProfilePageWindow,
 		openTodoList,
 		animateMapMovement,
+		toggleFinalMessage,
+		isFinalMessageOpen,
 	};
 }

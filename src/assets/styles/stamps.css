@@ -1,241 +1,276 @@
 .stamps-container {
-    width: clamp(380px, 28%, 600px);
-    height: clamp(200px, 68%, 900px);
-    background-color: #000000a9;
-    backdrop-filter: blur(3px);
-    border: 1px solid #949494; 
-    box-shadow: 0 0px 30px #000;
-    border-radius: 10px;
-    color: #DADADA;
-    overflow-y: auto;
-    align-self: flex-end;
-    margin-right: 70px;
+	width: clamp(450px, 28%, 600px);
+	height: clamp(200px, 68%, 900px);
+	background-color: #000000a9;
+	backdrop-filter: blur(3px);
+	border: 1px solid #949494;
+	box-shadow: 0 0px 30px #000;
+	border-radius: 10px;
+	color: #dadada;
+	overflow-y: auto;
+	align-self: flex-end;
+	margin-right: 70px;
+
+	@media (max-width: 1024px) {
+		align-self: center;
+		margin-right: 0;
+		width: clamp(200px, 55%, 500px);
+	}
+
+	@media (max-width: 768px) {
+		width: clamp(200px, 80%, 500px);
+		height: clamp(200px, 55%, 900px);
+	}
 }
 
 .stamps-container::-webkit-scrollbar {
-    width: 11px;
+	width: 11px;
 }
 
 .stamps-container::-webkit-scrollbar-track {
-    background: transparent;
+	background: transparent;
 }
 
 .stamps-container::-webkit-scrollbar-thumb {
-    cursor: pointer;
-    background-color: #cfcfcf7c;
-    border-radius: 10px;
-    border: 4px solid transparent; 
-    background-clip: padding-box;   
+	cursor: pointer;
+	background-color: #cfcfcf7c;
+	border-radius: 10px;
+	border: 4px solid transparent;
+	background-clip: padding-box;
 }
 
 .stamps-container::-webkit-scrollbar-thumb:hover {
-    background-color: #8f8f8f;
+	background-color: #8f8f8f;
 }
 
 .top-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .name {
-    text-transform: uppercase;
-    font-size: clamp(14px, 0.5vw + 1rem, 30px);
-    letter-spacing: 1px;
-    margin-block: 10px;
-    margin-top: 25px;
+	text-transform: uppercase;
+	font-size: clamp(14px, 0.5vw + 1rem, 30px);
+	letter-spacing: 1px;
+	margin-block: 10px;
+	margin-top: 25px;
 }
 
 .stats {
-    display: flex;
-    justify-content: space-between;
-    gap: 40px;
-    color: #BDBDBD;
-    margin-bottom: clamp(10px, 2vh, 25px);
-    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
+	display: flex;
+	justify-content: space-between;
+	gap: 40px;
+	color: #bdbdbd;
+	margin-bottom: clamp(10px, 2vh, 25px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
 }
 
 .stamps-mini {
-    margin-inline: clamp(20px, 2vw, 70px);
-    margin-bottom: 20px;
+	margin-inline: clamp(20px, 2vw, 70px);
+	margin-bottom: 20px;
 }
 
 .sorting label {
-    margin-right: 9px;
-    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
+	margin-right: 9px;
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
 }
 
 .sorting select {
-    font-size: clamp(12px, 0.5vw + 0.5rem, 16px);
-    background-color: black;
-    color: white;
-    width: clamp(100px, 11vw, 180px);
+	font-size: clamp(12px, 0.7vw + 0.5rem, 16px);
+	background-color: black;
+	color: white;
+	width: clamp(130px, 16vw, 180px);
 }
 
 #sorting-options {
-    appearance: none;
-    -webkit-appearance: none;
-    color: #DADADA;
-    border: 1px solid #555555;
-    border-radius: 6px;
-    padding: 4px 35px 4px 15px;
-    background-image: url('../../../assets/images/options_arrow.svg');
-    background-repeat: no-repeat;
-    background-position: calc(100% - 10px) center;
-    cursor: pointer;
-    transition: 0.2s ease;
+	appearance: none;
+	-webkit-appearance: none;
+	color: #dadada;
+	border: 1px solid #555555;
+	border-radius: 6px;
+	padding: 4px 35px 4px 15px;
+	background-image: url("../../../assets/images/options_arrow.svg");
+	background-repeat: no-repeat;
+	background-position: calc(100% - 10px) center;
+	cursor: pointer;
+	transition: 0.2s ease;
 }
 
 #sorting-options:hover {
-    border-color: #949494;
-    background-color: rgba(255, 255, 255, 0.05);
+	border-color: #949494;
+	background-color: rgba(255, 255, 255, 0.05);
 }
 
 ::picker(select) {
-    border: none;
+	border: none;
 }
 
 option {
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    border: 2px solid #dddddd;
-    background: black;
-    transition: 0.2s;
+	display: flex;
+	justify-content: flex-start;
+	gap: 20px;
+	border: 2px solid #dddddd;
+	background: black;
+	transition: 0.2s;
 }
 
 option:first-of-type {
-    border-radius: 8px 8px 0 0;
+	border-radius: 8px 8px 0 0;
 }
 
 option:last-of-type {
-  border-radius: 0 0 8px 8px;
+	border-radius: 0 0 8px 8px;
 }
 
 ::picker(select) {
-  border-radius: 8px;
+	border-radius: 8px;
 }
 
 option:not(option:last-of-type) {
-  border-bottom: none;
+	border-bottom: none;
 }
 
-option:hover, option:focus {
-    background: grey;
+option:hover,
+option:focus {
+	background: grey;
 }
 
-.stamp-block, .loading-stamp-mini {
-    margin-top: clamp(5px, 1.6vh, 20px);
-    padding: clamp(10px, 1.9vh, 25px);
-    border: 1px solid #555555;
-    background: #0000008e;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: 0.2s ease;
+.stamp-block,
+.loading-stamp-mini {
+	margin-top: clamp(5px, 1.6vh, 20px);
+	padding: clamp(10px, 1.9vh, 25px);
+	border: 1px solid #555555;
+	background: #0000008e;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: 0.2s ease;
 }
 
 .stamp-block:hover {
-    box-shadow: 0 0 17px #8686868a;
-    transform: scale(1.01);
-    transform-origin: center;
+	box-shadow: 0 0 17px #8686868a;
+	transform: scale(1.01);
+	transform-origin: center;
 }
 
 .stamp-block:active {
-    transform: scale(0.98);
-    background: #3535358e;
+	transform: scale(0.98);
+	background: #3535358e;
 }
 
 .station-pic {
-    flex: 1;
-    height: 73px;
-    overflow: hidden;
-    border-radius: 8px;
+	flex: 1;
+	height: clamp(40px, 5vh, 73px);
+	overflow: hidden;
+	border-radius: 8px;
 }
 
 .station-pic img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .names {
-    padding-left: clamp(10px, 1vh, 15px);
-    flex: 2;
+	padding-left: clamp(10px, 1vh, 15px);
+	flex: 2;
 }
 
 .station {
-    @media (min-width: 1920px) {
-        font-size: 1.1em;
-    }
+	@media (min-width: 1920px) {
+		font-size: 1.1em;
+	}
 }
 
 .country-stamp {
-    color: #949494;
-    padding-top: 5px;
-    font-size: 0.9em;
+	color: #949494;
+	padding-top: 5px;
+	font-size: 0.9em;
 
-    @media (min-width: 1920px) {
-        font-size: 1em;
-    }
+	@media (min-width: 1920px) {
+		font-size: 1em;
+	}
 }
 
 .info-arrow {
-    flex: 1;
-    font-size: 1.0em;
-    color: #949494;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+	flex: 1;
+	font-size: 1em;
+	color: #949494;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
 }
 
 .last-visited {
-    font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
-    width: clamp(80px, 80%, 110px);
-    text-align: right;
+	font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
+	width: clamp(100px, 90%, 110px);
+	text-align: right;
+}
+
+.last-visited .label {
+	font-size: clamp(13px, 0.5vw + 0.2rem, 16px);
+
+	@media (max-width: 1024px) {
+		display: none;
+	}
 }
 
 .info-arrow img {
-    width: 20px;
-    margin-bottom: 10px;
-    scale: 0.9;
+	width: 20px;
+	margin-bottom: 10px;
+	scale: 0.9;
+
+	@media (max-width: 1024px) {
+		scale: 0.8;
+	}
 }
 
 .date {
-    padding-top: clamp(5px, 0.7vh, 20px);
+	padding-top: clamp(5px, 0.7vh, 20px);
 }
 
 /* Lazy Loading styles */
 
 .loading-stamp-mini {
-    height: clamp(30px, 8vh, 90px);
-    background: #535353;
-    justify-content: left;
-    gap: 20px;
+	height: clamp(30px, 6vh, 90px);
+	background: #535353;
+	justify-content: left;
+	gap: 20px;
+
+	@media (max-width: 1024px) {
+		height: clamp(20px, 5vh, 60px);
+	}
 }
 
 .loading-image {
-    width: 20%;
-    background: #afafaf;
-    border-radius: 6px;
-    animation: opacityPulse 2s ease-out;
-    animation-iteration-count: infinite; 
-    opacity: 1;
+	width: 20%;
+	background: #afafaf;
+	border-radius: 6px;
+	animation: opacityPulse 2s ease-out;
+	animation-iteration-count: infinite;
+	opacity: 1;
 }
 
 .loading-names {
-    width: 100px;
-    height: 15px;
-    background: #afafaf;
-    margin-top: 5px;
-    animation: opacityPulse 2s ease-out;
-    animation-iteration-count: infinite; 
-    opacity: 1;
+	width: 100px;
+	height: 15px;
+	background: #afafaf;
+	margin-top: 5px;
+	animation: opacityPulse 2s ease-out;
+	animation-iteration-count: infinite;
+	opacity: 1;
 }
 
 @keyframes opacityPulse {
-    0%   { opacity: 1; }
-    50%  { opacity: 0.4; }
-    100% { opacity: 1; }
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+	}
 }

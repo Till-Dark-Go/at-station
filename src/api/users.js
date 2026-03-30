@@ -9,6 +9,38 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
 
+// Delete user
+export async function deleteUserDocument() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    await deleteDoc(userRef);
+  } catch (err) {
+    console.error("Failed to delete Firestore user document:", err);
+    throw err;
+  }
+}
+
+// Reset user data including stamps and current station
+export async function resetUserData() {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Not signed in");
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, {
+      stampsCount: 0,
+      currentStationId: "bern"
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to reset user data:", err);
+    throw err;
+  }
+}
+
 // Get the full user document
 export async function getUserDoc() {
 	const user = auth.currentUser;
@@ -59,6 +91,7 @@ export const getStampsCount = () => getUserField("stampsCount");
 export const updateDisplayName = (name) => updateUserField("displayName", name);
 export const updateCurrentStation = (stationId) =>
 	updateUserField("currentStationId", stationId);
+export const updateEmail = (email) => updateUserField("email", email);
 
 // Add (or update) a stamp document users/{uid}/stamps/{stationId}
 export async function addStamp(stationId) {
@@ -90,13 +123,3 @@ export async function addStamp(stationId) {
 		return { created: false, error: err };
 	}
 }
-
-// // Update the user's currentStationId fieldnat users/{uid}
-// export async function updateCurrentStation(stationId) {
-//   const user = auth.currentUser;
-//   if (!user) throw new Error("Not signed in");
-
-//   const userRef = doc(db, "users", user.uid);
-//   await updateDoc(userRef, { currentStationId: stationId });
-//   return true;
-// }
