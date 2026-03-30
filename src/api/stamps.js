@@ -11,6 +11,7 @@ import {
 	getDocs,
 	orderBy,
 	where,
+	documentId,
 } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 
@@ -47,13 +48,22 @@ export const updateStamp = async (userId, stationId, timestamp) => {
 	}
 };
 
-export const getStampsPage = async (userId, pageSize, lastDoc = null) => {
+export const getStampsPage = async (
+	userId,
+	pageSize,
+	lastDoc = null,
+	sortField = "last-visited",
+) => {
 	// Check if the user is logged in
 	ensureUsedId(userId);
 	const stampsRef = getStampsCollection(userId);
 
+	const [field, direction] =
+		sortField === "alphab"
+			? [documentId(), "asc"]
+			: ["last-visited", "desc"];
 	// Construct the initial query, sorting by most recently visited, limiting the result to 3 stamps
-	let q = query(stampsRef, orderBy("last-visited", "desc"), limit(pageSize));
+	let q = query(stampsRef, orderBy(field, direction), limit(pageSize));
 	if (lastDoc) q = query(q, startAfter(lastDoc)); // If we were already fetching before and have the lastDoc, start fetching after it
 
 	const snapshot = await getDocs(q); // Snapshot gets the actual information out of the reference (contains metadata)
