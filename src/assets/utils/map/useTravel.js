@@ -99,8 +99,8 @@ export function useTravel({
 		mapRef.current.easeTo({
 			center: [nextLng, nextLat],
 			zoom: 11.8,
-			// duration: 60000 * travelTime, // 1 minute = 60 000 ms and we set duration in ms
-			duration: 10000,
+			duration: 60000 * travelTime, // 1 minute = 60 000 ms and we set duration in ms
+			// duration: 10000,
 			easing: (t) => t, // Linear animation - no slowdown at the end
 		});
 

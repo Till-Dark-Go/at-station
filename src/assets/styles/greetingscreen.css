@@ -5,10 +5,10 @@
 /* The styles block below applies to Greeting Screen, Sign Up and Log In pages: */
 .topBar {
 	position: absolute;
-	top: 5%;
-	left: 10%;
+	margin-top: clamp(10px, 4vh, 40px);
+	margin-left: clamp(15px, 5vh, 45px);
 	z-index: 1111;
-	font-size: clamp(0.7em, 0.5vh, 1.1em);
+	font-size: clamp(12px, 0.7em, 16em);
 }
 
 /* The styles block below applies to Greeting Screen, Sign Up and Log In pages: */
