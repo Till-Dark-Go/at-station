@@ -28,6 +28,45 @@ export function calculateTravelTimeInMinutes(
 	return travelTime;
 }
 
+export function formatTravelTime(hours, minutes) {
+	if (hours > 0) {
+		return `${hours} hr ${minutes} min`;
+	}
+	return `${minutes} min`;
+}
+
+export function getClosestStations(userStartingPoint, stations, limit = 5) {
+	if (!userStartingPoint?.lng || !userStartingPoint?.lat) {
+		return [];
+	}
+
+	return stations
+		.filter((station) => station.id !== userStartingPoint.id)
+		.map((station) => {
+			const travelTimeInMinutes = calculateTravelTimeInMinutes(
+				userStartingPoint,
+				station.longitude,
+				station.latitude,
+			);
+			const distanceKm = haversine(
+				userStartingPoint.lng,
+				userStartingPoint.lat,
+				station.longitude,
+				station.latitude,
+			);
+			return {
+				id: station.id,
+				name: station.name || station.id,
+				country: station.country,
+				hours: Math.floor(travelTimeInMinutes / 60),
+				minutes: travelTimeInMinutes % 60,
+				distanceKm,
+			};
+		})
+		.sort((a, b) => a.distanceKm - b.distanceKm)
+		.slice(0, limit);
+}
+
 // This calculates the distance between two points considering MEDIANS - since this is a real world map, we can't just use the Euclidean distance formula
 function haversine(lng1, lat1, lng2, lat2) {
 	// Converting to radians

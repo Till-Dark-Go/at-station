@@ -4,6 +4,7 @@ import exit from "../../assets/images/exit.svg";
 
 import TopUI from "./TopUI.jsx";
 import PopupWindow from "./PopupWindow.jsx";
+import NearestStationsPopup from "./NearestStationsPopup.jsx";
 import BottomUI from "./BottomUI.jsx";
 import Stamps from "../Stamps Page/Stamps.jsx";
 import Todo from "../ToDo/Todo.jsx";
@@ -41,6 +42,10 @@ export default function Map() {
 		animateMapMovement,
 		toggleFinalMessage,
 		isFinalMessageOpen,
+		isNearestStationsOpen,
+		nearestStations,
+		openNearestStationsPopup,
+		closeNearestStationsPopup,
 	} = useMap();
 	return (
 		<>
@@ -70,6 +75,7 @@ export default function Map() {
 					currentlyTravelling={currentlyTravelling}
 					userStartingPoint={userStartingPoint}
 					nextStationName={nextStation.name}
+					onCurrentStationClick={openNearestStationsPopup}
 				/>
 
 				{stampsWindow && <Stamps />}
@@ -121,6 +127,16 @@ export default function Map() {
 					}
 					toggleProfilePageWindow={toggleProfilePageWindow}
 				/>
+
+				{isNearestStationsOpen && (
+					<NearestStationsPopup
+						stations={nearestStations}
+						currentStationName={
+							userStartingPoint.name || userStartingPoint.id
+						}
+						onClose={closeNearestStationsPopup}
+					/>
+				)}
 			</div>
 		</>
 	);

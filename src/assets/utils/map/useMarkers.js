@@ -11,6 +11,7 @@ export function useMarkers({
 	markersRef,
 	userStartingPoint,
 	openPopup,
+	openNearestStationsPopup,
 	popupOpenRef,
 	currentlyTravelling,
 	setNextStation,
@@ -36,8 +37,10 @@ export function useMarkers({
 		markersRef.current.forEach(({ marker, station }) => {
 			const markerElement = marker.getElement();
 			const isUserMarker =
-				station.longitude == userStartingPoint.lng &&
-				station.latitude == userStartingPoint.lat;
+				(userStartingPoint.id &&
+					station.id === userStartingPoint.id) ||
+				(station.longitude == userStartingPoint.lng &&
+					station.latitude == userStartingPoint.lat);
 
 			// Remove old userMarker class from all
 			markerElement.classList.remove("userMarker");
@@ -49,6 +52,12 @@ export function useMarkers({
 			if (isUserMarker) {
 				markerElement.classList.add("userMarker");
 				marker_img.src = user_marker_logo;
+				marker_img.style.cursor = "pointer";
+				marker_img.onclick = () => {
+					if (!currentlyTravelling.current) {
+						openNearestStationsPopup();
+					}
+				};
 			} else {
 				marker_img.src = marker_logo;
 				let hoverResults;

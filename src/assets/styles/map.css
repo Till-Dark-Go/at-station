@@ -94,13 +94,26 @@
 .top-curr-station-name {
 	margin-top: 28px;
 	text-align: center;
-	pointer-events: none;
 	cursor: default;
+}
+
+.top-curr-station-name.clickable {
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+}
+
+.top-curr-station-name.clickable:hover {
+	opacity: 0.85;
+}
+
+.top-curr-station-name.clickable:focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 4px;
+	border-radius: 4px;
 }
 
 .top-curr-station-name .lable {
 	font-size: 0.9em;
-	pointer-events: auto;
 }
 
 .top-curr-station-name .station-name {
@@ -108,7 +121,6 @@
 	text-transform: uppercase;
 	margin-block: 10px;
 	letter-spacing: 2px;
-	pointer-events: auto;
 	color: #fff;
 }
 
@@ -119,17 +131,21 @@
 
 .popup-window {
 	width: clamp(380px, 50%, 700px);
-	height: clamp(200px, 60%, 500px);
+	height: clamp(230px, 40%, 430px);
 	background-color: #00000070;
 	border: 1px solid #949494;
 	border-radius: 10px;
 	backdrop-filter: blur(2px);
 	font-weight: 300;
-	position: relative;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 20;
 
 	@media (max-width: 480px) {
 		width: clamp(300px, 40%, 700px);
-		height: clamp(200px, 50%, 500px);
+		height: clamp(230px, 50%, 530px);
 	}
 }
 
@@ -415,4 +431,51 @@
 
 .fade-in {
 	animation: fadeIn 0.2s ease-in;
+}
+
+.nearest-stations-popup {
+	/* Don't use height: auto — it overrides .popup-window and ignores height changes */
+	min-height: clamp(260px, 45%, 560px);
+}
+
+.nearest-stations-popup .info {
+	width: 70%;
+}
+
+.nearest-stations-list {
+	list-style: none;
+	padding: 0;
+	margin: clamp(12px, 2dvh, 24px) 0 0;
+	width: 100%;
+}
+
+.nearest-station-item {
+	display: grid;
+	grid-template-columns: 1.5em 1fr auto;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid #94949450;
+	text-align: left;
+}
+
+.nearest-station-item:last-child {
+	border-bottom: none;
+}
+
+.nearest-station-rank {
+	color: #949494;
+	font-weight: 500;
+}
+
+.nearest-station-name {
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #fff;
+	font-weight: 500;
+}
+
+.nearest-station-time {
+	color: #d0d0d0;
+	white-space: nowrap;
 }

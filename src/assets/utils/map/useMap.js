@@ -1,12 +1,19 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { getCurrentStationId } from "../../../api/users.js";
 import { arrayOfStations } from "./useStations.js";
 import { useMapSetup } from "./useMapSetup.js";
 import { useMarkers } from "./useMarkers.js";
 import { usePopup } from "./usePopup.js";
 import { useTravel } from "./useTravel.js";
+import { getClosestStations } from "./mapCalculations.js";
+import { useAuth } from "../../../firebase/AuthContext.jsx";
+
+function getStationLabel(station) {
+	return station?.name || station?.id || "";
+}
 
 export function useMap() {
+	const { currentUser } = useAuth();
 	const mapRef = useRef();
 	const mapContainerRef = useRef();
 	const markersRef = useRef([]);
@@ -54,27 +61,34 @@ export function useMap() {
 		timeStart: null,
 		timeEnd: null,
 	});
+	const [isNearestStationsOpen, setIsNearestStationsOpen] = useState(false);
+
+	const nearestStations = useMemo(
+		() => getClosestStations(userStartingPoint, arrayOfStations, 5),
+		[userStartingPoint],
+	);
 
 	// Load current station from database
 	useEffect(() => {
+		if (!currentUser) return;
+
 		async function loadUserStation() {
 			const stationId = await getCurrentStationId();
 			if (!stationId) return;
 
-			const station = arrayOfStations.find((s) => s.id === stationId); // Searching by the id
+			const station = arrayOfStations.find((s) => s.id === stationId);
 			if (!station) return;
 
-			// Resetting the useState of the user => triggers a rerender of the Map component and shows the updates instantly
 			setUserStartingPoint({
 				lng: station.longitude,
 				lat: station.latitude,
-				name: station.name,
+				name: getStationLabel(station),
 				id: station.id,
 			});
 		}
 
 		loadUserStation();
-	}, []);
+	}, [currentUser]);
 
 	// Setting up the map:
 	useMapSetup({
@@ -86,7 +100,7 @@ export function useMap() {
 	});
 
 	// Two functions: open and close the station popup (the one before started travelling)
-	const { openPopup, closePopup } = usePopup({
+	const { openPopup: openTravelPopup, closePopup } = usePopup({
 		currentlyTravelling,
 		popupOpenRef,
 		UI_elements_div,
@@ -96,12 +110,30 @@ export function useMap() {
 		setIsTodoOpen,
 	});
 
+	function openPopup(
+		hoursVar,
+		minutesVar,
+		nextLngVar,
+		nextLatVar,
+		stationId,
+	) {
+		setIsNearestStationsOpen(false);
+		openTravelPopup(
+			hoursVar,
+			minutesVar,
+			nextLngVar,
+			nextLatVar,
+			stationId,
+		);
+	}
+
 	// Setting up the custom markers: their onClicks/onHovers, custom svg etc
 	useMarkers({
 		mapRef,
 		markersRef,
 		userStartingPoint,
 		openPopup,
+		openNearestStationsPopup,
 		popupOpenRef,
 		currentlyTravelling,
 		setNextStation,
@@ -145,6 +177,34 @@ export function useMap() {
 		UI_elements_div.current.style.pointerEvents = isProfileOpen.current
 			? "none"
 			: "auto";
+	}
+
+	function openNearestStationsPopup() {
+		if (currentlyTravelling.current || !userStartingPoint.id) return;
+
+		setStampsWindow(false);
+		setIsTodoOpen(false);
+		setIsProfileOpen(false);
+		setPopupWindow(false);
+		popupOpenRef.current = false;
+		setTimeAndCoords({
+			hours: null,
+			minutes: null,
+			nextLng: null,
+			nextLat: null,
+			stationId: null,
+		});
+		setIsNearestStationsOpen(true);
+		if (UI_elements_div.current) {
+			UI_elements_div.current.style.pointerEvents = "auto";
+		}
+	}
+
+	function closeNearestStationsPopup() {
+		setIsNearestStationsOpen(false);
+		if (!popupOpenRef.current && UI_elements_div.current) {
+			UI_elements_div.current.style.pointerEvents = "none";
+		}
 	}
 
 	function toggleFinalMessage(
@@ -204,5 +264,9 @@ export function useMap() {
 		animateMapMovement,
 		toggleFinalMessage,
 		isFinalMessageOpen,
+		isNearestStationsOpen,
+		nearestStations,
+		openNearestStationsPopup,
+		closeNearestStationsPopup,
 	};
 }
