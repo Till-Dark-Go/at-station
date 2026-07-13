@@ -142,7 +142,7 @@ export function useMap() {
 		setStampsWindow(false);
 		setIsTodoOpen(false);
 		setIsProfileOpen((prev) => !prev);
-		UI_elements_div.current.style.pointerEvents = isProfileOpen.current
+		UI_elements_div.current.style.pointerEvents = isProfileOpen
 			? "none"
 			: "auto";
 	}

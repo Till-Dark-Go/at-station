@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -23,5 +22,19 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const analytics =
-	typeof window !== "undefined" ? getAnalytics(app) : null;
+
+// Analytics is optional and loaded lazily so that ad/tracker blockers
+// (which block "firebase/analytics" as a tracking script) can never crash
+// app startup. Any failure here is swallowed intentionally.
+export let analytics = null;
+if (typeof window !== "undefined") {
+	import("firebase/analytics")
+		.then(async ({ getAnalytics, isSupported }) => {
+			if (await isSupported()) {
+				analytics = getAnalytics(app);
+			}
+		})
+		.catch(() => {
+			// Blocked by an extension or unsupported environment — ignore.
+		});
+}

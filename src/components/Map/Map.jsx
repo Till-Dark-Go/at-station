@@ -11,7 +11,6 @@ import ProfilePage from "../Profile Page/ProfilePage.jsx";
 
 import { useMap } from "../../assets/utils/map/useMap.js";
 
-import { Activity, ViewTransition } from "react";
 import FinishedTravellingMessage from "./FinishedTravellingMessage.jsx";
 import { isDate } from "lodash";
 
